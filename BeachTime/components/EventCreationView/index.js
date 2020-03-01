@@ -60,9 +60,9 @@ export default class EventCreationView extends React.Component {
         console.log("$$$$$$$$NEW DATE", new Date(setYear, setMonth, setDay));
         const eventDate = new Date(setYear, setMonth, setDay);
         console.log("$$$$$$$$ EVENT DATE", eventDate);
+        this.state.date.setFullYear(setYear, setMonth, setDay),
 
         this.setState({
-          date: eventDate,
           calendarShown: false,
           timepickerShown: true
         });
@@ -72,13 +72,16 @@ export default class EventCreationView extends React.Component {
         setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
         const eventTime = new Date(setYear, setMonth, setDay, setHour, setMinute);
         console.log("$$$$$$$$ EVENT TIME", eventTime);
+        this.state.date.setHours(setHour, setMinute),
         this.setState({
-          date: this.state.date.setHours(setHour, setMinute),
+          // date: this.state.date.setHours(setHour, setMinute),
           timepickerShown: false
         });
       }
       console.log("CREATED EVENT", this.state.date)
     }
+    console.log("CREATED EVENT", this.state.date.getHours())
+
   }
 
 
