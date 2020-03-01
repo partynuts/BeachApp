@@ -1,9 +1,13 @@
 import React from 'react';
 import { StyleSheet, Button, TextInput, View, Text } from 'react-native';
+import Heading from "../Heading";
+import Home from "../Home";
 
 function Separator() {
-  return <View style={{marginVertical: 8,
-    borderBottomColor: '#737373'}} />;
+  return <View style={{
+    marginVertical: 8,
+    borderBottomColor: '#737373'
+  }} />;
 }
 
 export default class EntryPage extends React.Component {
@@ -28,9 +32,12 @@ export default class EntryPage extends React.Component {
   }
 
   handleSubmit(e) {
+    console.log("SUBMITTING", this.props)
     e.preventDefault();
+    console.log("BLUBBER")
+
     fetch(
-      "http://4aee7e42.ngrok.io:4040/users",
+      "http://e9644f02.ngrok.io/users",
       {
         method: "POST",
         headers: {
@@ -39,14 +46,22 @@ export default class EntryPage extends React.Component {
         body: JSON.stringify({ username: this.state.username, email: this.state.email })
       }
     )
-      .then(res => navigation.navigate("/home"))
+      .then(() => this.props.navigation.navigate(Home));
   }
 
   render() {
 
     const styles = StyleSheet.create({
       container: {
-        minHeight: '100%', padding: 60, backgroundColor: 'orange'
+        minHeight: '100%',
+        padding: 40,
+        backgroundColor: 'orange',
+        // marginTop: 10
+      },
+      title: {
+        fontSize: 24,
+        fontWeight: "700",
+        color: "white"
       },
       textInput: {
         height: 40,
@@ -63,14 +78,15 @@ export default class EntryPage extends React.Component {
 
     return (
       <View style={styles.container}>
-        {/*<Text style={{height: 40, marginBottom: 10}}>Bitch Time </Text>*/}
+        <Heading />
+        <Text style={styles.title}>Sign in!</Text>
+        <Separator />
         <TextInput
           style={styles.textInput}
           placeholder="username"
           onChangeText={(input) => this.setUsername(input)}
           value={this.state.username}
         />
-
         <TextInput
           style={styles.textInput}
           placeholder="email"

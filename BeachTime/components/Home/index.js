@@ -1,6 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Button, Text } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import Heading from "../Heading";
+import EventCreationView from "../EventCreationView";
+import WallOfShame from "../WallOfShame";
 
 function Separator() {
   return <View style={{marginVertical: 8,
@@ -20,7 +23,7 @@ export default class Home extends React.Component {
     const styles = StyleSheet.create({
       container: {
         minHeight: '100%',
-        padding: 60,
+        padding: 40,
         backgroundColor: 'orange'
       },
       text: {
@@ -32,10 +35,11 @@ export default class Home extends React.Component {
 
     return (
       <View style={styles.container}>
+        <Heading/>
         <Button
           style={styles.button}
           title="Create event"
-          onPress={() => console.log("CREATING")}
+          onPress={() => this.props.navigation.navigate(EventCreationView)}
         />
         <Separator />
         <Text style={styles.text}>Upcoming events:</Text>
@@ -64,7 +68,7 @@ export default class Home extends React.Component {
         <Button
           style={styles.button}
           title="Wall of shame"
-          onPress={() => console.log("Show Orga")}
+          onPress={() => this.props.navigation.navigate(WallOfShame)}
         />
       </View>
     );
