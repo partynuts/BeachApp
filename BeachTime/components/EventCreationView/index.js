@@ -66,14 +66,14 @@ export default class EventCreationView extends React.Component {
           calendarShown: false,
           timepickerShown: true
         });
-        console.log("DATE SET @@@@@")
+        console.log("DATE SET @@@@@", this.state.date)
       } else if (this.state.timepickerShown) {
         setHour = new Date(e.nativeEvent.timestamp).getHours();
         setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
         const eventTime = new Date(setYear, setMonth, setDay, setHour, setMinute);
         console.log("$$$$$$$$ EVENT TIME", eventTime);
         this.setState({
-          date: eventTime,
+          date: this.state.date.setHours(setHour, setMinute),
           timepickerShown: false
         });
       }
