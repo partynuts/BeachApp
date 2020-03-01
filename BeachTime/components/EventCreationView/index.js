@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View, Picker } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import Heading from "../Heading";
 
 function Separator() {
   return <View style={{
@@ -16,8 +17,11 @@ export default class EventCreationView extends React.Component {
     this.state = {
       date: new Date(),
       calendarShown: false,
-      timepickerShown: false
-    }
+      timepickerShown: false,
+      numberOfFields: 1
+    };
+    // console.log("Year:", this.state.date.getFullYear(), "Date", this.state.date.getDate(), "Month", this.state.date.getMonth(), "Hours:", this.state.date.getHours(), "Minutes:", this.state.date.getMinutes())
+    // console.log("DATE", this.state.date)
   }
 
   showCalendar(e) {
@@ -32,14 +36,48 @@ export default class EventCreationView extends React.Component {
     })
   }
 
+  //new Date(year, month, day, hours, minutes, seconds, milliseconds)
+
   setDate(e, date) {
-    console.log(e, date);
+    console.log("EVENT", e, "DATE", date);
+    console.log("NUR EVENT HOURS", new Date(e.nativeEvent.timestamp).getHours())
+    console.log("NUR EVENT MINUTE", new Date(e.nativeEvent.timestamp).getMinutes())
+
+    // const setTime = new Date(e.nativeEvent.timestamp);
+
+
     if (date) {
-      this.setState({
-        date: date,
-        calendarShown: false,
-        timepickerShown: false
-      })
+      let setYear = 0;
+      let setMonth = 0;
+      let setDay = 0;
+      let setHour = 0;
+      let setMinute = 0;
+
+      if (this.state.calendarShown) {
+        setYear = new Date(e.nativeEvent.timestamp).getFullYear();
+        setMonth = new Date(e.nativeEvent.timestamp).getMonth();
+        setDay = new Date(e.nativeEvent.timestamp).getDate();
+        console.log("$$$$$$$$NEW DATE", new Date(setYear, setMonth, setDay));
+        const eventDate = new Date(setYear, setMonth, setDay);
+        console.log("$$$$$$$$ EVENT DATE", eventDate);
+
+        this.setState({
+          date: eventDate,
+          calendarShown: false,
+          timepickerShown: true
+        });
+        console.log("DATE SET @@@@@")
+      } else if (this.state.timepickerShown) {
+        setHour = new Date(e.nativeEvent.timestamp).getHours();
+        setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
+        const eventTime = new Date(setYear, setMonth, setDay, setHour, setMinute);
+        console.log("$$$$$$$$ EVENT TIME", eventTime);
+        this.setState({
+          date: eventTime,
+          timepickerShown: false
+        });
+      }
+      console.log("CREATED EVENT", this.state.date)
     }
   }
 
@@ -48,27 +86,34 @@ export default class EventCreationView extends React.Component {
     const styles = StyleSheet.create({
       container: {
         minHeight: '100%',
-        padding: 60,
+        padding: 40,
         backgroundColor: 'orange'
       },
+      title: {
+        fontSize: 24,
+        fontWeight: "700",
+        color: "white"
+      },
       text: {
-        color: 'white'
+        color: "white",
+        fontWeight: "700"
       },
       picker: {
         height: 40,
         width: 100,
-        // borderWidth: 1,
         borderColor: 'black',
         backgroundColor: 'white',
+        marginTop: 10
       }
     });
 
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Set up an event!</Text>
+        <Heading />
+        <Text style={styles.title}>Set up an event!</Text>
         <Separator />
         <Button
-          title="Select date"
+          title="Select date and time"
           onPress={(e) => this.showCalendar(e)}
         />
         <Separator />
@@ -81,14 +126,7 @@ export default class EventCreationView extends React.Component {
           onChange={(e, date) => this.setDate(e, date)}
         />
         }
-        <Separator />
-        <Button
-          title="Select time"
-          onPress={(e) => this.showTimepicker(e)}
-        />
-        <Separator />
 
-        <Text style={styles.text}>{this.state.date.toString()}</Text>
         {this.state.timepickerShown &&
         <RNDateTimePicker
           value={this.state.date}
@@ -100,10 +138,9 @@ export default class EventCreationView extends React.Component {
         <Separator />
         <Text style={styles.text}>Number of fields:</Text>
         <Picker
-          selectedValue={this.state.language}
+          selectedValue={this.state.numberOfFields}
           style={styles.picker}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ language: itemValue })
+          onValueChange={(fieldValue, fieldIndex) => this.setState({ numberOfFields: fieldValue })
           }>
           <Picker.Item label="1" value="1" />
           <Picker.Item label="2" value="2" />
