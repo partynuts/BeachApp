@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Button, TextInput, View, Text } from 'react-native';
 import Heading from "../Heading";
 import Home from "../Home";
+// import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
+import { apiHost } from '../../config';
 
 function Separator() {
   return <View style={{
@@ -15,8 +18,22 @@ export default class EntryPage extends React.Component {
     super(props);
     this.state = {
       username: '',
-      email: ''
+      email: '',
+      errorMsg: undefined
     }
+  }
+
+  async componentDidMount() {
+    const username = await this.getUsernameFromStorage()
+    if(username) {
+      this.props.navigation.navigate(Home)
+    }
+  }
+
+  async getUsernameFromStorage() {
+    const userData = JSON.parse(await AsyncStorage.getItem('@User'));
+    console.log("-------------UD----------", JSON.stringify(userData.username))
+    return userData.username;
   }
 
   setUsername(input) {
@@ -32,12 +49,10 @@ export default class EntryPage extends React.Component {
   }
 
   handleSubmit(e) {
-    console.log("SUBMITTING", this.props)
     e.preventDefault();
-    console.log("BLUBBER")
 
     fetch(
-      "http://e9644f02.ngrok.io/users",
+      `${apiHost}/users`,
       {
         method: "POST",
         headers: {
@@ -46,7 +61,22 @@ export default class EntryPage extends React.Component {
         body: JSON.stringify({ username: this.state.username, email: this.state.email })
       }
     )
-      .then(() => this.props.navigation.navigate(Home));
+      .then(async (res) => {
+        if (!res.ok) {
+          return this.setState({
+            errorMsg: 'Something went wrong!'
+          })
+        }
+        const data = await res.json();
+        try {
+          await AsyncStorage.setItem('@User', JSON.stringify(data));
+          this.props.navigation.navigate(Home)
+        } catch (e) {
+          // saving error
+          console.log(e);
+        }
+
+      })
   }
 
   render() {
@@ -56,7 +86,6 @@ export default class EntryPage extends React.Component {
         minHeight: '100%',
         padding: 40,
         backgroundColor: 'orange',
-        // marginTop: 10
       },
       title: {
         fontSize: 24,
@@ -95,6 +124,9 @@ export default class EntryPage extends React.Component {
           keyboardType='email-address'
         />
         <Separator />
+        {this.state.errorMsg &&
+        <Text>{this.state.errorMsg}</Text>
+        }
         <Button
           title="Go!"
           onPress={(e) => this.handleSubmit(e)}
