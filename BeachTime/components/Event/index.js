@@ -58,22 +58,22 @@ export default class Event extends React.Component {
     e.preventDefault();
     // console.log("POSTING SIGN UP", this.state.eventData.userId, this.state.eventData.eventId)
     console.log("EVENT ID", this.state);
+    const eventId = this.state.eventData.id;
     fetch(
-      `${apiHost}/events/signup`,
+      `${apiHost}/events/${eventId}/signup`,
       {
-        method: "PATCH",
+        method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           userId: this.state.userId,
-          eventId: this.state.eventData.id
         })
       }
     )
       .then(async (res) => {
         const data = await res.json();
-        console.log("DATA NACH SIGN UP", data)
+        console.log("DATA NACH SIGN UP", data);
         // DATA NACH SIGN UP Object {
         //   "details": Object {
         //     "path": "/events/signup",

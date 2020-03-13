@@ -30,7 +30,7 @@ export default class EntryPage extends React.Component {
         username,
         userId: id
       });
-      this.props.navigation.navigate('Home', {username: this.state.username, userId: this.state.userId})
+      this.props.navigation.navigate('Home', {username, userId: id})
     }
   }
 
@@ -72,9 +72,10 @@ export default class EntryPage extends React.Component {
           })
         }
         const data = await res.json();
+        console.log("ENTRY PAGE DATENZEUGS", data)
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
-          this.props.navigation.navigate('Home',  {username: this.state.username})
+          this.props.navigation.navigate('Home',  {username: data.username, userId: data.id})
         } catch (e) {
           // saving error
           console.log(e);
