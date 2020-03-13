@@ -24,16 +24,20 @@ export default class EntryPage extends React.Component {
   }
 
   async componentDidMount() {
-    const username = await this.getUsernameFromStorage()
+    const {id, username} = await this.getUserIdFromStorage()
     if(username) {
-      this.props.navigation.navigate(Home)
+      this.setState({
+        username,
+        userId: id
+      });
+      this.props.navigation.navigate('Home', {username: this.state.username, userId: this.state.userId})
     }
   }
 
-  async getUsernameFromStorage() {
+  async getUserIdFromStorage() {
     const userData = JSON.parse(await AsyncStorage.getItem('@User'));
     console.log("-------------UD----------", JSON.stringify(userData.username))
-    return userData.username;
+    return userData;
   }
 
   setUsername(input) {
@@ -70,7 +74,7 @@ export default class EntryPage extends React.Component {
         const data = await res.json();
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
-          this.props.navigation.navigate(Home)
+          this.props.navigation.navigate('Home',  {username: this.state.username})
         } catch (e) {
           // saving error
           console.log(e);

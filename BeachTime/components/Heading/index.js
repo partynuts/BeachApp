@@ -15,14 +15,14 @@ export default class Heading extends React.Component {
   }
 
   async componentDidMount() {
-    const username = await this.getUsernameFromStorage()
-    this.setState({ username })
+    const {id, username} = await this.getUserIdFromStorage()
+    this.setState({ user_id: id, username })
   }
 
-  async getUsernameFromStorage() {
+  async getUserIdFromStorage() {
     const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-    console.log("-------------UD----------", JSON.stringify(userData.username))
-    return userData.username;
+    console.log("-------------UD----------", JSON.stringify(userData.id))
+    return userData;
   }
 
   render() {

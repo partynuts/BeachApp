@@ -112,8 +112,6 @@ export default class WallOfShame extends React.Component {
     ];
 
 
-
-
     const sorted = users.sort((a, b) => {
       let comparison = 0;
       if (a.booked > b.booked) {

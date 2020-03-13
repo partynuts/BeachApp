@@ -19,18 +19,21 @@ export default class EventCreationView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
+      eventData:
+        {
+          event_date: new Date(),
+          number_of_fields: 1,
+          location: "East61",
+        },
+      allSet: false,
       calendarShown: false,
       timepickerShown: false,
-      numberOfFields: 1,
-      allSet: false,
-      location: "East61",
     };
   }
 
   async componentDidMount() {
-    const {id, username} = await this.getUserIdFromStorage()
-    this.setState({ userId: id, username })
+    const { id, username } = await this.getUserIdFromStorage();
+    this.setState({ eventData: { ...this.state.eventData, creator_id: id }, userId: id, username })
   }
 
   async getUserIdFromStorage() {
@@ -59,7 +62,7 @@ export default class EventCreationView extends React.Component {
         setYear = new Date(e.nativeEvent.timestamp).getFullYear();
         setMonth = new Date(e.nativeEvent.timestamp).getMonth();
         setDay = new Date(e.nativeEvent.timestamp).getDate();
-        this.state.date.setFullYear(setYear, setMonth, setDay)
+        this.state.eventData.event_date.setFullYear(setYear, setMonth, setDay)
         this.setState({
           calendarShown: false,
           timepickerShown: true
@@ -67,7 +70,7 @@ export default class EventCreationView extends React.Component {
       } else if (this.state.timepickerShown) {
         setHour = new Date(e.nativeEvent.timestamp).getHours();
         setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
-        this.state.date.setHours(setHour, setMinute)
+        this.state.eventData.event_date.setHours(setHour, setMinute)
         this.setState({
           timepickerShown: false,
           allSet: true
@@ -78,27 +81,28 @@ export default class EventCreationView extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
+    console.log("STATE IN EVENT CREATION", this.state)
     fetch(
-      `${apiHost}/create`,
+      `${apiHost}/events`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          eventDate: this.state.date,
-          numberOfFields: this.state.numberOfFields,
-          location: this.state.location,
-          userId: this.state.userId
-        })
+        body: JSON.stringify(
+          {...this.state.eventData, eventId: this.state.eventData.id}
+        )
       }
     )
       .then(async (res) => {
         const data = await res.json();
-        console.log("DATA IM THEN", data);
-
-        this.props.navigation.navigate('Event', this.state)
+        console.log("RESPONSE DATA ", data)
+        this.setState({
+            eventData: {...this.state.eventData, id: data.id}
+          }, () => {
+          console.log("STATE IM EVENT CREATION NACH ABRUF DER DATEN", this.state)
+          this.props.navigation.navigate('Event', this.state)}
+        );
       })
   }
 
@@ -149,11 +153,7 @@ export default class EventCreationView extends React.Component {
       }
     });
 
-    console.log(typeof this.state.date);
-    console.log(this.state.date.toLocaleString('de-DE'));
-    const formattedDate = this.state.date.toLocaleString('de-DE');
-    console.log(formattedDate);
-
+      console.log("CREATION EVENT DATA", this.state.eventData)
     return (
       <View style={styles.container}>
         <Heading />
@@ -166,7 +166,7 @@ export default class EventCreationView extends React.Component {
         <Separator />
         {this.state.calendarShown &&
         <RNDateTimePicker
-          value={this.state.date}
+          value={this.state.eventData.event_date}
           mode='date'
           onChange={(e, date) => this.setDate(e, date)}
         />
@@ -174,7 +174,7 @@ export default class EventCreationView extends React.Component {
 
         {this.state.timepickerShown &&
         <RNDateTimePicker
-          value={this.state.date}
+          value={this.state.eventData.event_date}
           mode='time'
           onChange={(e, date) => this.setDate(e, date)}
         />
@@ -184,22 +184,22 @@ export default class EventCreationView extends React.Component {
           <View style={styles.column}>
             <Text style={styles.text}>Number of fields:</Text>
             <Picker
-              selectedValue={this.state.numberOfFields}
+              selectedValue={this.state.eventData.number_of_fields}
               style={styles.picker}
-              onValueChange={(fieldValue, fieldIndex) => this.setState({ numberOfFields: fieldValue })
+              onValueChange={(fieldValue, fieldIndex) => this.setState({ eventData: {...this.state.eventData, number_of_fields: fieldValue} })
               }>
-              <Picker.Item label="1" value="1" />
-              <Picker.Item label="2" value="2" />
-              <Picker.Item label="3" value="3" />
-              <Picker.Item label="4" value="4" />
+              <Picker.Item label="1" value={1} />
+              <Picker.Item label="2" value={2} />
+              <Picker.Item label="3" value={3} />
+              <Picker.Item label="4" value={4} />
             </Picker>
           </View>
           <View style={styles.column}>
             <Text style={styles.text}>Location:</Text>
             <Picker
-              selectedValue={this.state.location}
+              selectedValue={this.state.eventData.location}
               style={styles.picker}
-              onValueChange={(locationValue, fieldIndex) => this.setState({ location: locationValue })
+              onValueChange={(locationValue, fieldIndex) => this.setState({eventData: {...this.state.eventData, location: locationValue} })
               }>
               <Picker.Item label="East61" value="East61" />
               <Picker.Item label="Beach Mitte" value="BeachMitte" />
@@ -215,23 +215,23 @@ export default class EventCreationView extends React.Component {
           <Text style={styles.textResults}>Your settings:</Text>
           <Separator />
           <Text style={styles.textResults}>Date:</Text>
-          {this.state.date &&
+          {this.state.eventData.event_date &&
           <View>
-            <Text style={styles.textBold}>{moment(this.state.date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+            <Text style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
           </View>
           }
           <Separator />
-          {this.state.numberOfFields &&
+          {this.state.eventData.number_of_fields &&
           <View>
             <Text style={styles.textResults}>Fields:</Text>
-            <Text style={styles.textBold}>{this.state.numberOfFields}</Text>
+            <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
           </View>
           }
           <Separator />
-          {this.state.location &&
+          {this.state.eventData.location &&
           <View>
             <Text style={styles.textResults}>Location:</Text>
-            <Text style={styles.textBold}>{this.state.location}</Text>
+            <Text style={styles.textBold}>{this.state.eventData.location}</Text>
           </View>
           }
 
@@ -241,9 +241,7 @@ export default class EventCreationView extends React.Component {
         <Button
           title="Create!"
           onPress={(e) => this.handleSubmit(e)}
-        >
-
-        </Button>
+        />
       </View>
     );
   }
