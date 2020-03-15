@@ -24,33 +24,18 @@ export default class Event extends React.Component {
     };
     console.log("**********routeParams IN EVENTS**********")
     console.log("**********STATE IN EVENTS**********", this.state)
-
   }
 
   showEventDetails(styles) {
-    // if (this.state.eventData.eventData) {
-    //   console.log("NEXT")
-    //   return <View style={styles.resultsContainer}>
-    //     <Text style={styles.textResults}>Date:</Text>
-    //     <Text
-    //       style={styles.textBold}>{moment(this.state.eventData.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
-    //     <Text style={styles.textResults}>Location:</Text>
-    //     <Text style={styles.textBold}>{this.state.eventData.eventData.location}</Text>
-    //     <Text style={styles.textResults}>Fields:</Text>
-    //     <Text style={styles.textBold}>{this.state.eventData.eventData.number_of_fields}</Text>
-    //   </View>
-    // } else {
-    //   console.log("FROM CREATION")
-
-      return <View style={styles.resultsContainer}>
-        <Text style={styles.textResults}>Date:</Text>
-        <Text
-          style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
-        <Text style={styles.textResults}>Location:</Text>
-        <Text style={styles.textBold}>{this.state.eventData.location}</Text>
-        <Text style={styles.textResults}>Fields:</Text>
-        <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
-      </View>
+    return <View style={styles.resultsContainer}>
+      <Text style={styles.textResults}>Date:</Text>
+      <Text
+        style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+      <Text style={styles.textResults}>Location:</Text>
+      <Text style={styles.textBold}>{this.state.eventData.location}</Text>
+      <Text style={styles.textResults}>Fields:</Text>
+      <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
+    </View>
     // }
   }
 
@@ -72,20 +57,24 @@ export default class Event extends React.Component {
       }
     )
       .then(async (res) => {
-        const data = await res.json();
-        console.log("DATA NACH SIGN UP", data);
-        // DATA NACH SIGN UP Object {
-        //   "details": Object {
-        //     "path": "/events/signup",
-        //   },
-        //   "msg": "Not Found",
-        //     "status_code": 404,
-        // }
-        this.setState({
-          msg: data.msg,
-          signUpStatus: data.status,
-          participants: data.participants
-        })
+        if (res.status === 200) {
+          const data = await res.json();
+          console.log("DATA NACH SIGN UP", data, res.status);
+          this.setState({
+            msg: data.msg,
+            signUpStatus: data.status,
+          });
+        } else if (res.status === 201) {
+          console.log("DATA NACH SIGN UP", data, res.status);
+
+          const data = await res.json();
+          this.setState({
+            msg: data.msg,
+            signUpStatus: data.status,
+            eventData: { ...this.state.eventData, participants: data.participants },
+          });
+          console.log("NEUES STATE", this.state)
+        }
       })
       .catch(e => console.log(e))
     console.log("STATE NACH SIGN UP", this.state)
@@ -109,7 +98,6 @@ export default class Event extends React.Component {
   // }
 
   render() {
-
     const styles = StyleSheet.create({
       container: {
         minHeight: '100%',
@@ -155,7 +143,6 @@ export default class Event extends React.Component {
         backgroundColor: "white"
       }
     });
-
     return (
       <View style={styles.container}>
         <Heading />
@@ -165,22 +152,28 @@ export default class Event extends React.Component {
         }
 
         <Separator />
-        <Button
+        {Date.parse(this.state.eventData.event_date) > new Date() &&
+        < Button
           title="Sign up!"
           onPress={(e) => this.handleSubmit(e)}
+          disabled={Date.parse(this.state.eventData.event_date) < new Date()}
         />
+        }
+
         <Separator />
+        {this.state.msg &&
         <Text>{this.state.msg}</Text>
+        }
         <Separator />
-        <View style={styles.table}>
-          <Text style={styles.column}>Name</Text>
+        <View>
+          <Text style={styles.text}>Participants</Text>
         </View>
-        {this.state.participants &&
-          this.state.participants.map((participant, index) =>
-            <View style={styles.tableUser}>
-              <Text key={index} style={styles.column1}>{participant}</Text>
-            </View>
-          )
+        {this.state.eventData.participants &&
+        this.state.eventData.participants.map((participant, index) =>
+          <View style={styles.tableUser}>
+            <Text key={index} style={styles.column1}>{index + 1}. {participant}</Text>
+          </View>
+        )
         }
       </View>
     );
