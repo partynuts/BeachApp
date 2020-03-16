@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View, Picker, AsyncStorage } from 'react-native';
+import { Button, Text, View, Picker, AsyncStorage } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Heading from "../Heading";
 import Event from "../Event";
 import { apiHost } from '../../config';
 import moment from "moment";
-
+import {styles} from './style'
 
 function Separator() {
   return <View style={{
@@ -108,50 +108,6 @@ export default class EventCreationView extends React.Component {
 
 
   render() {
-    const styles = StyleSheet.create({
-      container: {
-        minHeight: '100%',
-        padding: 40,
-        backgroundColor: 'orange'
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: "700",
-        color: "white"
-      },
-      text: {
-        color: "white",
-        fontSize: 16
-      },
-      textResults: {
-        color: "black",
-        fontSize: 16
-      },
-      textBold: {
-        color: "black",
-        fontWeight: "700"
-      },
-      picker: {
-        height: 40,
-        width: 100,
-        borderColor: 'black',
-        borderWidth: 1,
-        backgroundColor: 'white',
-        marginTop: 10
-      },
-      choiceContainer: {
-        width: "100%",
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      },
-      column: {},
-      resultsContainer: {
-        padding: 5,
-        borderWidth: 1,
-        borderColor: "black",
-        backgroundColor: "white"
-      }
-    });
 
       console.log("CREATION EVENT DATA", this.state.eventData)
     return (

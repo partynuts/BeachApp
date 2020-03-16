@@ -1,5 +1,6 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Text, View } from 'react-native';
+import {styles} from './style';
 
 function Separator() {
   return <View style={{
@@ -26,25 +27,6 @@ export default class Heading extends React.Component {
   }
 
   render() {
-
-    const styles = StyleSheet.create({
-      container: {
-        width: "100%",
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        color: "white",
-      },
-      column1: {
-        width: "50%",
-        color: "white",
-      },
-      column2: {
-        width: "50%",
-        color: "white",
-        justifyContent: "flex-end"
-      }
-    });
 
     return (
       <View>

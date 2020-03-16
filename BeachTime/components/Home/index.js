@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { View, Button, Text } from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
 import { apiHost } from "../../config";
 import moment from "moment";
+import {styles} from './style';
 
 function Separator() {
   return <View style={{
@@ -69,18 +69,6 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const styles = StyleSheet.create({
-      container: {
-        minHeight: '100%',
-        padding: 40,
-        backgroundColor: 'orange'
-      },
-      text: {
-        marginTop: 30,
-        fontWeight: "700",
-        color: "white"
-      }
-    });
 
     return (
       <View style={styles.container}>

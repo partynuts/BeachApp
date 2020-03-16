@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { View, Text } from 'react-native';
 import Heading from "../Heading";
-import EventCreationView from "../EventCreationView";
-
+import {styles} from './style';
 function Separator() {
   return <View style={{
     marginVertical: 8,
@@ -32,46 +30,6 @@ export default class WallOfShame extends React.Component {
   }
 
   render() {
-    const styles = StyleSheet.create({
-      container: {
-        minHeight: '100%',
-        padding: 40,
-        color: "white",
-        backgroundColor: 'orange',
-      },
-      text: {
-        marginTop: 30,
-        fontWeight: "700",
-        color: "white"
-      },
-      table: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        padding: 5,
-        borderWidth: 1,
-        borderColor: 'black',
-      },
-      tableUser: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        padding: 5,
-        borderWidth: 1,
-        borderColor: 'black',
-      },
-      column: {
-        width: "50%",
-        color: "white",
-      },
-      column1: {
-        width: "70%",
-        color: "white",
-      },
-      column2: {
-        width: "30%",
-        color: "white",
-      }
-    });
-
     const users = [
       {
         username: "Antony",
@@ -110,7 +68,6 @@ export default class WallOfShame extends React.Component {
         booked: 0
       }
     ];
-
 
     const sorted = users.sort((a, b) => {
       let comparison = 0;
