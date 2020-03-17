@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     minHeight: '100%',
     padding: 40,
     color: "white",
-    backgroundColor: 'orange',
+    backgroundColor: 'orange'
   },
   text: {
     marginTop: 30,
@@ -29,14 +29,17 @@ export const styles = StyleSheet.create({
   column: {
     width: "50%",
     color: "white",
+    fontSize: 18
   },
   column1: {
     width: "70%",
     color: "white",
+    fontSize: 16
   },
   column2: {
     width: "30%",
     color: "white",
+    fontSize: 16
   }
 });
 

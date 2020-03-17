@@ -29,94 +29,45 @@ export default class WallOfShame extends React.Component {
       .then(res => res.json())
       .then(resp => {
         console.log("======RESPONSE from GET In WALL OF SHAME======", resp)
-        const allUsers = resp.map(user => user.username);
+        const allUsers = resp.map(user => ({username: user.username, booking_count: user.booking_count}));
         console.log("ALL USERS", allUsers);
+        const sorted = allUsers.sort((a, b) => {
+            let comparison = 0;
+            if (a.booking_count > b.booking_count) {
+              comparison = -1;
+            } else if (a.booking_count < b.booking_count) {
+              comparison = 1;
+            }
+            return comparison;
+          });
+          console.log("~~~~~~~~~SORTED~~~~~~~~~", sorted);
 
         this.setState({
-          allUsers
+          allUsers: sorted
         });
+
       })
       .catch(e => {
         console.log(e)
       });
   }
 
-  compare(a, b) {
-    const bookedA = a.booked;
-    const bookedB = b.booked;
-
-    let comparison = 0;
-    if (bookedA > bookedB) {
-      comparison = 1;
-    } else if (bookedA < bookedB) {
-      comparison = -1;
-    }
-    return comparison;
-  }
-
   render() {
-    // const users = [
-    //   {
-    //     username: "Antony",
-    //     booked: 4
-    //   },
-    //   {
-    //     username: "Pari",
-    //     booked: 6
-    //   },
-    //   {
-    //     username: "Fabi",
-    //     booked: 3
-    //   },
-    //   {
-    //     username: "Christoph",
-    //     booked: 0
-    //   },
-    //   {
-    //     username: "Alex",
-    //     booked: 1
-    //   },
-    //   {
-    //     username: "Tino",
-    //     booked: 2
-    //   },
-    //   {
-    //     username: "Tore",
-    //     booked: 0
-    //   },
-    //   {
-    //     username: "Marcos",
-    //     booked: 2
-    //   },
-    //   {
-    //     username: "Carlo",
-    //     booked: 0
-    //   }
-    // ];
-
-    // const sorted = this.state.allUsers.sort((a, b) => {
-    //   let comparison = 0;
-    //   if (a.booked > b.booked) {
-    //     comparison = -1;
-    //   } else if (a.booked < b.booked) {
-    //     comparison = 1;
-    //   }
-    //   return comparison;
-    // });
-    // console.log("SORTED", sorted)
+    console.log("STATE IM RENDER VON WALL OF SHAME", this.state)
 
     return (
       <View style={styles.container}>
         <Heading />
         <View style={styles.table}>
           <Text style={styles.column}>Name</Text>
-          <Text style={styles.column}>Times field booked</Text>
+          <Text style={styles.column}>Booking count</Text>
         </View>
         {this.state.allUsers &&
 
         this.state.allUsers.map((user, index) =>
           <View style={styles.tableUser}>
-            <Text key={index} style={styles.column1}>{user}</Text>
+            <Text key={index} style={styles.column1}>{user.username}</Text>
+            <Text key={index} style={styles.column2}>{user.booking_count}</Text>
           </View>
         )
 
