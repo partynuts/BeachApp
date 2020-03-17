@@ -39,7 +39,7 @@ export default class Home extends React.Component {
       .then(res => res.json())
       .then(resp => {
         console.log("======RESPONSE from GET In HOME======", resp)
-        const pastEventData = resp.pastEvent[0];
+        const pastEventData = resp.pastEvent;
         const nextEventData = resp.nextEvents[1];
         const secondNextEventData = resp.nextEvents[0];
         this.setState({
@@ -65,6 +65,7 @@ export default class Home extends React.Component {
 
   getPastEventPage(e) {
     e.preventDefault();
+    console.log("STATE IN HOME", this.state)
     this.props.navigation.navigate('Event', {eventData: this.state.pastEventData, username: this.state.username, userId: this.state.userId})
   }
 

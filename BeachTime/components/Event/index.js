@@ -16,7 +16,7 @@ export default class Event extends React.Component {
 
   constructor(props) {
     super(props);
-    const signedUpUser = props.route.params.eventData.participants.find(user => user === props.route.params.username);
+    const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user === props.route.params.username) : null;
     console.log("*******SIGNED UP USER*******", signedUpUser)
     this.state = {
       ...props.route.params,
