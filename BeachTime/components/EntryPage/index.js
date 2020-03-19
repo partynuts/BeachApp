@@ -24,13 +24,13 @@ export default class EntryPage extends React.Component {
   }
 
   async componentDidMount() {
-    const {id, username} = await this.getUserIdFromStorage()
-    if(username) {
+    const { id, username } = await this.getUserIdFromStorage()
+    if (username) {
       this.setState({
         username,
         userId: id
       });
-      this.props.navigation.navigate('Home', {username, userId: id})
+      this.props.navigation.navigate('Home', { username, userId: id })
     }
   }
 
@@ -54,7 +54,7 @@ export default class EntryPage extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
+    console.log("ENTERED DATA", this.state)
     fetch(
       `${apiHost}/users`,
       {
@@ -75,7 +75,7 @@ export default class EntryPage extends React.Component {
         console.log("ENTRY PAGE DATENZEUGS", data)
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
-          this.props.navigation.navigate('Home',  {username: data.username, userId: data.id})
+          this.props.navigation.navigate('Home', { username: data.username, userId: data.id })
         } catch (e) {
           // saving error
           console.log(e);
@@ -140,3 +140,5 @@ export default class EntryPage extends React.Component {
     )
   }
 }
+
+

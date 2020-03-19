@@ -5,6 +5,7 @@ import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
 import { apiHost } from "../../config";
 import moment from "moment";
+import registerForPushNotificationsAsync from './pushNotificationsHelper'
 import {styles} from './style';
 
 function Separator() {
@@ -29,6 +30,7 @@ export default class Home extends React.Component {
   }
 
   async componentDidMount() {
+    await registerForPushNotificationsAsync(this.state.userId, this.state.username);
     console.log("SGTRING", `${apiHost}/events?filter=past`)
     await fetch(
       `${apiHost}/events`,
