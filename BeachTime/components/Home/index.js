@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, Platform, TouchableOpacity } from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
 import { apiHost } from "../../config";
 import moment from "moment";
 import registerForPushNotificationsAsync from './pushNotificationsHelper'
-import {styles} from './style';
+import { stylesAndroid, stylesIos } from './style';
 
 function Separator() {
   return <View style={{
@@ -57,65 +57,114 @@ export default class Home extends React.Component {
 
   getNextEventPage(e) {
     e.preventDefault();
-    this.props.navigation.navigate('Event', {eventData: this.state.nextEventData, username: this.state.username, userId: this.state.userId})
+    this.props.navigation.navigate('Event', {
+      eventData: this.state.nextEventData,
+      username: this.state.username,
+      userId: this.state.userId
+    })
   }
 
   getSecondNextEventPage(e) {
     e.preventDefault();
-    this.props.navigation.navigate('Event', {eventData: this.state.secondNextEventData, username: this.state.username, userId: this.state.userId})
+    this.props.navigation.navigate('Event', {
+      eventData: this.state.secondNextEventData,
+      username: this.state.username,
+      userId: this.state.userId
+    })
   }
 
   getPastEventPage(e) {
     e.preventDefault();
     console.log("STATE IN HOME", this.state)
-    this.props.navigation.navigate('Event', {eventData: this.state.pastEventData, username: this.state.username, userId: this.state.userId})
+    this.props.navigation.navigate('Event', {
+      eventData: this.state.pastEventData,
+      username: this.state.username,
+      userId: this.state.userId
+    })
   }
 
   render() {
-
+    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
       <View style={styles.container}>
         <Heading />
+        {Platform.OS !== 'ios' ?
         <Button
           style={styles.button}
           title="Create event"
           onPress={() => this.props.navigation.navigate(EventCreationView)}
-        />
+        /> :
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate(EventCreationView)}
+          style={styles.button}>
+          <Text
+            style={styles.btnText}>Create event</Text>
+        </TouchableOpacity>
+        }
+
         <Separator />
         <Text style={styles.text}>Upcoming events:</Text>
         <Separator />
         {this.state.nextEventData &&
-        <Button
-          style={styles.button}
-          title={moment(this.state.nextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
-          onPress={(e) => this.getNextEventPage(e)}
-        />
+        (Platform.OS !== 'ios' ?
+          <Button
+            style={styles.button}
+            title={moment(this.state.nextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            onPress={(e) => this.getNextEventPage(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.getNextEventPage(e)}
+            style={styles.button}>
+            <Text
+              style={styles.btnText}>{moment(this.state.nextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+          </TouchableOpacity>)
         }
         <Separator />
         {this.state.secondNextEventData &&
-        <Button
-          title={moment(this.state.secondNextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
-          onPress={(e) => this.getSecondNextEventPage(e)}
-        />
+        (Platform.OS !== 'ios' ?
+          <Button
+            title={moment(this.state.secondNextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            onPress={(e) => this.getSecondNextEventPage(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.getSecondNextEventPage(e)}
+            style={styles.button}>
+            <Text
+              style={styles.btnText}>{moment(this.state.secondNextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+          </TouchableOpacity>)
         }
         <Separator />
         <Text style={styles.text}>Last event:</Text>
         <Separator />
         {this.state.pastEventData &&
-        <Button
-          style={styles.button}
-          title={moment(this.state.pastEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
-          onPress={(e) => this.getPastEventPage(e)}
-        />
+        (Platform.OS !== 'ios' ?
+          <Button
+            style={styles.button}
+            title={moment(this.state.pastEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            onPress={(e) => this.getPastEventPage(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.getPastEventPage(e)}
+            style={styles.button}>
+            <Text
+              style={styles.btnText}>{moment(this.state.pastEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+          </TouchableOpacity>)
         }
         <Separator />
         <Separator />
         <Separator />
-        <Button
-          style={styles.button}
-          title="Wall of shame"
-          onPress={() => this.props.navigation.navigate(WallOfShame)}
-        />
+        {Platform.OS !== 'ios' ?
+          <Button
+            style={styles.button}
+            title="Wall of shame"
+            onPress={() => this.props.navigation.navigate(WallOfShame)}
+          /> :
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate(WallOfShame)}
+            style={styles.button}>
+            <Text style={styles.btnText}>Wall of shame</Text>
+          </TouchableOpacity>
+        }
       </View>
     );
   }

@@ -20,7 +20,11 @@ export default class Event extends React.Component {
     console.log("*******SIGNED UP USER*******", signedUpUser)
     this.state = {
       ...props.route.params,
-      isUserSignedUp: props.route.params.username === signedUpUser
+      isUserSignedUp: props.route.params.username === signedUpUser,
+      signupData:
+        {
+          numberExternalPlayers: 0
+        },
     };
     console.log("**********routeParams IN EVENTS**********")
     console.log("**********STATE IN EVENTS**********", this.state)
@@ -117,8 +121,28 @@ export default class Event extends React.Component {
       .catch(e => console.log(e))
   }
 
+  addExternalPlayers() {
+    this.setState({
+      signupData: {
+        ...this.state.signupData,
+        numberExternalPlayers: this.state.signupData.numberExternalPlayers + 1
+      }
+    });
+  }
+
+  removeExternalPlayers() {
+    this.setState({
+      signupData: {
+        ...this.state.signupData,
+        numberExternalPlayers: this.state.signupData.numberExternalPlayers - 1
+      }
+    });
+  }
+
 
   render() {
+    console.log("--------signup Data nach addieren von externen------", this.state.signupData);
+
     return (
       <View style={styles.container}>
         <Heading />
@@ -141,13 +165,34 @@ export default class Event extends React.Component {
         <Text>{this.state.msg}</Text>
         }
         <Separator />
-        <View>
-          <Text style={styles.text}>Participants</Text>
+        <View style={styles.table}>
+          <Text style={styles.column}>Participants</Text>
+          {this.state.eventData.participants &&
+          <Text style={styles.column}>Externals</Text>
+          }
         </View>
         {this.state.eventData.participants &&
         this.state.eventData.participants.map((participant, index) =>
           <View style={styles.tableUser}>
             <Text key={index} style={styles.column1}>{index + 1}. {participant}</Text>
+            {/*<Text style={styles.text}>+</Text>*/}
+            {/*<TextInput*/}
+            {/*  style={styles.textInput}*/}
+            {/*  placeholder="No. external players"*/}
+            {/*  onChangeText={(input) => this.addExternalPlayers(input)}*/}
+            {/*  value={this.state.signupData.numberExternalPlayers}*/}
+            {/*/>*/}
+            <View style={styles.column2}>
+              < Button
+                title='+'
+                onPress={() => this.addExternalPlayers()}
+              />
+              < Button
+                title='-'
+                onPress={() => this.removeExternalPlayers()}
+              />
+              <Text>{this.state.signupData.numberExternalPlayers}</Text>
+            </View>
           </View>
         )
         }
