@@ -25,7 +25,6 @@ export default class EventCreationView extends React.Component {
           number_of_fields: 1,
           location: "East61",
         },
-      allSet: false,
       calendarShown: false,
       timepickerShown: false,
     };
@@ -166,7 +165,6 @@ export default class EventCreationView extends React.Component {
 
         <Separator />
         <Separator />
-        {/*{this.state.allSet &&*/}
         <View style={styles.resultsContainer}>
           <Text style={styles.textResults}>Your settings:</Text>
           <Separator />

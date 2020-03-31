@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, Picker, TextInput } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
-import {styles} from './style';
+import { styles } from './style';
 import moment from "moment";
 
 function Separator() {
@@ -74,6 +74,15 @@ export default class Event extends React.Component {
             isUserSignedUp: !this.state.isUserSignedUp
           });
           console.log("NEUES STATE", this.state)
+        } else if (res.status === 403) {
+          console.log("DATA NACH SIGN UP mit 403", data, res.status);
+
+          const data = await res.json();
+          this.setState({
+            msg: (data || null).msg,
+            signUpStatus: res.status,
+          });
+          console.log("NEUES STATE", this.state)
         }
       })
       .catch(e => console.log(e))
@@ -96,14 +105,14 @@ export default class Event extends React.Component {
       }
     )
       .then(async (res) => {
-          const data = await res.json();
-          console.log("DATA NACH CANCELLATION", data)
-          this.setState({
-            signUpStatus: res.status,
-            eventData: { ...this.state.eventData, participants: data.participants },
-            isUserSignedUp: !this.state.isUserSignedUp,
-          });
-          console.log("NEUES STATE", this.state)
+        const data = await res.json();
+        console.log("DATA NACH CANCELLATION", data)
+        this.setState({
+          signUpStatus: res.status,
+          eventData: { ...this.state.eventData, participants: data.participants },
+          isUserSignedUp: !this.state.isUserSignedUp,
+        });
+        console.log("NEUES STATE", this.state)
       })
       .catch(e => console.log(e))
   }
