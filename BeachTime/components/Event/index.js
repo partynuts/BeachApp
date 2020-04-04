@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text, Picker, TextInput } from 'react-native';
+import { StyleSheet, View, Button, Text, Picker, TextInput, TouchableOpacity, Platform } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
-import { styles } from './style';
+import { stylesIos, stylesAndroid } from './style'
 import moment from "moment";
 
 function Separator() {
@@ -17,16 +17,17 @@ export default class Event extends React.Component {
   constructor(props) {
     super(props);
     const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user === props.route.params.username) : null;
-    console.log("*******SIGNED UP USER*******", signedUpUser)
+    console.log("*******SIGNED UP USER*******", props)
     this.state = {
       ...props.route.params,
+      costsPerPerson: 0,
       isUserSignedUp: props.route.params.username === signedUpUser,
       signupData:
         {
           numberExternalPlayers: 0
         },
     };
-    console.log("**********routeParams IN EVENTS**********")
+    console.log("**********routeParams IN EVENTS**********", this.state.costsTotal/props.route.params.eventData.participants.length)
     console.log("**********STATE IN EVENTS**********", this.state)
   }
 
@@ -39,6 +40,10 @@ export default class Event extends React.Component {
       <Text style={styles.textBold}>{this.state.eventData.location}</Text>
       <Text style={styles.textResults}>Fields:</Text>
       <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
+      <Text style={styles.textResults}>Total costs:</Text>
+      <Text style={styles.textBold}>{this.state.costsTotal}</Text>
+      <Text style={styles.textResults}>Costs p.P.:</Text>
+      <Text style={styles.textBold}>{this.state.costsPerPerson} </Text>
     </View>
     // }
   }
@@ -65,7 +70,8 @@ export default class Event extends React.Component {
           console.log("DATA NACH SIGN UP mit 200", data, res.status);
           this.setState({
             msg: data.msg,
-            signUpStatus: res.status
+            signUpStatus: res.status,
+            costsPerPerson: this.state.costsTotal/this.state.eventData.participants.length,
           });
         } else if (res.status === 201) {
           console.log("DATA NACH SIGN UP mit 201", data, res.status);
@@ -142,6 +148,7 @@ export default class Event extends React.Component {
 
   render() {
     console.log("--------signup Data nach addieren von externen------", this.state.signupData);
+    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
       <View style={styles.container}>
@@ -153,11 +160,20 @@ export default class Event extends React.Component {
 
         <Separator />
         {Date.parse(this.state.eventData.event_date) > new Date() &&
-        < Button
-          title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
-          onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-          disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-        />
+        (Platform.OS !== 'ios' ?
+            < Button
+              title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
+              onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
+              disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+            /> :
+            <TouchableOpacity
+              onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
+              style={styles.button}
+              disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+            >
+              <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}</Text>
+            </TouchableOpacity>
+        )
         }
 
         <Separator />

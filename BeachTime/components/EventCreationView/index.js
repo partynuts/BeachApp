@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Text, View, Picker, AsyncStorage } from 'react-native';
+import { Button, Text, View, Picker, AsyncStorage, Platform, TouchableOpacity } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Heading from "../Heading";
 import Event from "../Event";
 import { apiHost } from '../../config';
 import moment from "moment";
-import {styles} from './style'
+import {stylesIos, stylesAndroid} from './style'
 
 function Separator() {
   return <View style={{
@@ -23,6 +23,7 @@ export default class EventCreationView extends React.Component {
         {
           event_date: new Date(),
           number_of_fields: 1,
+          costsTotal: 36,
           location: "East61",
         },
       calendarShown: false,
@@ -89,7 +90,7 @@ export default class EventCreationView extends React.Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(
-          {...this.state.eventData, eventId: this.state.eventData.id}
+          { ...this.state.eventData, eventId: this.state.eventData.id }
         )
       }
     )
@@ -97,42 +98,72 @@ export default class EventCreationView extends React.Component {
         const data = await res.json();
         console.log("RESPONSE DATA ", data)
         this.setState({
-            eventData: {...this.state.eventData, id: data.id}
+            eventData: { ...this.state.eventData, id: data.id }
           }, () => {
-          console.log("STATE IM EVENT CREATION NACH ABRUF DER DATEN", this.state)
-          this.props.navigation.navigate('Event', this.state)}
+            console.log("STATE IM EVENT CREATION NACH ABRUF DER DATEN", this.state)
+            this.props.navigation.navigate('Event', this.state)
+          }
         );
       })
   }
 
 
   render() {
+    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
-      console.log("CREATION EVENT DATA", this.state.eventData)
+    console.log("OP", Platform)
+    console.log("CREATION EVENT DATA", this.state.eventData)
+
     return (
       <View style={styles.container}>
         <Heading />
         <Text style={styles.title}>Set up an event!</Text>
         <Separator />
-        <Button
-          title="Select date and time"
-          onPress={(e) => this.showCalendar(e)}
-        />
-        <Separator />
-        {this.state.calendarShown &&
-        <RNDateTimePicker
-          value={this.state.eventData.event_date}
-          mode='date'
-          onChange={(e, date) => this.setDate(e, date)}
-        />
-        }
-
-        {this.state.timepickerShown &&
-        <RNDateTimePicker
-          value={this.state.eventData.event_date}
-          mode='time'
-          onChange={(e, date) => this.setDate(e, date)}
-        />
+        {Platform.OS !== 'ios' ?
+          <View>
+            <Button
+              title="Select date and time"
+              onPress={(e) => this.showCalendar(e)}
+            />
+            <Separator />
+            {this.state.calendarShown &&
+            <RNDateTimePicker
+              value={this.state.eventData.event_date}
+              mode='date'
+              onChange={(e, date) => this.setDate(e, date)}
+            />
+            }
+            {this.state.timepickerShown &&
+            <RNDateTimePicker
+              value={this.state.eventData.event_date}
+              mode='time'
+              onChange={(e, date) => this.setDate(e, date)}
+            />
+            }
+          </View> :
+          <View>
+            <TouchableOpacity
+              onPress={(e) => this.showCalendar(e)}
+              style={styles.button}>
+              <Text
+                style={styles.btnText}>Select date and time</Text>
+            </TouchableOpacity>
+            <Separator />
+            {this.state.calendarShown &&
+            <RNDateTimePicker
+              value={this.state.eventData.event_date}
+              mode='date'
+              onChange={(e, date) => this.setDate(e, date)}
+            />
+            }
+            {this.state.timepickerShown &&
+            <RNDateTimePicker
+              value={this.state.eventData.event_date}
+              mode='time'
+              onChange={(e, date) => this.setDate(e, date)}
+            />
+            }
+          </View>
         }
         <Separator />
         <View style={styles.choiceContainer}>
@@ -141,7 +172,7 @@ export default class EventCreationView extends React.Component {
             <Picker
               selectedValue={this.state.eventData.number_of_fields}
               style={styles.picker}
-              onValueChange={(fieldValue, fieldIndex) => this.setState({ eventData: {...this.state.eventData, number_of_fields: fieldValue} })
+              onValueChange={(fieldValue, fieldIndex) => this.setState({ eventData: {...this.state.eventData, number_of_fields: fieldValue, costsTotal: 36 * fieldValue} })
               }>
               <Picker.Item label="1" value={1} />
               <Picker.Item label="2" value={2} />
@@ -171,7 +202,8 @@ export default class EventCreationView extends React.Component {
           <Text style={styles.textResults}>Date:</Text>
           {this.state.eventData.event_date &&
           <View>
-            <Text style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+            <Text
+              style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
           </View>
           }
           <Separator />
@@ -192,10 +224,18 @@ export default class EventCreationView extends React.Component {
         </View>
         {/*}*/}
         <Separator />
-        <Button
-          title="Create!"
-          onPress={(e) => this.handleSubmit(e)}
-        />
+        {Platform.OS !== 'ios' ?
+          < Button
+            title="Create!"
+            onPress={(e) => this.handleSubmit(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.handleSubmit(e)}
+            style={styles.button}>
+            <Text
+              style={styles.btnText}>Create event</Text>
+          </TouchableOpacity>
+        }
       </View>
     );
   }

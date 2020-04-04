@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Button, TextInput, View, Text } from 'react-native';
+import { StyleSheet, Button, TextInput, View, Text, TouchableOpacity, Platform } from 'react-native';
 import Heading from "../Heading";
 import Home from "../Home";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage } from 'react-native';
 import { apiHost } from '../../config';
+import { stylesAndroid, stylesIos } from './style';
 
 function Separator() {
   return <View style={{
@@ -85,30 +86,7 @@ export default class EntryPage extends React.Component {
   }
 
   render() {
-
-    const styles = StyleSheet.create({
-      container: {
-        minHeight: '100%',
-        padding: 40,
-        backgroundColor: 'orange',
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: "700",
-        color: "white"
-      },
-      textInput: {
-        height: 40,
-        borderWidth: 1,
-        borderColor: 'black',
-        backgroundColor: 'white',
-        padding: 5,
-        marginBottom: 30
-      },
-      button: {
-        backgroundColor: "deeppink"
-      }
-    });
+    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
       <View style={styles.container}>
@@ -132,10 +110,17 @@ export default class EntryPage extends React.Component {
         {this.state.errorMsg &&
         <Text>{this.state.errorMsg}</Text>
         }
-        <Button
-          title="Go!"
-          onPress={(e) => this.handleSubmit(e)}
-        />
+        {Platform.OS !== 'ios' ?
+          <Button
+            title="Go!"
+            onPress={(e) => this.handleSubmit(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.handleSubmit(e)}
+            style={styles.button}>
+            <Text style={styles.btnText}>Go!</Text>
+          </TouchableOpacity>
+        }
       </View>
     )
   }
