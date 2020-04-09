@@ -51,19 +51,25 @@ export const stylesIos = StyleSheet.create({
     padding: 40,
     backgroundColor: 'orange'
   },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "white"
+  },
   text: {
     marginTop: 30,
     fontWeight: "700",
     color: "white"
   },
   btnText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
-    paddingTop: "2%"
+    // paddingTop: "2%"
   },
   button: {
     width: "100%",
-    height: "6%",
+    // height: "6%",
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,
@@ -76,5 +82,17 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     backgroundColor: 'deeppink'
+  },
+  choiceContainer: {
+    width: "80%",
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  column: {},
+  resultsContainer: {
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "white"
   }
 });

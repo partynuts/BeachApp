@@ -1,13 +1,22 @@
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import { apiHost } from '../../config';
-
+import Constants from 'expo-constants';
 
 export default async function registerForPushNotificationsAsync(userId) {
-  const PUSH_ENDPOINT = `${apiHost}/users/${userId}`;
+  if (!Constants.isDevice) {
+    return;
+  }
 
+  const PUSH_ENDPOINT = `${apiHost}/users/${userId}`;
+  let status;
+  console.log(Constants.isDevice)
   console.log("get Push notifications permission helper")
-  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  try {
+     status = (await Permissions.askAsync(Permissions.NOTIFICATIONS).catch(e => console.log("ERROR", e))).status;
+  } catch {
+    status = 'failed';
+  }
 
   if (status !== 'granted') {
     console.log("NO PERMISSION GRANTED", status)
@@ -25,7 +34,7 @@ export default async function registerForPushNotificationsAsync(userId) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-        notifications_token: token
+      notifications_token: token
     }),
   });
 }

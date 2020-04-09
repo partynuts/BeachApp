@@ -5,7 +5,7 @@ import Heading from "../Heading";
 import Event from "../Event";
 import { apiHost } from '../../config';
 import moment from "moment";
-import {stylesIos, stylesAndroid} from './style'
+import { stylesIos, stylesAndroid } from './style'
 
 function Separator() {
   return <View style={{
@@ -24,7 +24,7 @@ export default class EventCreationView extends React.Component {
           event_date: new Date(),
           number_of_fields: 1,
           costsTotal: 36,
-          location: "East61",
+          location: "East61-indoor",
         },
       calendarShown: false,
       timepickerShown: false,
@@ -34,6 +34,22 @@ export default class EventCreationView extends React.Component {
   async componentDidMount() {
     const { id, username } = await this.getUserIdFromStorage();
     this.setState({ eventData: { ...this.state.eventData, creator_id: id }, userId: id, username })
+
+    await fetch(
+      `${apiHost}/courtsinfo`,
+      {
+        method: "GET"
+      },
+    )
+      .then(res => res.json())
+      .then(resp => {
+        this.setState({
+          allCourts: resp.map(court => court.courts_name)
+        });
+      })
+      .catch(e => {
+        console.log(e)
+      });
   }
 
   async getUserIdFromStorage() {
@@ -81,7 +97,6 @@ export default class EventCreationView extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log("STATE IN EVENT CREATION", this.state)
     fetch(
       `${apiHost}/events`,
       {
@@ -96,23 +111,41 @@ export default class EventCreationView extends React.Component {
     )
       .then(async (res) => {
         const data = await res.json();
-        console.log("RESPONSE DATA ", data)
         this.setState({
             eventData: { ...this.state.eventData, id: data.id }
           }, () => {
-            console.log("STATE IM EVENT CREATION NACH ABRUF DER DATEN", this.state)
             this.props.navigation.navigate('Event', this.state)
           }
         );
       })
   }
 
+  getLocationOptions(styles) {
+    console.log("GETTING LOCATION OPTIONS")
+    return (
+      <View style={styles.column}>
+        <Text style={styles.text}>Location:</Text>
+        <Picker
+          selectedValue={this.state.eventData.location}
+          style={styles.picker}
+          onValueChange={(locationValue, fieldIndex) => this.setState({
+            eventData: {
+              ...this.state.eventData,
+              location: locationValue
+            }
+          })
+          }>
+          {this.state.allCourts.map(locationChoice => <Picker.Item label={locationChoice} value={locationChoice} />
+          )}
+        </Picker>
+      </View>
+    )
+  }
 
   render() {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     console.log("OP", Platform)
-    console.log("CREATION EVENT DATA", this.state.eventData)
 
     return (
       <View style={styles.container}>
@@ -165,14 +198,22 @@ export default class EventCreationView extends React.Component {
             }
           </View>
         }
+        {Platform.OS !== 'ios' &&
         <Separator />
+        }
         <View style={styles.choiceContainer}>
           <View style={styles.column}>
             <Text style={styles.text}>Number of fields:</Text>
             <Picker
               selectedValue={this.state.eventData.number_of_fields}
               style={styles.picker}
-              onValueChange={(fieldValue, fieldIndex) => this.setState({ eventData: {...this.state.eventData, number_of_fields: fieldValue, costsTotal: 36 * fieldValue} })
+              onValueChange={(fieldValue, fieldIndex) => this.setState({
+                eventData: {
+                  ...this.state.eventData,
+                  number_of_fields: fieldValue,
+                  costsTotal: 36 * fieldValue
+                }
+              })
               }>
               <Picker.Item label="1" value={1} />
               <Picker.Item label="2" value={2} />
@@ -180,18 +221,9 @@ export default class EventCreationView extends React.Component {
               <Picker.Item label="4" value={4} />
             </Picker>
           </View>
-          <View style={styles.column}>
-            <Text style={styles.text}>Location:</Text>
-            <Picker
-              selectedValue={this.state.eventData.location}
-              style={styles.picker}
-              onValueChange={(locationValue, fieldIndex) => this.setState({eventData: {...this.state.eventData, location: locationValue} })
-              }>
-              <Picker.Item label="East61" value="East61" />
-              <Picker.Item label="Beach Mitte" value="BeachMitte" />
-              <Picker.Item label="Beach61" value="Beach61" />
-            </Picker>
-          </View>
+          {this.state.allCourts &&
+          this.getLocationOptions(styles)
+          }
         </View>
 
         <Separator />

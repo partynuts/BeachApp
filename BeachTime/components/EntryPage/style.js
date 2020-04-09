@@ -43,11 +43,12 @@ export const stylesIos = StyleSheet.create({
   btnText: {
     fontSize: 20,
     color: "white",
-    paddingTop: "2%"
+    // paddingTop: "2%"
   },
   button: {
     width: "100%",
-    height: "6%",
+    // height: "6%",
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,

@@ -7,6 +7,7 @@ import { apiHost } from "../../config";
 import moment from "moment";
 import registerForPushNotificationsAsync from './pushNotificationsHelper'
 import { stylesAndroid, stylesIos } from './style';
+import CourtInfo from "../CourtInfo";
 
 function Separator() {
   return <View style={{
@@ -163,6 +164,19 @@ export default class Home extends React.Component {
             onPress={() => this.props.navigation.navigate(WallOfShame)}
             style={styles.button}>
             <Text style={styles.btnText}>Wall of shame</Text>
+          </TouchableOpacity>
+        }
+        <Separator />
+        {Platform.OS !== 'ios' ?
+          <Button
+            style={styles.button}
+            title="Court operators info"
+            onPress={() => this.props.navigation.navigate(CourtInfo)}
+          /> :
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate(CourtInfo)}
+            style={styles.button}>
+            <Text style={styles.btnText}>Court Info</Text>
           </TouchableOpacity>
         }
       </View>

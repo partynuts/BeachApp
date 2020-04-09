@@ -25,17 +25,16 @@ export const stylesIos = StyleSheet.create({
     color: "white"
   },
   btnText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
-    paddingTop: "2%"
+    // paddingTop: "2%"
   },
   button: {
     width: "100%",
-    height: "6%",
+    // height: "6%",
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: "red",
     borderRadius: 7,
     backgroundColor: "#0066FF",
   }
