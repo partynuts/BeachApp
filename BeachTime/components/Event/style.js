@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const stylesAndriod = StyleSheet.create({
+export const stylesAndroid = StyleSheet.create({
   container: {
     minHeight: '100%',
     padding: 40,
@@ -18,7 +18,12 @@ export const stylesAndriod = StyleSheet.create({
   },
   textResults: {
     color: "black",
-    fontSize: 16
+    fontSize: 16,
+    marginRight: 50
+  },
+  costsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   textBold: {
     color: "black",
@@ -61,8 +66,8 @@ export const stylesAndriod = StyleSheet.create({
   column: {
     color: "white",
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   column1: {
     width: "50%",
@@ -76,6 +81,9 @@ export const stylesAndriod = StyleSheet.create({
     width: "50%",
     color: "white",
     fontSize: 16
+  },
+  calBtn: {
+    backgroundColor: "#FF6347"
   }
 });
 
@@ -97,7 +105,12 @@ export const stylesIos = StyleSheet.create({
   },
   textResults: {
     color: "black",
-    fontSize: 16
+    fontSize: 16,
+    marginRight: 50
+  },
+  costsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   textBold: {
     color: "black",
@@ -140,8 +153,8 @@ export const stylesIos = StyleSheet.create({
   column: {
     color: "white",
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   column1: {
     width: "50%",
@@ -157,16 +170,20 @@ export const stylesIos = StyleSheet.create({
     fontSize: 16
   },
   btnText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
-    paddingTop: "2%"
+    // paddingTop: "2%"
   },
   button: {
     width: "100%",
-    height: "6%",
+    // height: "6%",
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,
     backgroundColor: "#0066FF",
+  },
+  calBtn: {
+    backgroundColor: "#FF6347"
   }
 });

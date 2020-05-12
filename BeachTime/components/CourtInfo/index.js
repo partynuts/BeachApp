@@ -45,8 +45,8 @@ export default class CourtInfo extends React.Component {
     return (
       <View style={styles.container}>
         <Heading />
-        {this.state.allCourts &&
-        this.state.allCourts.map(court => <View>
+        {this.state.allCourtsInfo &&
+        this.state.allCourtsInfo.map(court => <View>
           <Text>{court.courts_name}</Text>
           <Text>{court.address}</Text>
           <Text>{court.telephone}</Text>

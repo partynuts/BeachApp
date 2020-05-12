@@ -23,7 +23,6 @@ export default class EventCreationView extends React.Component {
         {
           event_date: new Date(),
           number_of_fields: 1,
-          costsTotal: 36,
           location: "East61-indoor",
         },
       calendarShown: false,
@@ -211,7 +210,6 @@ export default class EventCreationView extends React.Component {
                 eventData: {
                   ...this.state.eventData,
                   number_of_fields: fieldValue,
-                  costsTotal: 36 * fieldValue
                 }
               })
               }>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text, Picker, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { Button, Platform, Text, TouchableOpacity, View, Linking } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
-import { stylesIos, stylesAndroid } from './style'
+import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
 
 function Separator() {
@@ -18,16 +18,19 @@ export default class Event extends React.Component {
     super(props);
     const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user === props.route.params.username) : null;
     console.log("*******SIGNED UP USER*******", props)
+    const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
+    const noParticipants = props.route.params.eventData.participants === null || props.route.params.eventData.participants.length < 1;
     this.state = {
       ...props.route.params,
-      costsPerPerson: 0,
+      totalCosts,
+      costsPerPerson: noParticipants ? 0 : totalCosts / props.route.params.eventData.participants.length,
       isUserSignedUp: props.route.params.username === signedUpUser,
       signupData:
         {
           numberExternalPlayers: 0
         },
     };
-    console.log("**********routeParams IN EVENTS**********", this.state.costsTotal/props.route.params.eventData.participants.length)
+    console.log("**********routeParams IN EVENTS**********", props.route.params.eventData)
     console.log("**********STATE IN EVENTS**********", this.state)
   }
 
@@ -40,10 +43,16 @@ export default class Event extends React.Component {
       <Text style={styles.textBold}>{this.state.eventData.location}</Text>
       <Text style={styles.textResults}>Fields:</Text>
       <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
-      <Text style={styles.textResults}>Total costs:</Text>
-      <Text style={styles.textBold}>{this.state.costsTotal}</Text>
-      <Text style={styles.textResults}>Costs p.P.:</Text>
-      <Text style={styles.textBold}>{this.state.costsPerPerson} </Text>
+      <View style={styles.costsContainer}>
+        <View>
+          <Text style={styles.textResults}>Total costs:</Text>
+          <Text style={styles.textBold}>{this.state.totalCosts}</Text>
+        </View>
+        <View>
+          <Text style={styles.textResults}>Costs p.P.:</Text>
+          <Text style={styles.textBold}>{this.state.costsPerPerson} </Text>
+        </View>
+      </View>
     </View>
     // }
   }
@@ -71,23 +80,30 @@ export default class Event extends React.Component {
           this.setState({
             msg: data.msg,
             signUpStatus: res.status,
-            costsPerPerson: this.state.costsTotal/this.state.eventData.participants.length,
+            costsPerPerson: this.state.eventData.costsTotal / this.state.eventData.participants.length,
           });
+
         } else if (res.status === 201) {
+          const data = await res.json();
           console.log("DATA NACH SIGN UP mit 201", data, res.status);
 
-          const data = await res.json();
+          const noParticipants = data.participants === null || data.participants.length < 1;
           this.setState({
             msg: data.msg,
             signUpStatus: res.status,
             eventData: { ...this.state.eventData, participants: data.participants },
+            costsPerPerson: noParticipants ? 0 : this.state.totalCosts / data.participants.length,
             isUserSignedUp: !this.state.isUserSignedUp
           });
           console.log("NEUES STATE", this.state)
+          console.log("NEUES STATE", this.state.totalCosts)
+          console.log("NEUES STATE", data.participants.length)
+          console.log("KOSTEN GETEILT????", this.state.totalCosts / this.state.eventData.participants.length, this.state.costsPerPerson);
+
         } else if (res.status === 403) {
+          const data = await res.json();
           console.log("DATA NACH SIGN UP mit 403", data, res.status);
 
-          const data = await res.json();
           this.setState({
             msg: (data || null).msg,
             signUpStatus: res.status,
@@ -117,9 +133,12 @@ export default class Event extends React.Component {
       .then(async (res) => {
         const data = await res.json();
         console.log("DATA NACH CANCELLATION", data)
+        const noParticipants = data.participants === null || data.participants.length < 1;
+
         this.setState({
           signUpStatus: res.status,
           eventData: { ...this.state.eventData, participants: data.participants },
+          costsPerPerson: noParticipants ? 0 : this.state.totalCosts / data.participants.length,
           isUserSignedUp: !this.state.isUserSignedUp,
         });
         console.log("NEUES STATE", this.state)
@@ -145,6 +164,18 @@ export default class Event extends React.Component {
     });
   }
 
+  // editEvent(e) {
+  //   console.log("EDIT EVENT ", e);
+  //   this.props.navigation.navigate('EventCreationView', this.state)
+  // }
+
+  createCalendarEvent(e) {
+    console.log("get iCal Event ", e);
+    const eventId = this.state.eventData.id;
+    // RNFetchBlob.fetch("GET",`${apiHost}/events/${eventId}/calendar`)
+    Linking.openURL(`${apiHost}/events/${eventId}/calendar`);
+  }
+
 
   render() {
     console.log("--------signup Data nach addieren von externen------", this.state.signupData);
@@ -156,6 +187,34 @@ export default class Event extends React.Component {
         <Text style={styles.text}>Event details:</Text>
         {this.state.eventData &&
         this.showEventDetails(styles)
+        }
+
+        {/*{Platform.OS !== 'ios' ?*/}
+        {/*  < Button*/}
+        {/*    title="Edit"*/}
+        {/*    onPress={(e) => this.editEvent(e)}*/}
+        {/*  /> :*/}
+        {/*  <TouchableOpacity*/}
+        {/*    onPress={(e) => this.editEvent(e)}*/}
+        {/*    style={styles.button}*/}
+        {/*  >*/}
+        {/*    <Text style={styles.btnText}>Edit</Text>*/}
+        {/*  </TouchableOpacity>*/}
+        {/*}*/}
+        {this.state.isUserSignedUp &&
+        (Platform.OS !== 'ios' ?
+            <Button
+              title="Save event to calendar"
+              onPress={(e) => this.createCalendarEvent(e)}
+              style={styles.calBtn}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.createCalendarEvent(e)}
+              style={styles.button}
+            >
+              <Text style={styles.btnText}>Save event to calendar</Text>
+            </TouchableOpacity>
+        )
         }
 
         <Separator />
@@ -187,7 +246,7 @@ export default class Event extends React.Component {
           <Text style={styles.column}>Externals</Text>
           }
         </View>
-        {this.state.eventData.participants &&
+        {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
         this.state.eventData.participants.map((participant, index) =>
           <View style={styles.tableUser}>
             <Text key={index} style={styles.column1}>{index + 1}. {participant}</Text>
@@ -198,17 +257,18 @@ export default class Event extends React.Component {
             {/*  onChangeText={(input) => this.addExternalPlayers(input)}*/}
             {/*  value={this.state.signupData.numberExternalPlayers}*/}
             {/*/>*/}
-            <View style={styles.column2}>
-              < Button
-                title='+'
-                onPress={() => this.addExternalPlayers()}
-              />
-              < Button
-                title='-'
-                onPress={() => this.removeExternalPlayers()}
-              />
-              <Text>{this.state.signupData.numberExternalPlayers}</Text>
-            </View>
+
+            {/*<View style={styles.column2}>*/}
+            {/*  < Button*/}
+            {/*    title='+'*/}
+            {/*    onPress={() => this.addExternalPlayers()}*/}
+            {/*  />*/}
+            {/*  < Button*/}
+            {/*    title='-'*/}
+            {/*    onPress={() => this.removeExternalPlayers()}*/}
+            {/*  />*/}
+            {/*  <Text>{this.state.signupData.numberExternalPlayers}</Text>*/}
+            {/*</View>*/}
           </View>
         )
         }

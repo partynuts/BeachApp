@@ -32,7 +32,6 @@ export default class Home extends React.Component {
 
   async componentDidMount() {
     await registerForPushNotificationsAsync(this.state.userId, this.state.username);
-    console.log("SGTRING", `${apiHost}/events?filter=past`)
     await fetch(
       `${apiHost}/events`,
       {
