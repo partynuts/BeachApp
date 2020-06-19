@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Platform, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { Button, Platform, Text, TextInput, TouchableOpacity, View, Linking } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
@@ -251,12 +251,12 @@ export default class Event extends React.Component {
           <View style={styles.tableUser}>
             <Text key={index} style={styles.column1}>{index + 1}. {participant}</Text>
             {/*<Text style={styles.text}>+</Text>*/}
-            {/*<TextInput*/}
-            {/*  style={styles.textInput}*/}
-            {/*  placeholder="No. external players"*/}
-            {/*  onChangeText={(input) => this.addExternalPlayers(input)}*/}
-            {/*  value={this.state.signupData.numberExternalPlayers}*/}
-            {/*/>*/}
+            <TextInput
+              style={styles.textInput}
+              placeholder="add no. of guests"
+              onChangeText={(input) => this.addExternalPlayers(input)}
+              value={this.state.signupData.numberExternalPlayers}
+            />
 
             {/*<View style={styles.column2}>*/}
             {/*  < Button*/}
@@ -276,20 +276,3 @@ export default class Event extends React.Component {
     );
   }
 }
-
-//
-// getEvent() {
-//   fetch(
-//     `${apiHost}/create`,
-//     {
-//       method: "GET"
-//     },
-//   )
-//     .then(res => res.json())
-//     .then(resp => {
-//       console.log("RESPONSE from GET", resp)
-//     })
-//     .catch(e => {
-//       console.log(e)
-//     });
-// }

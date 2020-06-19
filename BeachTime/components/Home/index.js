@@ -38,7 +38,12 @@ export default class Home extends React.Component {
         method: "GET"
       },
     )
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        console.log("LOGGE REEEEEEES", JSON.stringify(res))
+      })
       .then(resp => {
         console.log("======RESPONSE from GET In HOME======", resp)
         const pastEventData = resp.pastEvent;
@@ -89,17 +94,17 @@ export default class Home extends React.Component {
       <View style={styles.container}>
         <Heading />
         {Platform.OS !== 'ios' ?
-        <Button
-          style={styles.button}
-          title="Create event"
-          onPress={() => this.props.navigation.navigate(EventCreationView)}
-        /> :
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(EventCreationView)}
-          style={styles.button}>
-          <Text
-            style={styles.btnText}>Create event</Text>
-        </TouchableOpacity>
+          <Button
+            style={styles.button}
+            title="Create event"
+            onPress={() => this.props.navigation.navigate(EventCreationView)}
+          /> :
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate(EventCreationView)}
+            style={styles.button}>
+            <Text
+              style={styles.btnText}>Create event</Text>
+          </TouchableOpacity>
         }
 
         <Separator />

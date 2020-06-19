@@ -161,14 +161,7 @@ export const stylesIos = StyleSheet.create({
     color: "white",
     fontSize: 16
   },
-  column2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: "50%",
-    color: "white",
-    fontSize: 16
-  },
+
   btnText: {
     fontSize: 18,
     color: "white",

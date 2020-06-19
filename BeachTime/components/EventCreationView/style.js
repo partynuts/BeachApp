@@ -88,7 +88,19 @@ export const stylesIos = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around'
   },
-  column: {},
+  column1: {
+    width: "50%",
+    color: "white",
+    fontSize: 16
+  },
+  column2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: "50%",
+    color: "white",
+    fontSize: 16
+  },
   resultsContainer: {
     padding: 5,
     borderWidth: 1,

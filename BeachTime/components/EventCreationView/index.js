@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View, Picker, AsyncStorage, Platform, TouchableOpacity } from 'react-native';
+import { Button, Text, View, Picker, AsyncStorage, Platform, TouchableOpacity, TextInput } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Heading from "../Heading";
 import Event from "../Event";
@@ -27,6 +27,8 @@ export default class EventCreationView extends React.Component {
         },
       calendarShown: false,
       timepickerShown: false,
+      showNumberOfFieldsPicker: false,
+      showLocationPicker: false
     };
   }
 
@@ -124,6 +126,14 @@ export default class EventCreationView extends React.Component {
     return (
       <View style={styles.column}>
         <Text style={styles.text}>Location:</Text>
+        <Text
+          style={styles.text}
+          onPress={(e) => {
+            e.preventDefault();
+            this.setState({ showLocationPicker: !this.state.showLocationPicker });
+          }}
+        >{this.state.eventData.location}</Text>
+        {this.state.showLocationPicker &&
         <Picker
           selectedValue={this.state.eventData.location}
           style={styles.picker}
@@ -137,6 +147,7 @@ export default class EventCreationView extends React.Component {
           {this.state.allCourts.map(locationChoice => <Picker.Item label={locationChoice} value={locationChoice} />
           )}
         </Picker>
+        }
       </View>
     )
   }
@@ -202,7 +213,25 @@ export default class EventCreationView extends React.Component {
         }
         <View style={styles.choiceContainer}>
           <View style={styles.column}>
-            <Text style={styles.text}>Number of fields:</Text>
+            <Text
+              style={styles.text}
+              onPress={(e) => {
+                e.preventDefault();
+                this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
+              }}
+            >
+              Number of fields:
+            </Text>
+            <Text
+              style={styles.text}
+              onPress={(e) => {
+                e.preventDefault();
+                this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
+              }}
+            >
+              {this.state.eventData.number_of_fields}
+            </Text>
+            {this.state.showNumberOfFieldsPicker &&
             <Picker
               selectedValue={this.state.eventData.number_of_fields}
               style={styles.picker}
@@ -218,6 +247,7 @@ export default class EventCreationView extends React.Component {
               <Picker.Item label="3" value={3} />
               <Picker.Item label="4" value={4} />
             </Picker>
+            }
           </View>
           {this.state.allCourts &&
           this.getLocationOptions(styles)
