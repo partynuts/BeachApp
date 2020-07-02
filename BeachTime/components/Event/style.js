@@ -178,5 +178,12 @@ export const stylesIos = StyleSheet.create({
   },
   calBtn: {
     backgroundColor: "#FF6347"
+  },
+  guestBtn: {
+    width: "20%",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 7,
+    backgroundColor: "#0066FF"
   }
 });

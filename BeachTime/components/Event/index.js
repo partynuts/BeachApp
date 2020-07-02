@@ -4,6 +4,8 @@ import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
+import { AsyncStorage } from 'react-native';
+
 
 function Separator() {
   return <View style={{
@@ -19,7 +21,8 @@ export default class Event extends React.Component {
     const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user === props.route.params.username) : null;
     console.log("*******SIGNED UP USER*******", props)
     const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
-    const noParticipants = props.route.params.eventData.participants === null || props.route.params.eventData.participants.length < 1;
+    const noParticipants = props.route.params.eventData.participants.length < 1;
+    const myParticipant = props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username);
     this.state = {
       ...props.route.params,
       totalCosts,
@@ -27,12 +30,29 @@ export default class Event extends React.Component {
       isUserSignedUp: props.route.params.username === signedUpUser,
       signupData:
         {
-          numberExternalPlayers: 0
+          numberExternalPlayers: myParticipant ? myParticipant.guests : 0
         },
+      showGuestBtn: false
     };
     console.log("**********routeParams IN EVENTS**********", props.route.params.eventData)
     console.log("**********STATE IN EVENTS**********", this.state)
   }
+
+  // async componentDidMount() {
+  //   const { id } = await this.getUserIdFromStorage();
+  //   console.log("ID AUS STORAGE", id, "ID AUS PROPS", this.props.route.params.userId)
+  //
+  //   if (id === this.props.route.params.user) {
+  //     this.setState({showGuestBtn: true})
+  //   }
+  //   console.log("STATE IN EVENTS NACH MOUNTING", this.state)
+  // }
+  //
+  // async getUserIdFromStorage() {
+  //   const userData = JSON.parse(await AsyncStorage.getItem('@User'));
+  //   console.log("-------------UD----------", JSON.stringify(userData.username))
+  //   return userData;
+  // }
 
   showEventDetails(styles) {
     return <View style={styles.resultsContainer}>
@@ -114,6 +134,29 @@ export default class Event extends React.Component {
       .catch(e => console.log(e))
   }
 
+  handleGuestSignup(e) {
+    e.preventDefault();
+
+    const eventId = this.state.eventData.id;
+
+    fetch(
+      `${apiHost}/events/${eventId}/signupGuest`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: this.state.userId,
+        })
+      }
+    )
+      .then(async (res) => {
+        console.log("RESPONSE FOR GUEST SIGNUP", res)
+      })
+      .catch(e => console.log(e))
+  }
+
   handleCancellation(e) {
     e.preventDefault();
     console.log("EVENT ID Cancellation", this.state, "CANCELLING!!!!!!!");
@@ -146,11 +189,11 @@ export default class Event extends React.Component {
       .catch(e => console.log(e))
   }
 
-  addExternalPlayers() {
+  addExternalPlayers(e) {
     this.setState({
       signupData: {
         ...this.state.signupData,
-        numberExternalPlayers: this.state.signupData.numberExternalPlayers + 1
+        numberExternalPlayers: Number(e.nativeEvent.text)
       }
     });
   }
@@ -179,6 +222,7 @@ export default class Event extends React.Component {
 
   render() {
     console.log("--------signup Data nach addieren von externen------", this.state.signupData);
+    console.log("--------WHO AM I------", this.state.username);
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
@@ -249,26 +293,16 @@ export default class Event extends React.Component {
         {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
         this.state.eventData.participants.map((participant, index) =>
           <View style={styles.tableUser}>
-            <Text key={index} style={styles.column1}>{index + 1}. {participant}</Text>
+            <Text key={index} style={styles.column1}>{index + 1}. {participant.username}</Text>
             {/*<Text style={styles.text}>+</Text>*/}
             <TextInput
               style={styles.textInput}
-              placeholder="add no. of guests"
-              onChangeText={(input) => this.addExternalPlayers(input)}
-              value={this.state.signupData.numberExternalPlayers}
+              onChange={(e) => this.addExternalPlayers(e)}
+              editable={participant.username === this.state.username}
+              value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+              keyboardType="number-pad"
+              returnKeyType="done"
             />
-
-            {/*<View style={styles.column2}>*/}
-            {/*  < Button*/}
-            {/*    title='+'*/}
-            {/*    onPress={() => this.addExternalPlayers()}*/}
-            {/*  />*/}
-            {/*  < Button*/}
-            {/*    title='-'*/}
-            {/*    onPress={() => this.removeExternalPlayers()}*/}
-            {/*  />*/}
-            {/*  <Text>{this.state.signupData.numberExternalPlayers}</Text>*/}
-            {/*</View>*/}
           </View>
         )
         }
