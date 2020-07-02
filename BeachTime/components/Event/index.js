@@ -18,16 +18,18 @@ export default class Event extends React.Component {
 
   constructor(props) {
     super(props);
-    const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user === props.route.params.username) : null;
+    this.timeoutId = null;
+    const signedUpUser = props.route.params.eventData.participants.find(user => user.username === props.route.params.username);
     console.log("*******SIGNED UP USER*******", props)
     const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
     const noParticipants = props.route.params.eventData.participants.length < 1;
     const myParticipant = props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username);
+
     this.state = {
       ...props.route.params,
       totalCosts,
       costsPerPerson: noParticipants ? 0 : totalCosts / props.route.params.eventData.participants.length,
-      isUserSignedUp: props.route.params.username === signedUpUser,
+      isUserSignedUp: props.route.params.username === signedUpUser.username,
       signupData:
         {
           numberExternalPlayers: myParticipant ? myParticipant.guests : 0
@@ -115,11 +117,6 @@ export default class Event extends React.Component {
             costsPerPerson: noParticipants ? 0 : this.state.totalCosts / data.participants.length,
             isUserSignedUp: !this.state.isUserSignedUp
           });
-          console.log("NEUES STATE", this.state)
-          console.log("NEUES STATE", this.state.totalCosts)
-          console.log("NEUES STATE", data.participants.length)
-          console.log("KOSTEN GETEILT????", this.state.totalCosts / this.state.eventData.participants.length, this.state.costsPerPerson);
-
         } else if (res.status === 403) {
           const data = await res.json();
           console.log("DATA NACH SIGN UP mit 403", data, res.status);
@@ -134,25 +131,35 @@ export default class Event extends React.Component {
       .catch(e => console.log(e))
   }
 
-  handleGuestSignup(e) {
-    e.preventDefault();
-
+  handleGuestSignup() {
     const eventId = this.state.eventData.id;
 
     fetch(
-      `${apiHost}/events/${eventId}/signupGuest`,
+      `${apiHost}/events/${eventId}/guests`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           userId: this.state.userId,
+          guestCount: this.state.signupData.numberExternalPlayers
         })
       }
     )
       .then(async (res) => {
-        console.log("RESPONSE FOR GUEST SIGNUP", res)
+        const response = await res.json();
+        console.log("RESPONSE GUESTS", response)
+
+        const extraData = response.enrollment ? {
+          signupData: {
+            numberExternalPlayers: response.enrollment.guests
+          }
+        } : {};
+        this.setState({
+          msg: response.msg,
+          ...extraData
+        });
       })
       .catch(e => console.log(e))
   }
@@ -189,22 +196,20 @@ export default class Event extends React.Component {
       .catch(e => console.log(e))
   }
 
-  addExternalPlayers(e) {
+  setExternalPlayers(e) {
     this.setState({
       signupData: {
         ...this.state.signupData,
         numberExternalPlayers: Number(e.nativeEvent.text)
       }
     });
-  }
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId)
+    }
 
-  removeExternalPlayers() {
-    this.setState({
-      signupData: {
-        ...this.state.signupData,
-        numberExternalPlayers: this.state.signupData.numberExternalPlayers - 1
-      }
-    });
+    this.timeoutId = setTimeout(() => {
+      this.handleGuestSignup();
+    }, 1000)
   }
 
   // editEvent(e) {
@@ -292,12 +297,12 @@ export default class Event extends React.Component {
         </View>
         {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
         this.state.eventData.participants.map((participant, index) =>
-          <View style={styles.tableUser}>
-            <Text key={index} style={styles.column1}>{index + 1}. {participant.username}</Text>
+          <View style={styles.tableUser} key={index}>
+            <Text style={styles.column1}>{index + 1}. {participant.username}</Text>
             {/*<Text style={styles.text}>+</Text>*/}
             <TextInput
               style={styles.textInput}
-              onChange={(e) => this.addExternalPlayers(e)}
+              onChange={(e) => this.setExternalPlayers(e)}
               editable={participant.username === this.state.username}
               value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
               keyboardType="number-pad"
