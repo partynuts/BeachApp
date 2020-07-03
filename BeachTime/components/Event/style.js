@@ -144,7 +144,7 @@ export const stylesIos = StyleSheet.create({
   },
   tableUser: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 5,
     borderWidth: 1,
@@ -152,16 +152,18 @@ export const stylesIos = StyleSheet.create({
   },
   column: {
     color: "white",
-    fontSize: 18,
-    // borderWidth: 1,
-    // borderColor: 'red',
+    fontSize: 18
   },
   column1: {
     width: "50%",
     color: "white",
     fontSize: 16
   },
-
+  column2: {
+    color: "white",
+    fontSize: 18,
+    paddingRight: "10%"
+  },
   btnText: {
     fontSize: 18,
     color: "white",
@@ -179,11 +181,8 @@ export const stylesIos = StyleSheet.create({
   calBtn: {
     backgroundColor: "#FF6347"
   },
-  guestBtn: {
-    width: "20%",
-    flexDirection: 'row',
-    justifyContent: 'center',
-    borderRadius: 7,
-    backgroundColor: "#0066FF"
+  textInput: {
+    color: "white",
+    fontSize: 18
   }
 });

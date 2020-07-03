@@ -20,16 +20,18 @@ export default class Event extends React.Component {
     super(props);
     this.timeoutId = null;
     const signedUpUser = props.route.params.eventData.participants.find(user => user.username === props.route.params.username);
-    console.log("*******SIGNED UP USER*******", props)
+    console.log("*******SIGNED UP USER*******", signedUpUser);
     const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
     const noParticipants = props.route.params.eventData.participants.length < 1;
     const myParticipant = props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username);
+  const totalExternalPlayers = props.route.params.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0);
+  console.log("++++++++++++T O T A L  EXTERNAL ++++++++", totalExternalPlayers);
 
     this.state = {
       ...props.route.params,
       totalCosts,
-      costsPerPerson: noParticipants ? 0 : totalCosts / props.route.params.eventData.participants.length,
-      isUserSignedUp: props.route.params.username === signedUpUser.username,
+      costsPerPerson: noParticipants ? 0 : totalCosts / (props.route.params.eventData.participants.length + totalExternalPlayers),
+      isUserSignedUp: signedUpUser ? props.route.params.username === signedUpUser.username : false,
       signupData:
         {
           numberExternalPlayers: myParticipant ? myParticipant.guests : 0
@@ -81,6 +83,7 @@ export default class Event extends React.Component {
 
   handleSignup(e) {
     e.preventDefault();
+    this.setState({ msg: null })
     console.log("EVENT ID", this.state);
     const eventId = this.state.eventData.id;
     fetch(
@@ -99,23 +102,36 @@ export default class Event extends React.Component {
         if (res.status === 200) {
           const data = await res.json();
           console.log("DATA NACH SIGN UP mit 200", data, res.status);
+          const myParticipant = data.participants.find(participant => participant.username === this.state.username);
+          const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
+
           this.setState({
             msg: data.msg,
             signUpStatus: res.status,
-            costsPerPerson: this.state.eventData.costsTotal / this.state.eventData.participants.length,
+            costsPerPerson: this.state.eventData.costsTotal / (this.state.eventData.participants.length + totalExternalPlayers),
+            signupData:
+              {
+                numberExternalPlayers: myParticipant ? myParticipant.guests : 0
+              },
           });
 
         } else if (res.status === 201) {
           const data = await res.json();
           console.log("DATA NACH SIGN UP mit 201", data, res.status);
-
+          const myParticipant = data.participants.find(participant => participant.username === this.state.username);
           const noParticipants = data.participants === null || data.participants.length < 1;
+          const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
+
           this.setState({
             msg: data.msg,
             signUpStatus: res.status,
             eventData: { ...this.state.eventData, participants: data.participants },
-            costsPerPerson: noParticipants ? 0 : this.state.totalCosts / data.participants.length,
-            isUserSignedUp: !this.state.isUserSignedUp
+            costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
+            isUserSignedUp: !this.state.isUserSignedUp,
+            signupData:
+              {
+                numberExternalPlayers: myParticipant ? myParticipant.guests : 0
+              },
           });
         } else if (res.status === 403) {
           const data = await res.json();
@@ -158,7 +174,8 @@ export default class Event extends React.Component {
         } : {};
         this.setState({
           msg: response.msg,
-          ...extraData
+          ...extraData,
+          costsPerPerson: this.state.totalCosts / response.totalParticipants,
         });
       })
       .catch(e => console.log(e))
@@ -166,6 +183,8 @@ export default class Event extends React.Component {
 
   handleCancellation(e) {
     e.preventDefault();
+    this.setState({ msg: null })
+
     console.log("EVENT ID Cancellation", this.state, "CANCELLING!!!!!!!");
     const eventId = this.state.eventData.id;
     fetch(
@@ -184,11 +203,12 @@ export default class Event extends React.Component {
         const data = await res.json();
         console.log("DATA NACH CANCELLATION", data)
         const noParticipants = data.participants === null || data.participants.length < 1;
+        const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
 
         this.setState({
           signUpStatus: res.status,
           eventData: { ...this.state.eventData, participants: data.participants },
-          costsPerPerson: noParticipants ? 0 : this.state.totalCosts / data.participants.length,
+          costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
           isUserSignedUp: !this.state.isUserSignedUp,
         });
         console.log("NEUES STATE", this.state)
@@ -301,7 +321,7 @@ export default class Event extends React.Component {
             <Text style={styles.column1}>{index + 1}. {participant.username}</Text>
             {/*<Text style={styles.text}>+</Text>*/}
             <TextInput
-              style={styles.textInput}
+              style={styles.column2}
               onChange={(e) => this.setExternalPlayers(e)}
               editable={participant.username === this.state.username}
               value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
