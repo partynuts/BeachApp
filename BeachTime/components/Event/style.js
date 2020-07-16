@@ -66,8 +66,6 @@ export const stylesAndroid = StyleSheet.create({
   column: {
     color: "white",
     fontSize: 18,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   column1: {
     width: "50%",
@@ -171,7 +169,6 @@ export const stylesIos = StyleSheet.create({
   },
   button: {
     width: "100%",
-    // height: "6%",
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -184,5 +181,13 @@ export const stylesIos = StyleSheet.create({
   textInput: {
     color: "white",
     fontSize: 18
-  }
+  },
+  editBtn: {
+    width: "20%",
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 7,
+    backgroundColor: "#0066FF",
+  },
 });

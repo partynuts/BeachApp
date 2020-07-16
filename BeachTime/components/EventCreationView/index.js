@@ -18,12 +18,14 @@ export default class EventCreationView extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log("PROPS????????", props, props.route.params);
+
     this.state = {
       eventData:
         {
-          event_date: new Date(),
-          number_of_fields: 1,
-          location: "East61-indoor",
+          event_date: props.route.params && props.route.params.eventData ? new Date(props.route.params.eventData.event_date) : new Date(),
+          number_of_fields: props.route.params && props.route.params.eventData ? props.route.params.eventData.number_of_fields : 1,
+          location: props.route.params && props.route.params.eventData ? props.route.params.eventData.location : "East61-indoor",
         },
       calendarShown: false,
       timepickerShown: false,
@@ -33,6 +35,9 @@ export default class EventCreationView extends React.Component {
   }
 
   async componentDidMount() {
+    console.log("####### STATE IM CREATION BEIM EDIT ##### ", this.state);
+    console.log("####### ROUTE PARAMS IM CREATION BEIM EDIT ##### ", this.props.route.params);
+
     const { id, username } = await this.getUserIdFromStorage();
     this.setState({ eventData: { ...this.state.eventData, creator_id: id }, userId: id, username })
 
@@ -45,7 +50,7 @@ export default class EventCreationView extends React.Component {
       .then(res => res.json())
       .then(resp => {
         this.setState({
-          allCourts: resp.map(court => court.courts_name)
+          allCourts: resp.map(court => ({ name: court.courts_name, price: court.price }))
         });
       })
       .catch(e => {
@@ -121,8 +126,35 @@ export default class EventCreationView extends React.Component {
       })
   }
 
+  handleUpdate(e) {
+    console.log("@@@@@@ SENDING AN UPDATE @@@@@@@@", this.props);
+    e.preventDefault();
+    fetch(
+      `${apiHost}/events`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+          { ...this.state.eventData, eventId: this.props.route.params.eventData.id }
+        )
+      }
+    )
+      .then(async (res) => {
+        const data = await res.json();
+        this.setState({
+            eventData: { ...this.state.eventData, id: data.id }
+          }, () => {
+            this.props.route.params.onUpdate(this.state);
+            this.props.navigation.navigate('Event')
+          }
+        );
+      })
+  }
+
   getLocationOptions(styles) {
-    console.log("GETTING LOCATION OPTIONS")
+    console.log("GETTING LOCATION OPTIONS", this.state.allCourts)
     return (
       <View style={styles.column}>
         <Text style={styles.text}>Location:</Text>
@@ -140,11 +172,13 @@ export default class EventCreationView extends React.Component {
           onValueChange={(locationValue, fieldIndex) => this.setState({
             eventData: {
               ...this.state.eventData,
-              location: locationValue
+              location: locationValue,
+              courtPrice: this.state.allCourts.find(locationChoice => locationChoice.name === locationValue).price
             }
           })
           }>
-          {this.state.allCourts.map(locationChoice => <Picker.Item label={locationChoice} value={locationChoice} />
+          {this.state.allCourts.map(locationChoice => <Picker.Item label={locationChoice.name}
+            value={locationChoice.name} />
           )}
         </Picker>
         }
@@ -286,14 +320,14 @@ export default class EventCreationView extends React.Component {
         <Separator />
         {Platform.OS !== 'ios' ?
           < Button
-            title="Create!"
-            onPress={(e) => this.handleSubmit(e)}
+            title={this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
+            onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
           /> :
           <TouchableOpacity
-            onPress={(e) => this.handleSubmit(e)}
+            onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
             style={styles.button}>
             <Text
-              style={styles.btnText}>Create event</Text>
+              style={styles.btnText}>{this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}</Text>
           </TouchableOpacity>
         }
       </View>

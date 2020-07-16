@@ -19,13 +19,14 @@ export default class Event extends React.Component {
   constructor(props) {
     super(props);
     this.timeoutId = null;
-    const signedUpUser = props.route.params.eventData.participants.find(user => user.username === props.route.params.username);
+    const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user.username === props.route.params.username) : null;
     console.log("*******SIGNED UP USER*******", signedUpUser);
     const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
-    const noParticipants = props.route.params.eventData.participants.length < 1;
-    const myParticipant = props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username);
-  const totalExternalPlayers = props.route.params.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0);
-  console.log("++++++++++++T O T A L  EXTERNAL ++++++++", totalExternalPlayers);
+    console.log("%%%%%%% TOTAL COSTS %%%%%%%%", props.route.params.eventData.courtPrice, props.route.params.eventData.number_of_fields)
+    const noParticipants = props.route.params.eventData.participants ? props.route.params.eventData.participants.length < 1 : true;
+    const myParticipant = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username) : null;
+    const totalExternalPlayers = props.route.params.eventData.participants ? props.route.params.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0) : 0;
+    console.log("++++++++++++T O T A L  EXTERNAL ++++++++", totalExternalPlayers);
 
     this.state = {
       ...props.route.params,
@@ -76,6 +77,18 @@ export default class Event extends React.Component {
           <Text style={styles.textResults}>Costs p.P.:</Text>
           <Text style={styles.textBold}>{this.state.costsPerPerson} </Text>
         </View>
+        {Platform.OS !== 'ios' ?
+          < Button
+            title="edit"
+            onPress={(e) => this.editEvent(e)}
+          /> :
+          <TouchableOpacity
+            onPress={(e) => this.editEvent(e)}
+            style={styles.editBtn}
+          >
+            <Text style={styles.btnText}>edit</Text>
+          </TouchableOpacity>
+        }
       </View>
     </View>
     // }
@@ -232,10 +245,15 @@ export default class Event extends React.Component {
     }, 1000)
   }
 
-  // editEvent(e) {
-  //   console.log("EDIT EVENT ", e);
-  //   this.props.navigation.navigate('EventCreationView', this.state)
-  // }
+  editEvent(e) {
+    console.log("EDIT EVENT ", e);
+    console.log("####### STATE IM EVENT BEIM EDIT ##### ", this.state)
+    this.props.navigation.navigate('EventCreationView', {
+      ...this.state, onUpdate: (newState) => {
+        this.setState({ eventData: newState.eventData })
+      }
+    })
+  }
 
   createCalendarEvent(e) {
     console.log("get iCal Event ", e);
@@ -258,18 +276,6 @@ export default class Event extends React.Component {
         this.showEventDetails(styles)
         }
 
-        {/*{Platform.OS !== 'ios' ?*/}
-        {/*  < Button*/}
-        {/*    title="Edit"*/}
-        {/*    onPress={(e) => this.editEvent(e)}*/}
-        {/*  /> :*/}
-        {/*  <TouchableOpacity*/}
-        {/*    onPress={(e) => this.editEvent(e)}*/}
-        {/*    style={styles.button}*/}
-        {/*  >*/}
-        {/*    <Text style={styles.btnText}>Edit</Text>*/}
-        {/*  </TouchableOpacity>*/}
-        {/*}*/}
         {this.state.isUserSignedUp &&
         (Platform.OS !== 'ios' ?
             <Button
@@ -319,7 +325,6 @@ export default class Event extends React.Component {
         this.state.eventData.participants.map((participant, index) =>
           <View style={styles.tableUser} key={index}>
             <Text style={styles.column1}>{index + 1}. {participant.username}</Text>
-            {/*<Text style={styles.text}>+</Text>*/}
             <TextInput
               style={styles.column2}
               onChange={(e) => this.setExternalPlayers(e)}
