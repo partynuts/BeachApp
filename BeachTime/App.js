@@ -10,6 +10,14 @@ import Event from "./components/Event";
 import WallOfShame from "./components/WallOfShame";
 import CourtInfo from "./components/CourtInfo";
 
+import * as Sentry from 'sentry-expo';
+
+Sentry.init({
+  dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
+  enableInExpoDevelopment: true,
+  debug: true,
+});
+
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
@@ -18,7 +26,6 @@ export default class App extends React.Component {
   }
 
   render() {
-
     return (
       <NavigationContainer>
         <Stack.Navigator>

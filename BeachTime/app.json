@@ -32,6 +32,18 @@
       "package": "com.pari.beachtime",
       "versionCode": 1,
       "permissions" : []
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "mnone",
+            "project": "beach-time",
+            "authToken": "2577b679c966455f887ad7b396edb508802f0f4a9acd4eeb87821a2920c81266"
+          }
+        }
+      ]
     }
   }
 }

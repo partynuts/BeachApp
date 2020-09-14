@@ -17,18 +17,32 @@ function Separator() {
 }
 
 export default class Home extends React.Component {
-
   constructor(props) {
     super(props);
     const routeParams = props.route.params;
     this.state = {
       username: routeParams.username,
-      userId: routeParams.userId
+      userId: routeParams.userId,
+      errorMsg: null
     }
   }
 
   async componentDidMount() {
-    await registerForPushNotificationsAsync(this.state.userId, this.state.username);
+    this.setState({
+      errorMsg: "Register for push notific"
+    });
+
+    try {
+      await registerForPushNotificationsAsync(this.state.userId, this.state.username);
+    } catch(e) {
+      this.setState({
+        errorMsg: e.message
+      });
+    }
+
+    this.setState({
+      errorMsg: "start FETCH"
+    });
     await fetch(
       `${apiHost}/events`,
       {
@@ -36,11 +50,17 @@ export default class Home extends React.Component {
       },
     )
       .then(res => {
+        this.setState({
+          errorMsg: "FETCH done"
+        });
         if (res.ok) {
           return res.json();
         }
       })
       .then(resp => {
+        this.setState({
+          errorMsg: "WAT AUCH IMMER"
+        });
         const pastEventData = resp.pastEvent;
         const nextEventData = resp.nextEvents[1];
         const secondNextEventData = resp.nextEvents[0];
@@ -51,7 +71,10 @@ export default class Home extends React.Component {
         });
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
+        this.setState({
+          errorMsg: e.message
+        })
       });
   }
 
@@ -92,6 +115,9 @@ export default class Home extends React.Component {
     return (
       <View style={styles.container}>
         <Heading />
+        {this.state.errorMsg &&
+        <Text>{this.state.errorMsg}</Text>
+        }
         {Platform.OS !== 'ios' ?
           <Button
             style={styles.button}
