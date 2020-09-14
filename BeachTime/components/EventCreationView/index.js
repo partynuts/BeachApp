@@ -18,7 +18,6 @@ export default class EventCreationView extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("PROPS????????", props, props.route.params);
 
     this.state = {
       eventData:
@@ -35,9 +34,6 @@ export default class EventCreationView extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("####### STATE IM CREATION BEIM EDIT ##### ", this.state);
-    console.log("####### ROUTE PARAMS IM CREATION BEIM EDIT ##### ", this.props.route.params);
-
     const { id, username } = await this.getUserIdFromStorage();
     this.setState({ eventData: { ...this.state.eventData, creator_id: id }, userId: id, username })
 
@@ -60,7 +56,6 @@ export default class EventCreationView extends React.Component {
 
   async getUserIdFromStorage() {
     const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-    console.log("-------------UD----------", JSON.stringify(userData.id))
     return userData;
   }
 
@@ -69,8 +64,6 @@ export default class EventCreationView extends React.Component {
       calendarShown: !this.state.calendarShown
     })
   }
-
-  //new Date(year, month, day, hours, minutes, seconds, milliseconds)
 
   setDate(e, date) {
     if (date) {
@@ -127,7 +120,6 @@ export default class EventCreationView extends React.Component {
   }
 
   handleUpdate(e) {
-    console.log("@@@@@@ SENDING AN UPDATE @@@@@@@@", this.props);
     e.preventDefault();
     fetch(
       `${apiHost}/events`,
@@ -154,7 +146,6 @@ export default class EventCreationView extends React.Component {
   }
 
   getLocationOptions(styles) {
-    console.log("GETTING LOCATION OPTIONS", this.state.allCourts)
     return (
       <View style={styles.column}>
         <Text style={styles.text}>Location:</Text>
@@ -177,7 +168,7 @@ export default class EventCreationView extends React.Component {
             }
           })
           }>
-          {this.state.allCourts.map(locationChoice => <Picker.Item label={locationChoice.name}
+          {this.state.allCourts.map((locationChoice, index) => <Picker.Item key={index} label={locationChoice.name}
             value={locationChoice.name} />
           )}
         </Picker>
@@ -188,8 +179,6 @@ export default class EventCreationView extends React.Component {
 
   render() {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
-
-    console.log("OP", Platform)
 
     return (
       <View style={styles.container}>

@@ -28,9 +28,7 @@ export default class WallOfShame extends React.Component {
     )
       .then(res => res.json())
       .then(resp => {
-        console.log("======RESPONSE from GET In WALL OF SHAME======", resp)
         const allUsers = resp.map(user => ({username: user.username, booking_count: user.booking_count}));
-        console.log("ALL USERS", allUsers);
         const sorted = allUsers.sort((a, b) => {
             let comparison = 0;
             if (a.booking_count > b.booking_count) {
@@ -40,7 +38,6 @@ export default class WallOfShame extends React.Component {
             }
             return comparison;
           });
-          console.log("~~~~~~~~~SORTED~~~~~~~~~", sorted);
 
         this.setState({
           allUsers: sorted
@@ -53,8 +50,6 @@ export default class WallOfShame extends React.Component {
   }
 
   render() {
-    console.log("STATE IM RENDER VON WALL OF SHAME", this.state)
-
     return (
       <View style={styles.container}>
         <Heading />
@@ -65,12 +60,11 @@ export default class WallOfShame extends React.Component {
         {this.state.allUsers &&
 
         this.state.allUsers.map((user, index) =>
-          <View style={styles.tableUser}>
-            <Text key={index} style={styles.column1}>{user.username}</Text>
-            <Text key={index} style={styles.column2}>{user.booking_count}</Text>
+          <View style={styles.tableUser} key={index}>
+            <Text style={styles.column1}>{user.username}</Text>
+            <Text style={styles.column2}>{user.booking_count}</Text>
           </View>
         )
-
         }
       </View>
     );

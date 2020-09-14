@@ -25,9 +25,6 @@ export default class Home extends React.Component {
       username: routeParams.username,
       userId: routeParams.userId
     }
-
-    console.log("PROPS IN HOME", routeParams)
-    console.log("STATE IN HOME", this.state)
   }
 
   async componentDidMount() {
@@ -42,10 +39,8 @@ export default class Home extends React.Component {
         if (res.ok) {
           return res.json();
         }
-        console.log("LOGGE REEEEEEES", JSON.stringify(res))
       })
       .then(resp => {
-        console.log("======RESPONSE from GET In HOME======", resp)
         const pastEventData = resp.pastEvent;
         const nextEventData = resp.nextEvents[1];
         const secondNextEventData = resp.nextEvents[0];
@@ -80,12 +75,16 @@ export default class Home extends React.Component {
 
   getPastEventPage(e) {
     e.preventDefault();
-    console.log("STATE IN HOME", this.state)
     this.props.navigation.navigate('Event', {
       eventData: this.state.pastEventData,
       username: this.state.username,
       userId: this.state.userId
     })
+  }
+
+  handleButtonPress(e, component) {
+    e.preventDefault();
+    this.props.navigation.navigate(component)
   }
 
   render() {
@@ -97,10 +96,10 @@ export default class Home extends React.Component {
           <Button
             style={styles.button}
             title="Create event"
-            onPress={() => this.props.navigation.navigate(EventCreationView)}
+            onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
           /> :
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate(EventCreationView)}
+            onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
             style={styles.button}>
             <Text
               style={styles.btnText}>Create event</Text>
@@ -162,10 +161,10 @@ export default class Home extends React.Component {
           <Button
             style={styles.button}
             title="Wall of shame"
-            onPress={() => this.props.navigation.navigate(WallOfShame)}
+            onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
           /> :
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate(WallOfShame)}
+            onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
             style={styles.button}>
             <Text style={styles.btnText}>Wall of shame</Text>
           </TouchableOpacity>
@@ -175,24 +174,15 @@ export default class Home extends React.Component {
           <Button
             style={styles.button}
             title="Court operators info"
-            onPress={() => this.props.navigation.navigate(CourtInfo)}
+            onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
           /> :
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate(CourtInfo)}
+            onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
             style={styles.button}>
-            <Text style={styles.btnText}>Court Info</Text>
+            <Text style={styles.btnText}>Court Operators Info</Text>
           </TouchableOpacity>
         }
       </View>
     );
   }
 }
-
-// Show last event data Object {
-//   "creator_id": 25,
-//     "event_date": "2020-03-06T08:39:19.179Z",
-//     "id": 11,
-//     "location": "East61",
-//     "number_of_fields": 1,
-//     "participants": null,
-// }
