@@ -40,6 +40,13 @@ export const styles = StyleSheet.create({
     width: "30%",
     color: "white",
     fontSize: 16
+  },
+  tel: {
+    color: "blue",
+    textDecorationLine: "underline"
+  },
+  bla: {
+    marginBottom: 10
   }
 });
 

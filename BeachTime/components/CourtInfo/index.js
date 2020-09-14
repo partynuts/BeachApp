@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import Heading from "../Heading";
 import { styles } from './style';
 import { apiHost } from "../../config";
+import * as Linking from "expo-linking";
 
 function Separator() {
   return <View style={{
@@ -39,6 +40,14 @@ export default class CourtInfo extends React.Component {
       });
   }
 
+  createBookingLink(court) {
+    if (court.telephone.startsWith('0')) {
+      return `tel:${court.telephone}`
+    } else {
+      return `http://${court.telephone}`
+    }
+  }
+
   render() {
     console.log("STATE IM RENDER VON COURT INFO", this.state)
 
@@ -46,12 +55,11 @@ export default class CourtInfo extends React.Component {
       <View style={styles.container}>
         <Heading />
         {this.state.allCourtsInfo &&
-        this.state.allCourtsInfo.map(court => <View>
+        this.state.allCourtsInfo.map((court, index) => <View key={index}  style={styles.bla}>
           <Text>{court.courts_name}</Text>
           <Text>{court.address}</Text>
-          <Text>{court.telephone}</Text>
+          <Text style={styles.tel} onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}</Text>
           <Text>{court.time}</Text>
-          <Text>{court.price}</Text>
         </View>)}
       </View>
     );
