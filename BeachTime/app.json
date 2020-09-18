@@ -3,7 +3,7 @@
     "name": "Beach Time",
     "slug": "beach-time",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
+    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android",
@@ -31,7 +31,7 @@
     "android": {
       "package": "com.pari.beachtime",
       "versionCode": 1,
-      "permissions" : []
+      "permissions": []
     },
     "hooks": {
       "postPublish": [
@@ -44,6 +44,7 @@
           }
         }
       ]
-    }
+    },
+    "description": ""
   }
 }

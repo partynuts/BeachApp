@@ -28,10 +28,6 @@ export default class Home extends React.Component {
   }
 
   async componentDidMount() {
-    this.setState({
-      errorMsg: "Register for push notific"
-    });
-
     try {
       await registerForPushNotificationsAsync(this.state.userId, this.state.username);
     } catch(e) {
@@ -40,9 +36,7 @@ export default class Home extends React.Component {
       });
     }
 
-    this.setState({
-      errorMsg: "start FETCH"
-    });
+
     await fetch(
       `${apiHost}/events`,
       {
@@ -50,17 +44,13 @@ export default class Home extends React.Component {
       },
     )
       .then(res => {
-        this.setState({
-          errorMsg: "FETCH done"
-        });
+
         if (res.ok) {
           return res.json();
         }
       })
       .then(resp => {
-        this.setState({
-          errorMsg: "WAT AUCH IMMER"
-        });
+
         const pastEventData = resp.pastEvent;
         const nextEventData = resp.nextEvents[1];
         const secondNextEventData = resp.nextEvents[0];
