@@ -30,13 +30,19 @@ export default class Home extends React.Component {
   async componentDidMount() {
     try {
       await registerForPushNotificationsAsync(this.state.userId, this.state.username);
-    } catch(e) {
+    } catch (e) {
       this.setState({
         errorMsg: e.message
       });
     }
 
+    this.fetchDataFormDb();
+    setInterval(() => {
+      this.fetchDataFormDb();
+    }, 30000);
+  }
 
+  async fetchDataFormDb() {
     await fetch(
       `${apiHost}/events`,
       {

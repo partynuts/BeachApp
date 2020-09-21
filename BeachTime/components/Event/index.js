@@ -20,18 +20,15 @@ export default class Event extends React.Component {
     super(props);
     this.timeoutId = null;
     const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user.username === props.route.params.username) : null;
-    console.log("*******SIGNED UP USER*******", signedUpUser);
     const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
-    console.log("%%%%%%% TOTAL COSTS %%%%%%%%", props.route.params.eventData.courtPrice, props.route.params.eventData.number_of_fields)
     const noParticipants = props.route.params.eventData.participants ? props.route.params.eventData.participants.length < 1 : true;
     const myParticipant = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username) : null;
     const totalExternalPlayers = props.route.params.eventData.participants ? props.route.params.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0) : 0;
-    console.log("++++++++++++T O T A L  EXTERNAL ++++++++", totalExternalPlayers);
 
     this.state = {
       ...props.route.params,
       totalCosts,
-      costsPerPerson: noParticipants ? 0 : totalCosts / (props.route.params.eventData.participants.length + totalExternalPlayers),
+      // costsPerPerson: noParticipants ? 0 : totalCosts / (props.route.params.eventData.participants.length + totalExternalPlayers),
       isUserSignedUp: signedUpUser ? props.route.params.username === signedUpUser.username : false,
       signupData:
         {
@@ -39,25 +36,35 @@ export default class Event extends React.Component {
         },
       showGuestBtn: false
     };
-    console.log("**********routeParams IN EVENTS**********", props.route.params.eventData)
-    console.log("**********STATE IN EVENTS**********", this.state)
   }
 
-  // async componentDidMount() {
-  //   const { id } = await this.getUserIdFromStorage();
-  //   console.log("ID AUS STORAGE", id, "ID AUS PROPS", this.props.route.params.userId)
-  //
-  //   if (id === this.props.route.params.user) {
-  //     this.setState({showGuestBtn: true})
-  //   }
-  //   console.log("STATE IN EVENTS NACH MOUNTING", this.state)
-  // }
-  //
-  // async getUserIdFromStorage() {
-  //   const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-  //   console.log("-------------UD----------", JSON.stringify(userData.username))
-  //   return userData;
-  // }
+  componentDidMount() {
+    setInterval(() => {
+      fetch(`${apiHost}/events/${this.state.eventData.id}`)
+        .then(res => {
+          return res.json()
+        })
+        .then(resp => {
+          this.setState({
+            eventData: resp
+          })
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }, 30000)
+  }
+
+  calculateCostsPerPerson() {
+    console.log('asjhdjkah')
+    console.log(this.state.eventData)
+    const participantsCount = this.state.eventData.participants.length;
+    const noParticipants = participantsCount === 0;
+    const totalCosts = this.state.eventData.courtPrice * this.state.eventData.number_of_fields;
+    const totalExternalPlayers = this.state.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0);
+
+    return noParticipants ? 0 : totalCosts / (participantsCount + totalExternalPlayers)
+  }
 
   showEventDetails(styles) {
     return <View style={styles.resultsContainer}>
@@ -75,7 +82,7 @@ export default class Event extends React.Component {
         </View>
         <View>
           <Text style={styles.textResults}>Costs p.P.:</Text>
-          <Text style={styles.textBold}>{this.state.costsPerPerson} </Text>
+          <Text style={styles.textBold}>{this.calculateCostsPerPerson()} </Text>
         </View>
         {Platform.OS !== 'ios' ?
           < Button
@@ -117,11 +124,12 @@ export default class Event extends React.Component {
           console.log("DATA NACH SIGN UP mit 200", data, res.status);
           const myParticipant = data.participants.find(participant => participant.username === this.state.username);
           const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
-
+console.log('onsignup', data)
           this.setState({
             msg: data.msg,
+            eventData: data,
             signUpStatus: res.status,
-            costsPerPerson: this.state.eventData.costsTotal / (this.state.eventData.participants.length + totalExternalPlayers),
+            // costsPerPerson: this.state.eventData.costsTotal / (this.state.eventData.participants.length + totalExternalPlayers),
             signupData:
               {
                 numberExternalPlayers: myParticipant ? myParticipant.guests : 0
@@ -138,8 +146,8 @@ export default class Event extends React.Component {
           this.setState({
             msg: data.msg,
             signUpStatus: res.status,
-            eventData: { ...this.state.eventData, participants: data.participants },
-            costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
+            eventData: data,
+            // costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
             isUserSignedUp: !this.state.isUserSignedUp,
             signupData:
               {
@@ -186,6 +194,7 @@ export default class Event extends React.Component {
           }
         } : {};
         this.setState({
+          eventData: response.eventData,
           msg: response.msg,
           ...extraData,
           costsPerPerson: this.state.totalCosts / response.totalParticipants,
@@ -221,7 +230,7 @@ export default class Event extends React.Component {
         this.setState({
           signUpStatus: res.status,
           eventData: { ...this.state.eventData, participants: data.participants },
-          costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
+          // costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
           isUserSignedUp: !this.state.isUserSignedUp,
         });
         console.log("NEUES STATE", this.state)

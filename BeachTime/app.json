@@ -31,7 +31,8 @@
     "android": {
       "package": "com.pari.beachtime",
       "versionCode": 1,
-      "permissions": []
+      "permissions": [],
+      "googleServicesFile": "./google-services.json"
     },
     "hooks": {
       "postPublish": [

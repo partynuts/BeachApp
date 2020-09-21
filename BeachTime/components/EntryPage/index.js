@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, Button, TextInput, View, Text, TouchableOpacity, Platform } from 'react-native';
+// import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage, Button, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Heading from "../Heading";
 import Home from "../Home";
-// import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage } from 'react-native';
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style';
 
@@ -20,6 +19,7 @@ export default class EntryPage extends React.Component {
     this.state = {
       username: '',
       email: '',
+      paypalUsername: '',
       errorMsg: undefined
     }
   }
@@ -53,6 +53,12 @@ export default class EntryPage extends React.Component {
     });
   }
 
+  setPaypalUsername(input) {
+    this.setState({
+      paypalUsername: input
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     console.log("ENTERED DATA", this.state)
@@ -63,13 +69,20 @@ export default class EntryPage extends React.Component {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ username: this.state.username, email: this.state.email })
+        body: JSON.stringify({ username: this.state.username, email: this.state.email, paypal_username: this.state.paypalUsername })
       }
     )
       .then(async (res) => {
         if (!res.ok) {
+          let errorMsg = 'Something went terribly wrong!';
+          try {
+            errorMsg = (await res.json()).errorMsg;
+          }
+          catch (e) {
+
+          }
           return this.setState({
-            errorMsg: 'Something went wrong!'
+            errorMsg: errorMsg
           })
         }
         const data = await res.json();
@@ -78,7 +91,6 @@ export default class EntryPage extends React.Component {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
           this.props.navigation.navigate('Home', { username: data.username, userId: data.id })
         } catch (e) {
-          // saving error
           console.log(e);
         }
 
@@ -95,13 +107,20 @@ export default class EntryPage extends React.Component {
         <Separator />
         <TextInput
           style={styles.textInput}
-          placeholder="username"
+          placeholder="Username*"
           onChangeText={(input) => this.setUsername(input)}
           value={this.state.username}
         />
         <TextInput
           style={styles.textInput}
-          placeholder="email"
+          placeholder="PayPal username"
+          onChangeText={(input) => this.setPaypalUsername(input)}
+          value={this.state.paypalUsername}
+        />
+        <TextInput
+          style={styles.textInput}
+          type="email"
+          placeholder="Email*"
           onChangeText={(input) => this.setEmail(input)}
           value={this.state.email}
           keyboardType='email-address'

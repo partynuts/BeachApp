@@ -111,7 +111,7 @@ export default class EventCreationView extends React.Component {
       .then(async (res) => {
         const data = await res.json();
         this.setState({
-            eventData: { ...this.state.eventData, id: data.id }
+            eventData: data
           }, () => {
             this.props.navigation.navigate('Event', this.state)
           }
@@ -136,7 +136,7 @@ export default class EventCreationView extends React.Component {
       .then(async (res) => {
         const data = await res.json();
         this.setState({
-            eventData: { ...this.state.eventData, id: data.id }
+            eventData: data
           }, () => {
             this.props.route.params.onUpdate(this.state);
             this.props.navigation.navigate('Event')
