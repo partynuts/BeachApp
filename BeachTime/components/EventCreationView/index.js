@@ -119,8 +119,10 @@ export default class EventCreationView extends React.Component {
       })
   }
 
-  handleUpdate(e) {
+  async handleUpdate(e) {
     e.preventDefault();
+    const userData = await this.getUserIdFromStorage();
+    console.log("USER DATA IM UPDATE", userData);
     fetch(
       `${apiHost}/events`,
       {
@@ -129,7 +131,7 @@ export default class EventCreationView extends React.Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(
-          { ...this.state.eventData, eventId: this.props.route.params.eventData.id }
+          { ...this.state.eventData, eventId: this.props.route.params.eventData.id, userId: userData.id }
         )
       }
     )
@@ -148,9 +150,9 @@ export default class EventCreationView extends React.Component {
   getLocationOptions(styles) {
     return (
       <View style={styles.column}>
-        <Text style={styles.text}>Location:</Text>
+        <Text style={styles.text}>Select location:</Text>
         <Text
-          style={styles.text}
+          style={styles.pickerBtn}
           onPress={(e) => {
             e.preventDefault();
             this.setState({ showLocationPicker: !this.state.showLocationPicker });
@@ -243,10 +245,10 @@ export default class EventCreationView extends React.Component {
                 this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
               }}
             >
-              Number of fields:
+              Select fields:
             </Text>
             <Text
-              style={styles.text}
+              style={styles.pickerBtn}
               onPress={(e) => {
                 e.preventDefault();
                 this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
