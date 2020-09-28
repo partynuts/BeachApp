@@ -277,13 +277,18 @@ export default class Event extends React.Component {
     Linking.openURL(`${apiHost}/events/${eventId}/calendar`);
   }
 
-  createPayPalLink(username) {
+  createPayPalLink(username, styles) {
     const cpp = this.calculateCostsPerPerson();
     if (username) {
-      console.log("PAYPAL LINK", `https://www.paypal.me/${username}/5`)
-      return `https://www.paypal.me/${username}/5`
+      return <Text
+        style={styles.column1}
+        onPress={() => Linking.openURL(`https://www.paypal.me/${username.trim()}/${cpp}`)}
+      >
+        PayPal
+      </Text>
+
     }
-    return;
+    return <Text> </Text>;
   }
 
   render() {
@@ -357,13 +362,8 @@ export default class Event extends React.Component {
                 {index + 1}. {participant.username}
               </Text>
               {Date.parse(this.state.eventData.event_date) < new Date() ?
-                <Text
-                  style={styles.column1}
-                  onPress={() => Linking.openURL(this.createPayPalLink(participant.paypal_username))}
-                >
-                  PayPal
-                </Text> :
-
+                this.createPayPalLink(participant.paypal_username, styles)
+                  :
                 <TextInput
                   disabled={Date.parse(this.state.eventData.event_date) < new Date()}
                   style={styles.column1}
