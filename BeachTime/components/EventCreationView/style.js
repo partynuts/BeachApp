@@ -42,6 +42,13 @@ export const stylesAndroid = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     backgroundColor: "white"
+  },
+  pickerBtn: {
+    height: 30,
+    width: 100,
+    color: 'white',
+    backgroundColor: 'dodgerblue',
+    textAlign: 'center'
   }
 });
 
@@ -80,8 +87,7 @@ export const stylesIos = StyleSheet.create({
     height: "6%",
     flexDirection: 'row',
     justifyContent: 'center',
-    borderRadius: 7,
-    backgroundColor: 'deeppink'
+    borderRadius: 7
   },
   choiceContainer: {
     width: "80%",
@@ -106,5 +112,12 @@ export const stylesIos = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     backgroundColor: "white"
+  },
+  pickerBtn: {
+  height: 30,
+    width: 100,
+    color: 'white',
+    backgroundColor: 'dodgerblue',
+    textAlign: 'center'
   }
 });

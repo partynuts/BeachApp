@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import Heading from "../Heading";
 import { styles } from './style';
 import { apiHost } from "../../config";
@@ -52,16 +52,21 @@ export default class CourtInfo extends React.Component {
     console.log("STATE IM RENDER VON COURT INFO", this.state)
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Heading />
         {this.state.allCourtsInfo &&
-        this.state.allCourtsInfo.map((court, index) => <View key={index}  style={styles.bla}>
-          <Text>{court.courts_name}</Text>
-          <Text>{court.address}</Text>
-          <Text style={styles.tel} onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}</Text>
-          <Text>{court.time}</Text>
-        </View>)}
-      </View>
+        <ScrollView style={styles.scrollView}>
+          {this.state.allCourtsInfo.map((court, index) => <View key={index} style={styles.bla}>
+            <Text>{court.courts_name}</Text>
+            <Text>{court.address}</Text>
+            <Text style={styles.tel}
+              onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}</Text>
+            <Text>{court.time}</Text>
+          </View>)
+          }
+        </ScrollView>
+        }
+      </SafeAreaView>
     );
   }
 }

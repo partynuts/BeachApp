@@ -50,16 +50,23 @@ export default class Home extends React.Component {
       },
     )
       .then(res => {
-
         if (res.ok) {
           return res.json();
         }
       })
       .then(resp => {
+        console.log("RESPONSE im Fetch Data from DB", resp);
+        let pastEventData;
+        let nextEventData;
+        let secondNextEventData;
 
-        const pastEventData = resp.pastEvent;
-        const nextEventData = resp.nextEvents[1];
-        const secondNextEventData = resp.nextEvents[0];
+        if (resp && resp.pastEvent) {
+          pastEventData = resp.pastEvent;
+        }
+        if (resp && resp.nextEvents) {
+          nextEventData = resp.nextEvents[1];
+          secondNextEventData = resp.nextEvents[0];
+        }
         this.setState({
           pastEventData,
           nextEventData,
@@ -135,28 +142,28 @@ export default class Home extends React.Component {
         (Platform.OS !== 'ios' ?
           <Button
             style={styles.button}
-            title={moment(this.state.nextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            title={moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
             onPress={(e) => this.getNextEventPage(e)}
           /> :
           <TouchableOpacity
             onPress={(e) => this.getNextEventPage(e)}
             style={styles.button}>
             <Text
-              style={styles.btnText}>{moment(this.state.nextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+              style={styles.btnText}>{moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
           </TouchableOpacity>)
         }
         <Separator />
         {this.state.secondNextEventData &&
         (Platform.OS !== 'ios' ?
           <Button
-            title={moment(this.state.secondNextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            title={moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
             onPress={(e) => this.getSecondNextEventPage(e)}
           /> :
           <TouchableOpacity
             onPress={(e) => this.getSecondNextEventPage(e)}
             style={styles.button}>
             <Text
-              style={styles.btnText}>{moment(this.state.secondNextEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+              style={styles.btnText}>{moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
           </TouchableOpacity>)
         }
         <Separator />
@@ -166,14 +173,14 @@ export default class Home extends React.Component {
         (Platform.OS !== 'ios' ?
           <Button
             style={styles.button}
-            title={moment(this.state.pastEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+            title={moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
             onPress={(e) => this.getPastEventPage(e)}
           /> :
           <TouchableOpacity
             onPress={(e) => this.getPastEventPage(e)}
             style={styles.button}>
             <Text
-              style={styles.btnText}>{moment(this.state.pastEventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+              style={styles.btnText}>{moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
           </TouchableOpacity>)
         }
         <Separator />

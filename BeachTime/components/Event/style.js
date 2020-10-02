@@ -68,21 +68,31 @@ export const stylesAndroid = StyleSheet.create({
     fontSize: 18,
   },
   column1: {
-    width: "50%",
+    // width: "50%",
     color: "white",
     fontSize: 16
   },
   column2: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    width: "50%",
+    width: "20%",
     color: "white",
-    fontSize: 16
+    fontSize: 16,
+    borderColor: 'red',
+    borderWidth: 1,
   },
   calBtn: {
     backgroundColor: "#FF6347"
-  }
+  },
+  editBtn: {
+    width: "20%",
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 7,
+    backgroundColor: "red",
+  },
 });
 
 export const stylesIos = StyleSheet.create({
@@ -153,7 +163,7 @@ export const stylesIos = StyleSheet.create({
     fontSize: 18
   },
   column1: {
-    width: "50%",
+    // width: "50%",
     color: "white",
     fontSize: 16
   },

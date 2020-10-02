@@ -1,11 +1,14 @@
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 
 export const styles = StyleSheet.create({
   container: {
-    minHeight: '100%',
+    // minHeight: '100%',
     padding: 40,
     color: "white",
-    backgroundColor: 'orange'
+    backgroundColor: 'orange',
+    flex: 1
+    // marginTop: Constants.statusBarHeight,
   },
   text: {
     marginTop: 30,
@@ -47,6 +50,9 @@ export const styles = StyleSheet.create({
   },
   bla: {
     marginBottom: 10
+  },
+  scrollView: {
+  marginHorizontal: 5
   }
 });
 
