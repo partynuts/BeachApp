@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 import EntryPage from "./components/EntryPage";
 import { NavigationContainer } from '@react-navigation/native';
 import Home from "./components/Home";
@@ -23,21 +23,42 @@ const Stack = createStackNavigator();
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      renderContainer: false
+    };
+  }
+
+  async componentDidMount() {
+    const userData = JSON.parse(await AsyncStorage.getItem('@User'));
+    console.log("-------------UD USERNAME APP.js----------", JSON.stringify(userData.username));
+
+    this.setState({
+      userData: userData,
+      renderContainer: true,
+    })
   }
 
   render() {
-    return (
+    console.log("this.props", this.state)
+    return this.state.renderContainer && (
       <NavigationContainer>
         <Stack.Navigator>
+          {!this.state.userData &&
           <Stack.Screen
             name="EntryPage"
             component={EntryPage}
             options={{ title: "Sign up for the app" }}
           />
+          }
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ title: "Create or sign up for an event" }}
+            options={{
+              title: "Create or sign up for an event"
+            }}
+            username={this.state.userData.username}
+            userId={this.state.userData.id}
           />
           <Stack.Screen
             name="EventCreationView"
@@ -61,7 +82,8 @@ export default class App extends React.Component {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    );
+    )
+      ;
   }
 }
 

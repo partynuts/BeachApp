@@ -19,6 +19,7 @@ function Separator() {
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
+    console.log("PROPS Im Constructor", props);
     const routeParams = props.route.params;
     this.state = {
       username: routeParams.username,

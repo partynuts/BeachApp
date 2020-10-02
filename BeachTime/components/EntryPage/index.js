@@ -37,7 +37,7 @@ export default class EntryPage extends React.Component {
 
   async getUserIdFromStorage() {
     const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-    console.log("-------------UD----------", JSON.stringify(userData.username))
+    console.log("-------------UD USERNAME----------", JSON.stringify(userData.username))
     return userData;
   }
 
