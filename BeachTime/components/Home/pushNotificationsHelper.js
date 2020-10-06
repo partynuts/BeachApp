@@ -44,11 +44,12 @@ export function handlePushNotifications() {
   ExpoNotifications.setNotificationHandler({
     handleNotification: async (event) => {
       console.log("EVENT", event);
-      return {
-        shouldShowAlert: false,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-      }
+      return Promise.reject("BLA")
+      // return {
+      //   shouldShowAlert: false,
+      //   shouldPlaySound: false,
+      //   shouldSetBadge: false,
+      // }
     },
   });
 }

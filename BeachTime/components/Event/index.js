@@ -1,4 +1,5 @@
 import React from 'react';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import {
   Button,
   SafeAreaView,
@@ -15,10 +16,10 @@ import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
-import { parseIconFromClassName } from 'react-native-fontawesome';
+
 import * as ExpoNotifications from "expo-notifications";
 
-const validIcon = parseIconFromClassName('fa fa-paypal');
+// const validIcon = parseIconFromClassName('fa fa-calendar-alt');
 
 function Separator() {
   return <View style={{
@@ -57,10 +58,15 @@ export default class Event extends React.Component {
       console.log("NOTIFICATIONS", notification)
       this.fetchDataFromDb()
     });
-    // setInterval(() => {
-    //
-    // }, 10000)
+
+    this.intervalId = setInterval(() => {
+      this.fetchDataFromDb();
+    }, 10000);
     console.log("EVENT DATA", this.state.eventData)
+
+    this.props.navigation.addListener("blur", () => {
+      clearInterval(this.intervalId)
+    })
   }
 
   fetchDataFromDb() {
@@ -289,7 +295,6 @@ export default class Event extends React.Component {
   createCalendarEvent(e) {
     console.log("get iCal Event ", e);
     const eventId = this.state.eventData.id;
-    // RNFetchBlob.fetch("GET",`${apiHost}/events/${eventId}/calendar`)
     Linking.openURL(`${apiHost}/events/${eventId}/calendar`);
   }
 
@@ -300,7 +305,7 @@ export default class Event extends React.Component {
         style={styles.column1}
         onPress={() => Linking.openURL(`https://www.paypal.me/${username.trim()}/${cpp}`)}
       >
-        PayPal
+        <FontAwesome style={styles.icon} name="paypal" size={20} color="#00457C" />
       </Text>
 
     }
@@ -338,20 +343,15 @@ export default class Event extends React.Component {
             {this.state.eventData &&
             this.showEventDetails(styles)
             }
-
-            {this.state.isUserSignedUp &&
-            (Platform.OS !== 'ios' ?
-                <Button
-                  title="Save event to calendar"
-                  onPress={(e) => this.createCalendarEvent(e)}
-                  style={styles.calBtn}
-                /> :
-                <TouchableOpacity
-                  onPress={(e) => this.createCalendarEvent(e)}
-                  style={styles.button}
-                >
-                  <Text style={styles.btnText}>Save event to calendar</Text>
-                </TouchableOpacity>
+            {/*<FontAwesome style={{fontSize: 32}} icon={validIcon} />*/}
+            {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
+            (<TouchableOpacity
+                onPress={(e) => this.createCalendarEvent(e)}
+                style={styles.button}
+              >
+                <Text style={styles.btnText}>Save event to calendar</Text>
+                <Ionicons style={styles.icon} name="md-calendar" size={24} color="white" />
+              </TouchableOpacity>
             )
             }
 

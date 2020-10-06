@@ -105,6 +105,17 @@ export const stylesAndroid = StyleSheet.create({
     fontSize: 16,
     color: "white",
   },
+  button: {
+    width: "100%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    // borderRadius: 7,
+    backgroundColor: "purple",
+  },
+  icon: {
+    marginLeft: 5
+  }
 });
 
 export const stylesIos = StyleSheet.create({

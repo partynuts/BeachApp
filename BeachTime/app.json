@@ -17,6 +17,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "notification": {
+      "iosDisplayInForeground": false,
+      "androidMode": "default"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
