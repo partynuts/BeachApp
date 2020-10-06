@@ -1,12 +1,10 @@
 import React from 'react';
-import { Button, Platform, Text, TextInput, TouchableOpacity, View, Linking, ScrollView } from 'react-native';
+import { Button, Linking, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
-import { AsyncStorage } from 'react-native';
-import FontAwesome, { parseIconFromClassName, SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
-import { styles } from "../CourtInfo/style";
+import { parseIconFromClassName } from 'react-native-fontawesome';
 
 const validIcon = parseIconFromClassName('fa fa-paypal');
 
@@ -88,21 +86,17 @@ export default class Event extends React.Component {
           <Text style={styles.textBold}>{this.calculateCostsPerPerson()} </Text>
         </View>
         {Date.parse(this.state.eventData.event_date) > new Date() &&
-        (Platform.OS !== 'ios' ?
-            < Button
-              title="edit"
-              style={styles.editBtn}
-              onPress={(e) => this.editEvent(e)}
-            /> :
-            <TouchableOpacity
-              onPress={(e) => this.editEvent(e)}
-              style={styles.editBtn}
-            >
-              <Text style={styles.btnText}>edit</Text>
-            </TouchableOpacity>
-        )
+        <TouchableOpacity
+          title="edit"
+          style={styles.editBtn}
+          onPress={(e) => this.editEvent(e)}
+        >
+          <Text style={styles.btnText}>edit</Text>
+        </TouchableOpacity>
+
         }
       </View>
+
     </View>
     // }
   }
@@ -363,7 +357,7 @@ export default class Event extends React.Component {
               </Text>
               {Date.parse(this.state.eventData.event_date) < new Date() ?
                 this.createPayPalLink(participant.paypal_username, styles)
-                  :
+                :
                 <TextInput
                   disabled={Date.parse(this.state.eventData.event_date) < new Date()}
                   style={styles.column1}

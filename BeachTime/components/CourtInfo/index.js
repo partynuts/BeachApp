@@ -53,7 +53,9 @@ export default class CourtInfo extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <Heading />
+        <View style={styles.heading}>
+          <Heading />
+        </View>
         {this.state.allCourtsInfo &&
         <ScrollView style={styles.scrollView}>
           {this.state.allCourtsInfo.map((court, index) => <View key={index} style={styles.bla}>

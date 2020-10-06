@@ -43,6 +43,7 @@ export const stylesAndroid = StyleSheet.create({
     justifyContent: 'space-between'
   },
   resultsContainer: {
+    position: "relative",
     padding: 5,
     borderWidth: 1,
     borderColor: "black",
@@ -88,10 +89,16 @@ export const stylesAndroid = StyleSheet.create({
   editBtn: {
     width: "20%",
     padding: 5,
+    position: "absolute",
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,
-    backgroundColor: "red",
+    backgroundColor: 'dodgerblue',
+  },
+  btnText: {
+    fontSize: 16,
+    color: "white",
   },
 });
 
@@ -175,7 +182,6 @@ export const stylesIos = StyleSheet.create({
   btnText: {
     fontSize: 18,
     color: "white",
-    // paddingTop: "2%"
   },
   button: {
     width: "100%",

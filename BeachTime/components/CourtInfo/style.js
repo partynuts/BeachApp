@@ -1,7 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import React from "react";
 
-export const styles = StyleSheet.create({
+const commonStyles = {
   container: {
     // minHeight: '100%',
     padding: 40,
@@ -52,7 +53,16 @@ export const styles = StyleSheet.create({
     marginBottom: 10
   },
   scrollView: {
-  marginHorizontal: 5
-  }
-});
+    padding: 0
+  },
+  heading: {
 
+  }
+};
+
+if (Platform.OS === 'ios') {
+  commonStyles.scrollView = {...commonStyles.scrollView, padding: 40, paddingTop: 0};
+  commonStyles.heading = {...commonStyles.heading, paddingLeft: 40, paddingTop: 40, paddingRight: 40}
+}
+
+export const styles = StyleSheet.create(commonStyles);

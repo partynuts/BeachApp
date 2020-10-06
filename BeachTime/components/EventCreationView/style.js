@@ -48,7 +48,8 @@ export const stylesAndroid = StyleSheet.create({
     width: 100,
     color: 'white',
     backgroundColor: 'dodgerblue',
-    textAlign: 'center'
+    textAlign: 'center',
+    lineHeight: 30
   }
 });
 
@@ -114,10 +115,11 @@ export const stylesIos = StyleSheet.create({
     backgroundColor: "white"
   },
   pickerBtn: {
-  height: 30,
+    height: 30,
     width: 100,
     color: 'white',
-    backgroundColor: 'dodgerblue',
-    textAlign: 'center'
+    backgroundColor: "#0066FF",
+    textAlign: 'center',
+    lineHeight: 30
   }
 });

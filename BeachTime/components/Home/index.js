@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text, Platform, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, RefreshControl, View, Button, Text, Platform, TouchableOpacity } from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
@@ -36,13 +36,10 @@ export default class Home extends React.Component {
       });
     }
 
-    this.fetchDataFormDb();
-    setInterval(() => {
-      this.fetchDataFormDb();
-    }, 30000);
+    this.fetchDataFromDb();
   }
 
-  async fetchDataFormDb() {
+  async fetchDataFromDb() {
     await fetch(
       `${apiHost}/events`,
       {
@@ -64,8 +61,8 @@ export default class Home extends React.Component {
           pastEventData = resp.pastEvent;
         }
         if (resp && resp.nextEvents) {
-          nextEventData = resp.nextEvents[1];
-          secondNextEventData = resp.nextEvents[0];
+          nextEventData = resp.nextEvents[0];
+          secondNextEventData = resp.nextEvents[1];
         }
         this.setState({
           pastEventData,
@@ -113,105 +110,122 @@ export default class Home extends React.Component {
     this.props.navigation.navigate(component)
   }
 
+  async onRefresh() {
+    this.setState({
+      refreshing: true
+    });
+
+    await this.fetchDataFromDb();
+
+    this.setState({
+      refreshing: false
+    });
+  }
+
   render() {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
-      <View style={styles.container}>
-        <Heading />
-        {this.state.errorMsg &&
-        <Text>{this.state.errorMsg}</Text>
-        }
-        {Platform.OS !== 'ios' ?
-          <Button
-            style={styles.button}
-            title="Create event"
-            onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
-            style={styles.button}>
-            <Text
-              style={styles.btnText}>Create event</Text>
-          </TouchableOpacity>
-        }
+      <SafeAreaView>
+        <ScrollView
+          style={styles.container}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
+        >
+          <Heading />
+          {this.state.errorMsg &&
+          <Text>{this.state.errorMsg}</Text>
+          }
+          {Platform.OS !== 'ios' ?
+            <Button
+              style={styles.button}
+              title="Create event"
+              onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}
+              style={styles.button}>
+              <Text
+                style={styles.btnText}>Create event</Text>
+            </TouchableOpacity>
+          }
 
-        <Separator />
-        <Text style={styles.text}>Upcoming events:</Text>
-        <Separator />
-        {this.state.nextEventData &&
-        (Platform.OS !== 'ios' ?
-          <Button
-            style={styles.button}
-            title={moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
-            onPress={(e) => this.getNextEventPage(e)}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.getNextEventPage(e)}
-            style={styles.button}>
-            <Text
-              style={styles.btnText}>{moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
-          </TouchableOpacity>)
-        }
-        <Separator />
-        {this.state.secondNextEventData &&
-        (Platform.OS !== 'ios' ?
-          <Button
-            title={moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
-            onPress={(e) => this.getSecondNextEventPage(e)}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.getSecondNextEventPage(e)}
-            style={styles.button}>
-            <Text
-              style={styles.btnText}>{moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
-          </TouchableOpacity>)
-        }
-        <Separator />
-        <Text style={styles.text}>Last event:</Text>
-        <Separator />
-        {this.state.pastEventData &&
-        (Platform.OS !== 'ios' ?
-          <Button
-            style={styles.button}
-            title={moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
-            onPress={(e) => this.getPastEventPage(e)}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.getPastEventPage(e)}
-            style={styles.button}>
-            <Text
-              style={styles.btnText}>{moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
-          </TouchableOpacity>)
-        }
-        <Separator />
-        <Separator />
-        <Separator />
-        {Platform.OS !== 'ios' ?
-          <Button
-            style={styles.button}
-            title="Wall of shame"
-            onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
-            style={styles.button}>
-            <Text style={styles.btnText}>Wall of shame</Text>
-          </TouchableOpacity>
-        }
-        <Separator />
-        {Platform.OS !== 'ios' ?
-          <Button
-            style={styles.button}
-            title="Court operators info"
-            onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
-            style={styles.button}>
-            <Text style={styles.btnText}>Court Operators Info</Text>
-          </TouchableOpacity>
-        }
-      </View>
+          <Separator />
+          <Text style={styles.text}>Upcoming events:</Text>
+          <Separator />
+          {this.state.nextEventData &&
+          (Platform.OS !== 'ios' ?
+            <Button
+              style={styles.button}
+              title={moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
+              onPress={(e) => this.getNextEventPage(e)}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.getNextEventPage(e)}
+              style={styles.button}>
+              <Text
+                style={styles.btnText}>{moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
+            </TouchableOpacity>)
+          }
+          <Separator />
+          {this.state.secondNextEventData &&
+          (Platform.OS !== 'ios' ?
+            <Button
+              title={moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
+              onPress={(e) => this.getSecondNextEventPage(e)}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.getSecondNextEventPage(e)}
+              style={styles.button}>
+              <Text
+                style={styles.btnText}>{moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
+            </TouchableOpacity>)
+          }
+          <Separator />
+          <Text style={styles.text}>Last event:</Text>
+          <Separator />
+          {this.state.pastEventData &&
+          (Platform.OS !== 'ios' ?
+            <Button
+              style={styles.button}
+              title={moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
+              onPress={(e) => this.getPastEventPage(e)}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.getPastEventPage(e)}
+              style={styles.button}>
+              <Text
+                style={styles.btnText}>{moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
+            </TouchableOpacity>)
+          }
+          <Separator />
+          <Separator />
+          <Separator />
+          {Platform.OS !== 'ios' ?
+            <Button
+              style={styles.button}
+              title="Wall of shame"
+              onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}
+              style={styles.button}>
+              <Text style={styles.btnText}>Wall of shame</Text>
+            </TouchableOpacity>
+          }
+          <Separator />
+          {Platform.OS !== 'ios' ?
+            <Button
+              style={styles.button}
+              title="Court operators info"
+              onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
+            /> :
+            <TouchableOpacity
+              onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}
+              style={styles.button}>
+              <Text style={styles.btnText}>Court Operators Info</Text>
+            </TouchableOpacity>
+          }
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
