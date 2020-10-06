@@ -1,5 +1,16 @@
 import React from 'react';
-import { Button, Linking, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Button,
+  SafeAreaView,
+  Linking,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
@@ -40,21 +51,27 @@ export default class Event extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(() => {
-      fetch(`${apiHost}/events/${this.state.eventData.id}`)
-        .then(res => {
-          return res.json()
-        })
-        .then(resp => {
-          this.setState({
-            eventData: resp
-          })
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    }, 10000)
+    this.fetchDataFromDb();
+    // setInterval(() => {
+    //
+    // }, 10000)
     console.log("EVENT DATA", this.state.eventData)
+  }
+
+  fetchDataFromDb() {
+    fetch(`${apiHost}/events/${this.state.eventData.id}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(resp => {
+        console.log("REEEEEES IN EVENT FROM FETCH", resp)
+        this.setState({
+          eventData: resp
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 
   calculateCostsPerPerson() {
@@ -285,95 +302,113 @@ export default class Event extends React.Component {
     return <Text> </Text>;
   }
 
+  async onRefresh() {
+    this.setState({
+      refreshing: true
+    });
+
+    await this.fetchDataFromDb();
+
+    this.setState({
+      refreshing: false
+    });
+  }
+
   render() {
     console.log("--------signup Data nach addieren von externen------", this.state.signupData);
     console.log("--------WHO AM I------", this.state.username);
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
-      <View style={styles.container}>
-        <Heading />
-        <ScrollView style={styles.scrollView}>
+      <SafeAreaView>
 
-          <Text style={styles.text}>Event details:</Text>
-          {this.state.eventData &&
-          this.showEventDetails(styles)
-          }
+        <ScrollView
+          style={styles.container}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
+        >
+          <Heading />
+          <ScrollView style={styles.scrollView}>
 
-          {this.state.isUserSignedUp &&
-          (Platform.OS !== 'ios' ?
-              <Button
-                title="Save event to calendar"
-                onPress={(e) => this.createCalendarEvent(e)}
-                style={styles.calBtn}
-              /> :
-              <TouchableOpacity
-                onPress={(e) => this.createCalendarEvent(e)}
-                style={styles.button}
-              >
-                <Text style={styles.btnText}>Save event to calendar</Text>
-              </TouchableOpacity>
-          )
-          }
-
-          <Separator />
-          {Date.parse(this.state.eventData.event_date) > new Date() &&
-          (Platform.OS !== 'ios' ?
-              < Button
-                title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
-                onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-                disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-              /> :
-              <TouchableOpacity
-                onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-                style={styles.button}
-                disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-              >
-                <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}</Text>
-              </TouchableOpacity>
-          )
-          }
-
-          <Separator />
-          {this.state.msg &&
-          <Text>{this.state.msg}</Text>
-          }
-          <Separator />
-          <View style={styles.table}>
-            <Text style={styles.column}>Participants</Text>
-            {this.state.eventData.participants &&
-            Date.parse(this.state.eventData.event_date) > new Date() ?
-              <Text style={styles.column}>Externals</Text> :
-              <Text style={styles.column}>Payment</Text>
+            <Text style={styles.text}>Event details:</Text>
+            {this.state.eventData &&
+            this.showEventDetails(styles)
             }
-          </View>
-          {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-          this.state.eventData.participants.map((participant, index) =>
-            <View style={styles.table} key={index}>
-              <Text
-                style={styles.column1}
-              >
-                {index + 1}. {participant.username}
-              </Text>
-              {Date.parse(this.state.eventData.event_date) < new Date() ?
-                this.createPayPalLink(participant.paypal_username, styles)
-                :
-                <TextInput
+
+            {this.state.isUserSignedUp &&
+            (Platform.OS !== 'ios' ?
+                <Button
+                  title="Save event to calendar"
+                  onPress={(e) => this.createCalendarEvent(e)}
+                  style={styles.calBtn}
+                /> :
+                <TouchableOpacity
+                  onPress={(e) => this.createCalendarEvent(e)}
+                  style={styles.button}
+                >
+                  <Text style={styles.btnText}>Save event to calendar</Text>
+                </TouchableOpacity>
+            )
+            }
+
+            <Separator />
+            {Date.parse(this.state.eventData.event_date) > new Date() &&
+            (Platform.OS !== 'ios' ?
+                < Button
+                  title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
+                  onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
                   disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                  style={styles.column1}
-                  onChange={(e) => this.setExternalPlayers(e)}
-                  editable={participant.username === this.state.username}
-                  value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
-                  keyboardType="number-pad"
-                  returnKeyType="done"
-                />
+                /> :
+                <TouchableOpacity
+                  onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
+                  style={styles.button}
+                  disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                >
+                  <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}</Text>
+                </TouchableOpacity>
+            )
+            }
+
+            <Separator />
+            {this.state.msg &&
+            <Text>{this.state.msg}</Text>
+            }
+            <Separator />
+            <View style={styles.table}>
+              <Text style={styles.column}>Participants</Text>
+              {this.state.eventData.participants &&
+              Date.parse(this.state.eventData.event_date) > new Date() ?
+                <Text style={styles.column}>Externals</Text> :
+                <Text style={styles.column}>Payment</Text>
               }
             </View>
-          )
-          }
-        </ScrollView>
+            {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+            this.state.eventData.participants.map((participant, index) =>
+              <View style={styles.table} key={index}>
+                <Text
+                  style={styles.column1}
+                >
+                  {index + 1}. {participant.username}
+                </Text>
+                {Date.parse(this.state.eventData.event_date) < new Date() ?
+                  this.createPayPalLink(participant.paypal_username, styles)
+                  :
+                  <TextInput
+                    disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                    style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
+                    onChange={(e) => this.setExternalPlayers(e)}
+                    editable={participant.username === this.state.username}
+                    value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                  />
+                }
+              </View>
+            )
+            }
+          </ScrollView>
 
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
