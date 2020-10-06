@@ -1,11 +1,12 @@
 import React from 'react';
+import * as ExpoNotifications from 'expo-notifications';
 import { SafeAreaView, ScrollView, RefreshControl, View, Button, Text, Platform, TouchableOpacity } from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
 import { apiHost } from "../../config";
 import moment from "moment";
-import registerForPushNotificationsAsync from './pushNotificationsHelper'
+import registerForPushNotificationsAsync, { handlePushNotifications } from './pushNotificationsHelper'
 import { stylesAndroid, stylesIos } from './style';
 import CourtInfo from "../CourtInfo";
 
@@ -30,6 +31,11 @@ export default class Home extends React.Component {
   async componentDidMount() {
     try {
       await registerForPushNotificationsAsync(this.state.userId, this.state.username);
+      handlePushNotifications();
+      ExpoNotifications.addNotificationReceivedListener(notification => {
+        console.log("NOTIFICATIONS", notification)
+        this.fetchDataFromDb()
+      });
     } catch (e) {
       this.setState({
         errorMsg: e.message

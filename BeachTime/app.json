@@ -32,7 +32,8 @@
       "package": "com.pari.beachtime",
       "versionCode": 1,
       "permissions": [],
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
     "hooks": {
       "postPublish": [

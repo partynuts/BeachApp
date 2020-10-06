@@ -16,6 +16,7 @@ import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
 import { parseIconFromClassName } from 'react-native-fontawesome';
+import * as ExpoNotifications from "expo-notifications";
 
 const validIcon = parseIconFromClassName('fa fa-paypal');
 
@@ -52,6 +53,10 @@ export default class Event extends React.Component {
 
   componentDidMount() {
     this.fetchDataFromDb();
+    ExpoNotifications.addNotificationReceivedListener(notification => {
+      console.log("NOTIFICATIONS", notification)
+      this.fetchDataFromDb()
+    });
     // setInterval(() => {
     //
     // }, 10000)
