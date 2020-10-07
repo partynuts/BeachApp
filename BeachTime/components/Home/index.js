@@ -36,6 +36,7 @@ export default class Home extends React.Component {
         console.log("NOTIFICATIONS", notification)
         this.fetchDataFromDb()
       });
+
     } catch (e) {
       this.setState({
         errorMsg: e.message
@@ -43,9 +44,15 @@ export default class Home extends React.Component {
     }
 
     this.fetchDataFromDb();
+    this.intervalId = setInterval(() => {
+      console.log('sajhgfdshjfghjsgh')
+      this.fetchDataFromDb();
+    }, 10000);
+    console.log("EVENT DATA", this.state.eventData)
   }
 
   async fetchDataFromDb() {
+    console.log("####### FETCHING DATA #######")
     await fetch(
       `${apiHost}/events`,
       {

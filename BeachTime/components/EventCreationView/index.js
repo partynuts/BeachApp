@@ -77,7 +77,7 @@ export default class EventCreationView extends React.Component {
         setYear = new Date(e.nativeEvent.timestamp).getFullYear();
         setMonth = new Date(e.nativeEvent.timestamp).getMonth();
         setDay = new Date(e.nativeEvent.timestamp).getDate();
-        this.state.eventData.event_date.setFullYear(setYear, setMonth, setDay)
+        this.state.eventData.event_date.setFullYear(setYear, setMonth, setDay);
         this.setState({
           calendarShown: false,
           timepickerShown: true
@@ -85,7 +85,7 @@ export default class EventCreationView extends React.Component {
       } else if (this.state.timepickerShown) {
         setHour = new Date(e.nativeEvent.timestamp).getHours();
         setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
-        this.state.eventData.event_date.setHours(setHour, setMinute)
+        this.state.eventData.event_date.setHours(setHour, setMinute);
         this.setState({
           timepickerShown: false,
           allSet: true
@@ -111,7 +111,9 @@ export default class EventCreationView extends React.Component {
       .then(async (res) => {
         const data = await res.json();
         this.setState({
-            eventData: data
+            eventData: data,
+            calendarShown: false,
+            timepickerShown: false
           }, () => {
             this.props.navigation.navigate('Event', this.state)
           }

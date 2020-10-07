@@ -62,7 +62,6 @@ export default class Event extends React.Component {
     this.intervalId = setInterval(() => {
       this.fetchDataFromDb();
     }, 10000);
-    console.log("EVENT DATA", this.state.eventData)
 
     this.props.navigation.addListener("blur", () => {
       clearInterval(this.intervalId)
