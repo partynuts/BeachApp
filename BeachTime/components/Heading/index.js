@@ -54,6 +54,7 @@ export default class Heading extends React.Component {
         <View style={styles.container}>
           <Text>Beach Time </Text>
           {this.state.username &&
+          !this.props.nonEditable ?
           <View style={styles.column2}>
             <Text>Hi, </Text>
             <TouchableOpacity
@@ -61,7 +62,8 @@ export default class Heading extends React.Component {
               style={styles.button}>
               <Text style={styles.link}>{this.state.username}!</Text>
             </TouchableOpacity>
-          </View>
+          </View> :
+            <Text>Hi, {this.state.username}!</Text>
           }
         </View>
         <Separator />

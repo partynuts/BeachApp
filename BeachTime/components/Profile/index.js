@@ -101,7 +101,7 @@ export default class Profile extends React.Component {
     console.log("STATE IN PROFILE", this.state)
     return (
       <View style={styles.container}>
-        <Heading />
+        <Heading nonEditable={true}/>
         {this.state.username &&
         <View>
           <TextInput
