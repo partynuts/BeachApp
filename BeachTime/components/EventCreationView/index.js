@@ -1,5 +1,15 @@
 import React from 'react';
-import { Button, Text, View, Picker, AsyncStorage, Platform, TouchableOpacity, TextInput } from 'react-native';
+import {
+  Button,
+  Text,
+  View,
+  Picker,
+  AsyncStorage,
+  Platform,
+  TouchableOpacity,
+  TextInput,
+  ScrollView
+} from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Heading from "../Heading";
 import Event from "../Event";
@@ -186,7 +196,7 @@ export default class EventCreationView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Heading />
+        <Heading navigation={this.props.navigation}/>
         <Text style={styles.title}>Set up an event!</Text>
         <Separator />
         {Platform.OS !== 'ios' ?

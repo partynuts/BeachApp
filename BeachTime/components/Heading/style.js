@@ -13,9 +13,13 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   column2: {
-    width: "50%",
+    // width: "50%",
     color: "white",
+    flexDirection: 'row',
     justifyContent: "flex-end"
+  },
+  link: {
+    color: "blue"
   }
 });
 

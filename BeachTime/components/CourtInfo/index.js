@@ -54,7 +54,7 @@ export default class CourtInfo extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.heading}>
-          <Heading />
+          <Heading navigation={this.props.navigation}/>
         </View>
         {this.state.allCourtsInfo &&
         <ScrollView style={styles.scrollView}>

@@ -1,6 +1,16 @@
 import React from 'react';
 import * as ExpoNotifications from 'expo-notifications';
-import { SafeAreaView, ScrollView, RefreshControl, View, Button, Text, Platform, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  RefreshControl,
+  View,
+  Button,
+  Text,
+  Platform,
+  TouchableOpacity,
+  AsyncStorage
+} from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
@@ -26,6 +36,7 @@ export default class Home extends React.Component {
       userId: routeParams.userId,
       errorMsg: null
     }
+    console.log("PROPS IN HOME %%%%%%", props)
   }
 
   async componentDidMount() {
@@ -45,7 +56,6 @@ export default class Home extends React.Component {
 
     this.fetchDataFromDb();
     this.intervalId = setInterval(() => {
-      console.log('sajhgfdshjfghjsgh')
       this.fetchDataFromDb();
     }, 10000);
     console.log("EVENT DATA", this.state.eventData)
@@ -136,6 +146,7 @@ export default class Home extends React.Component {
   }
 
   render() {
+    console.log("STATE IN HOME", this.state.username)
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
       <SafeAreaView>
@@ -143,7 +154,7 @@ export default class Home extends React.Component {
           style={styles.container}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
         >
-          <Heading />
+          <Heading navigation={this.props.navigation} />
           {this.state.errorMsg &&
           <Text>{this.state.errorMsg}</Text>
           }

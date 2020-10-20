@@ -325,7 +325,7 @@ export default class Event extends React.Component {
 
   render() {
     console.log("--------signup Data nach addieren von externen------", this.state.signupData);
-    console.log("--------WHO AM I------", this.state.username);
+    console.log("--------WHO AM I------", this.state.username, this.state.userId);
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
@@ -335,7 +335,7 @@ export default class Event extends React.Component {
           style={styles.container}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
         >
-          <Heading />
+          <Heading navigation={this.props.navigation}/>
           <ScrollView style={styles.scrollView}>
 
             <Text style={styles.text}>Event details:</Text>

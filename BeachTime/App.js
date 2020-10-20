@@ -9,14 +9,16 @@ import EventCreationView from "./components/EventCreationView";
 import Event from "./components/Event";
 import WallOfShame from "./components/WallOfShame";
 import CourtInfo from "./components/CourtInfo";
+import Profile from "./components/Profile";
+import Heading from "./components/Heading";
 
 import * as Sentry from 'sentry-expo';
 
-Sentry.init({
-  dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
-  enableInExpoDevelopment: true,
-  debug: true,
-});
+// Sentry.init({
+//   dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
+//   enableInExpoDevelopment: true,
+//   debug: true,
+// });
 
 const Stack = createStackNavigator();
 
@@ -37,7 +39,7 @@ export default class App extends React.Component {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ title: "Create or sign up for an event" }}
+            options={{ title: "Create or sign up for an event"}}
           />
           <Stack.Screen
             name="EventCreationView"
@@ -55,9 +57,18 @@ export default class App extends React.Component {
             options={{ title: "Wall of shame" }}
           />
           <Stack.Screen
+            name="Heading"
+            component={Heading}
+          />
+          <Stack.Screen
             name="CourtInfo"
             component={CourtInfo}
             options={{ title: "Court operators info" }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ title: "Edit your profile" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

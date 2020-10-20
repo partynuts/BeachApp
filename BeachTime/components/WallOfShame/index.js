@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Heading from "../Heading";
 import { styles } from './style';
 import { apiHost } from "../../config";
@@ -52,7 +52,7 @@ export default class WallOfShame extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Heading />
+        <Heading navigation={this.props.navigation}/>
         <View style={styles.table}>
           <Text style={styles.column}>Name</Text>
           <Text style={styles.column}>Booking count</Text>
