@@ -29,7 +29,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pari.beachtime",
+      "bundleIdentifier": "com.parinazroghany.beachtime",
       "buildNumber": "1.0.1"
     },
     "android": {
