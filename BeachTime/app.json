@@ -33,7 +33,7 @@
       "buildNumber": "1.0.1"
     },
     "android": {
-      "package": "com.pari.beachtime",
+      "package": "com.parinazroghany.beachtime",
       "versionCode": 2,
       "permissions": [],
       "googleServicesFile": "./google-services.json",
