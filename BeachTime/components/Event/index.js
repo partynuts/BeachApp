@@ -90,8 +90,9 @@ export default class Event extends React.Component {
     const noParticipants = participantsCount === 0;
     const totalCosts = this.state.eventData.courtPrice * this.state.eventData.number_of_fields;
     const totalExternalPlayers = this.state.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0);
+    const costsPerPerson = totalCosts / (participantsCount + totalExternalPlayers);
 
-    return noParticipants ? 0 : totalCosts / (participantsCount + totalExternalPlayers)
+    return noParticipants ? 0 : costsPerPerson.toFixed(2)
   }
 
   showEventDetails(styles) {
@@ -335,7 +336,7 @@ export default class Event extends React.Component {
           style={styles.container}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
         >
-          <Heading navigation={this.props.navigation}/>
+          <Heading navigation={this.props.navigation} />
           <ScrollView style={styles.scrollView}>
 
             <Text style={styles.text}>Event details:</Text>

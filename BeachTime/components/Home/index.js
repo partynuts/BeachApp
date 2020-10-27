@@ -36,7 +36,6 @@ export default class Home extends React.Component {
       userId: routeParams.userId,
       errorMsg: null
     }
-    console.log("PROPS IN HOME %%%%%%", props)
   }
 
   async componentDidMount() {
