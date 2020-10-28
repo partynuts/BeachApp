@@ -42,7 +42,6 @@ export default class Event extends React.Component {
     this.state = {
       ...props.route.params,
       totalCosts,
-      // costsPerPerson: noParticipants ? 0 : totalCosts / (props.route.params.eventData.participants.length + totalExternalPlayers),
       isUserSignedUp: signedUpUser ? props.route.params.username === signedUpUser.username : false,
       signupData:
         {
@@ -175,7 +174,6 @@ export default class Event extends React.Component {
             msg: data.msg,
             signUpStatus: res.status,
             eventData: data,
-            // costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
             isUserSignedUp: !this.state.isUserSignedUp,
             signupData:
               {
@@ -258,7 +256,6 @@ export default class Event extends React.Component {
         this.setState({
           signUpStatus: res.status,
           eventData: { ...this.state.eventData, participants: data.participants },
-          // costsPerPerson: noParticipants ? 0 : this.state.totalCosts / (data.participants.length + totalExternalPlayers),
           isUserSignedUp: !this.state.isUserSignedUp,
         });
         console.log("NEUES STATE", this.state)
@@ -283,17 +280,20 @@ export default class Event extends React.Component {
   }
 
   editEvent(e) {
-    console.log("EDIT EVENT ", e);
-    console.log("####### STATE IM EVENT BEIM EDIT ##### ", this.state)
     this.props.navigation.navigate('EventCreationView', {
-      ...this.state, onUpdate: (newState) => {
-        this.setState({ eventData: newState.eventData })
-      }
+      ...this.state,
+      onUpdate: (newState) => this.updateData(newState)
+    });
+  }
+
+  updateData(newState) {
+    this.setState({
+      eventData: newState.eventData,
+      totalCosts: newState.eventData.courtPrice * newState.eventData.number_of_fields
     })
   }
 
   createCalendarEvent(e) {
-    console.log("get iCal Event ", e);
     const eventId = this.state.eventData.id;
     Linking.openURL(`${apiHost}/events/${eventId}/calendar`);
   }
@@ -325,8 +325,6 @@ export default class Event extends React.Component {
   }
 
   render() {
-    console.log("--------signup Data nach addieren von externen------", this.state.signupData);
-    console.log("--------WHO AM I------", this.state.username, this.state.userId);
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
@@ -343,11 +341,10 @@ export default class Event extends React.Component {
             {this.state.eventData &&
             this.showEventDetails(styles)
             }
-            {/*<FontAwesome style={{fontSize: 32}} icon={validIcon} />*/}
             {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
             (<TouchableOpacity
                 onPress={(e) => this.createCalendarEvent(e)}
-                style={styles.button}
+                style={styles.buttonCal}
               >
                 <Text style={styles.btnText}>Save event to calendar</Text>
                 <Ionicons style={styles.icon} name="md-calendar" size={24} color="white" />

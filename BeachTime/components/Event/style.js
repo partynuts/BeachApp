@@ -105,12 +105,11 @@ export const stylesAndroid = StyleSheet.create({
     fontSize: 16,
     color: "white",
   },
-  button: {
+  buttonCal: {
     width: "100%",
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    // borderRadius: 7,
     backgroundColor: "purple",
   },
   icon: {
@@ -216,8 +215,12 @@ export const stylesIos = StyleSheet.create({
     borderRadius: 7,
     backgroundColor: "#0066FF",
   },
-  calBtn: {
-    backgroundColor: "#FF6347"
+  buttonCal: {
+    width: "100%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: "purple",
   },
   textInput: {
     color: "white",

@@ -125,6 +125,7 @@ export default class EventCreationView extends React.Component {
             calendarShown: false,
             timepickerShown: false
           }, () => {
+            this.props.navigation.pop();
             this.props.navigation.navigate('Event', this.state)
           }
         );
@@ -153,7 +154,8 @@ export default class EventCreationView extends React.Component {
             eventData: data
           }, () => {
             this.props.route.params.onUpdate(this.state);
-            this.props.navigation.navigate('Event')
+            this.props.navigation.pop();
+            this.props.navigation.navigate('Event', this.state)
           }
         );
       })
@@ -196,7 +198,7 @@ export default class EventCreationView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Heading navigation={this.props.navigation}/>
+        <Heading navigation={this.props.navigation} />
         <Text style={styles.title}>Set up an event!</Text>
         <Separator />
         {Platform.OS !== 'ios' ?
