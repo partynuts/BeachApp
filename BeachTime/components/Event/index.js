@@ -34,7 +34,7 @@ export default class Event extends React.Component {
     super(props);
     this.timeoutId = null;
     const signedUpUser = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(user => user.username === props.route.params.username) : null;
-    const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields;
+    const totalCosts = props.route.params.eventData.courtPrice * props.route.params.eventData.number_of_fields * 2;
     const noParticipants = props.route.params.eventData.participants ? props.route.params.eventData.participants.length < 1 : true;
     const myParticipant = props.route.params.eventData.participants ? props.route.params.eventData.participants.find(participant => participant.username === props.route.params.username) : null;
     const totalExternalPlayers = props.route.params.eventData.participants ? props.route.params.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0) : 0;
@@ -87,7 +87,7 @@ export default class Event extends React.Component {
     console.log(this.state.eventData)
     const participantsCount = this.state.eventData.participants.length;
     const noParticipants = participantsCount === 0;
-    const totalCosts = this.state.eventData.courtPrice * this.state.eventData.number_of_fields;
+    const totalCosts = this.state.eventData.courtPrice * this.state.eventData.number_of_fields * 2;
     const totalExternalPlayers = this.state.eventData.participants.reduce((acc, currValue) => acc + currValue.guests, 0);
     const costsPerPerson = totalCosts / (participantsCount + totalExternalPlayers);
 
@@ -289,7 +289,7 @@ export default class Event extends React.Component {
   updateData(newState) {
     this.setState({
       eventData: newState.eventData,
-      totalCosts: newState.eventData.courtPrice * newState.eventData.number_of_fields
+      totalCosts: newState.eventData.courtPrice * newState.eventData.number_of_fields * 2
     })
   }
 
