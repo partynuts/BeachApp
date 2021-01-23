@@ -98,31 +98,34 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    console.log("STATE IN PROFILE", this.state)
     return (
       <View style={styles.container}>
         <Heading nonEditable={true}/>
-        {this.state.username &&
         <View>
           <TextInput
             style={styles.textInput}
             onChangeText={(input) => this.setUsername(input)}
-            value={this.state.username}
+            value={this.state.username ? this.state.username : ''}
+            placeholder={this.state.username ? '' : 'Fritz'}
           />
           <TextInput
             style={styles.textInput}
             onChangeText={(input) => this.setPaypalUsername(input)}
-            value={this.state.paypal_username}
+            value={this.state.paypal_username ? this.state.paypal_username : ''}
+            placeholder={this.state.paypal_username ? '' : 'Bratzo'}
           />
           <TextInput
             style={styles.textInput}
             type="email"
             onChangeText={(input) => this.setEmail(input)}
-            value={this.state.email}
+            value={this.state.email ? this.state.email : ''}
+            placeholder={this.state.email ? '' : 'example@mail.com'}
             keyboardType='email-address'
           />
         </View>
-        }<Separator />
+
+
+        <Separator />
         <Separator />
         {this.state.errorMsg &&
         <Text>{this.state.errorMsg}</Text>

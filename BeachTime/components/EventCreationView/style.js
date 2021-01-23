@@ -121,5 +121,8 @@ export const stylesIos = StyleSheet.create({
     backgroundColor: "#0066FF",
     textAlign: 'center',
     lineHeight: 30
+  },
+  iosDatePicker: {
+    backgroundColor: 'rgba(255,255,255, 0.9)'
   }
 });

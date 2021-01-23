@@ -104,6 +104,24 @@ export default class EventCreationView extends React.Component {
     }
   }
 
+  setDateIos(e, date) {
+    if (date) {
+      let setYear = 0;
+      let setMonth = 0;
+      let setDay = 0;
+      let setHour = 0;
+      let setMinute = 0;
+
+      setYear = new Date(e.nativeEvent.timestamp).getFullYear();
+      setMonth = new Date(e.nativeEvent.timestamp).getMonth();
+      setDay = new Date(e.nativeEvent.timestamp).getDate();
+      setHour = new Date(e.nativeEvent.timestamp).getHours();
+      setMinute = new Date(e.nativeEvent.timestamp).getMinutes();
+      this.state.eventData.event_date.setFullYear(setYear, setMonth, setDay);
+      this.state.eventData.event_date.setHours(setHour, setMinute);
+    }
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     fetch(
@@ -232,18 +250,19 @@ export default class EventCreationView extends React.Component {
             </TouchableOpacity>
             <Separator />
             {this.state.calendarShown &&
-            <RNDateTimePicker
-              value={this.state.eventData.event_date}
-              mode='date'
-              onChange={(e, date) => this.setDate(e, date)}
-            />
-            }
-            {this.state.timepickerShown &&
-            <RNDateTimePicker
-              value={this.state.eventData.event_date}
-              mode='time'
-              onChange={(e, date) => this.setDate(e, date)}
-            />
+            <View style={styles.iosDatePicker}>
+              <RNDateTimePicker
+                value={this.state.eventData.event_date}
+                mode='datetime'
+                onChange={(e, date) => this.setDateIos(e, date)}
+              />
+              <TouchableOpacity
+                onPress={(e) => this.showCalendar(e)}
+                style={styles.button}>
+                <Text
+                  style={styles.btnText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
             }
           </View>
         }
