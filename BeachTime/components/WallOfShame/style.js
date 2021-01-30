@@ -1,45 +1,59 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+import colors from "../../colors";
 
-export const styles = StyleSheet.create({
+export const commonStyles = StyleSheet.create({
   container: {
     minHeight: '100%',
     padding: 40,
     color: "white",
-    backgroundColor: 'orange'
+    backgroundColor: colors.creme
   },
   text: {
     marginTop: 30,
     fontWeight: "700",
-    color: "white"
+    color: "black"
   },
   table: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     padding: 5,
-    borderWidth: 1,
-    borderColor: 'black',
+    borderWidth: 2,
+    borderColor: 'lightgrey'
   },
   tableUser: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     padding: 5,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'lightgrey',
   },
   column: {
     width: "50%",
-    color: "white",
+    color: "black",
     fontSize: 18
   },
   column1: {
     width: "70%",
-    color: "white",
+    color: "black",
     fontSize: 16
   },
   column2: {
     width: "30%",
-    color: "white",
+    color: "black",
     fontSize: 16
+  },
+  scrollView: {
+    padding: 0
+  },
+  dataTable: {
+    backgroundColor: colors.textColorWhite,
+    margin: 5
   }
 });
 
+if (Platform.OS === 'ios') {
+  commonStyles.scrollView = { ...commonStyles.scrollView, padding: 40, paddingTop: 0 };
+  commonStyles.heading = { ...commonStyles.heading, paddingLeft: 40, paddingTop: 40, paddingRight: 40 }
+}
+
+export const styles = StyleSheet.create(commonStyles);

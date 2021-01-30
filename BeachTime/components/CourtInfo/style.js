@@ -1,13 +1,15 @@
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import React from "react";
+import colors from "../../colors";
 
 const commonStyles = {
   container: {
     // minHeight: '100%',
     padding: 40,
     color: "white",
-    backgroundColor: 'orange',
+    // backgroundColor: 'orange',
+    backgroundColor: colors.creme,
     flex: 1
     // marginTop: Constants.statusBarHeight,
   },
@@ -57,6 +59,11 @@ const commonStyles = {
   },
   heading: {
 
+  },
+  card: {
+    borderWidth: 1,
+    margin: 5,
+    // backgroundColor: colors.amberBackground
   }
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Button,
   SafeAreaView,
@@ -73,7 +73,6 @@ export default class Event extends React.Component {
         return res.json()
       })
       .then(resp => {
-        console.log("REEEEEES IN EVENT FROM FETCH", resp)
         this.setState({
           eventData: resp
         })
@@ -84,7 +83,6 @@ export default class Event extends React.Component {
   }
 
   calculateCostsPerPerson() {
-    console.log(this.state.eventData)
     const participantsCount = this.state.eventData.participants.length;
     const noParticipants = participantsCount === 0;
     const totalCosts = this.state.eventData.courtPrice * this.state.eventData.number_of_fields * 2;
@@ -96,21 +94,48 @@ export default class Event extends React.Component {
 
   showEventDetails(styles) {
     return <View style={styles.resultsContainer}>
-      <Text style={styles.textResults}>Date:</Text>
-      <Text
-        style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
-      <Text style={styles.textResults}>Location:</Text>
-      <Text style={styles.textBold}>{this.state.eventData.location}</Text>
-      <Text style={styles.textResults}>Fields:</Text>
-      <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
-      <View style={styles.costsContainer}>
-        <View>
-          <Text style={styles.textResults}>Total costs:</Text>
-          <Text style={styles.textBold}>{this.state.totalCosts}</Text>
-        </View>
-        <View>
-          <Text style={styles.textResults}>Costs p.P.:</Text>
-          <Text style={styles.textBold}>{this.calculateCostsPerPerson()} </Text>
+      <Text style={styles.text}>Event details:</Text>
+      <View style={styles.eventDetailWrapper}>
+        <MaterialCommunityIcons
+          name="calendar-clock"
+          color="grey"
+          size={25}
+          style={styles.eventElement}
+        />
+        <Text
+          style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+        </Text>
+      </View>
+      <View style={styles.eventDetailWrapper}>
+        <MaterialCommunityIcons
+          name="map-marker"
+          color="grey"
+          size={25}
+          style={styles.eventElement}
+        />
+        <Text style={styles.eventElement}>{this.state.eventData.location},</Text>
+        <MaterialCommunityIcons
+          name="volleyball"
+          color="grey"
+          size={25}
+          style={styles.eventElement}
+        />
+        <Text style={styles.textBold}>{this.state.eventData.number_of_fields} </Text>
+      </View>
+      <View style={styles.eventDetailWrapper}>
+        <MaterialCommunityIcons
+          name="currency-eur"
+          color="grey"
+          size={25}
+          style={styles.eventElement}
+        />
+        <View style={styles.costsContainer}>
+          <View>
+            <Text style={styles.eventElement}>{this.state.totalCosts} total,</Text>
+          </View>
+          <View>
+            <Text style={styles.textBold}>{this.calculateCostsPerPerson()} p.P </Text>
+          </View>
         </View>
         {Date.parse(this.state.eventData.event_date) > new Date() &&
         <TouchableOpacity
@@ -120,10 +145,8 @@ export default class Event extends React.Component {
         >
           <Text style={styles.btnText}>edit</Text>
         </TouchableOpacity>
-
         }
       </View>
-
     </View>
     // }
   }
@@ -305,7 +328,7 @@ export default class Event extends React.Component {
         style={styles.column1}
         onPress={() => Linking.openURL(`https://www.paypal.me/${username.trim()}/${cpp}`)}
       >
-        <FontAwesome style={styles.icon} name="paypal" size={20} color="#00457C" />
+        <FontAwesome5 style={styles.icon} name="paypal" size={20} color="#00457C" />
       </Text>
 
     }
@@ -329,15 +352,12 @@ export default class Event extends React.Component {
 
     return (
       <SafeAreaView>
-
         <ScrollView
           style={styles.container}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
         >
           <Heading navigation={this.props.navigation} />
           <ScrollView style={styles.scrollView}>
-
-            <Text style={styles.text}>Event details:</Text>
             {this.state.eventData &&
             this.showEventDetails(styles)
             }
@@ -375,40 +395,59 @@ export default class Event extends React.Component {
             <Text>{this.state.msg}</Text>
             }
             <Separator />
-            <View style={styles.table}>
-              <Text style={styles.column}>Participants</Text>
-              {this.state.eventData.participants &&
-              Date.parse(this.state.eventData.event_date) > new Date() ?
-                <Text style={styles.column}>Externals</Text> :
-                <Text style={styles.column}>Payment</Text>
-              }
-            </View>
-            {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-            this.state.eventData.participants.map((participant, index) =>
-              <View style={styles.table} key={index}>
-                <Text
-                  style={styles.column1}
-                >
-                  {index + 1}. {participant.username}
-                </Text>
-                {Date.parse(this.state.eventData.event_date) < new Date() ?
-                  this.createPayPalLink(participant.paypal_username, styles)
-                  :
-                  <TextInput
-                    disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                    style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
-                    onChange={(e) => this.setExternalPlayers(e)}
-                    editable={participant.username === this.state.username}
-                    value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
-                    keyboardType="number-pad"
-                    returnKeyType="done"
+            <View style={styles.participantsWrapper}>
+              <View style={styles.table}>
+                <Text style={styles.column}>
+                  <MaterialCommunityIcons
+                    name="account-multiple-outline"
+                    color="grey"
+                    size={25}
                   />
+                </Text>
+                {this.state.eventData.participants &&
+                Date.parse(this.state.eventData.event_date) > new Date() ?
+                  <Text style={styles.column}>
+                    <MaterialCommunityIcons
+                      name="account-plus"
+                      color="grey"
+                      size={25}
+                    />
+                  </Text> :
+                  <Text style={styles.column}>
+                    <MaterialCommunityIcons
+                      name="credit-card-outline"
+                      color="grey"
+                      size={25}
+                    />
+                  </Text>
                 }
               </View>
-            )
-            }
+              {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+              this.state.eventData.participants.map((participant, index) =>
+                <View style={styles.table} key={index}>
+                  <Text
+                    style={styles.column1}
+                  >
+                    {index + 1}. {participant.username}
+                  </Text>
+                  {Date.parse(this.state.eventData.event_date) < new Date() ?
+                    this.createPayPalLink(participant.paypal_username, styles)
+                    :
+                    <TextInput
+                      disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                      style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
+                      onChange={(e) => this.setExternalPlayers(e)}
+                      editable={participant.username === this.state.username}
+                      value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+                      keyboardType="number-pad"
+                      returnKeyType="done"
+                    />
+                  }
+                </View>
+              )
+              }
+            </View>
           </ScrollView>
-
         </ScrollView>
       </SafeAreaView>
     );

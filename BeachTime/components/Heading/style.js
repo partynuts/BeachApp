@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
-    color: "white",
+    color: "white"
   },
   column1: {
     width: "50%",

@@ -55,14 +55,14 @@ export default class Heading extends React.Component {
           <Text>Beach Time </Text>
           {this.state.username &&
           !this.props.nonEditable ?
-          <View style={styles.column2}>
-            <Text>Hi, </Text>
-            <TouchableOpacity
-              onPress={(e) => this.goToProfile(e)}
-              style={styles.button}>
-              <Text style={styles.link}>{this.state.username}!</Text>
-            </TouchableOpacity>
-          </View> :
+            <View style={styles.column2}>
+              <Text>Hi, </Text>
+              {/*<TouchableOpacity*/}
+              {/*  onPress={(e) => this.goToProfile(e)}*/}
+              {/*  style={styles.button}>*/}
+              <Text>{this.state.username}!</Text>
+              {/*</TouchableOpacity>*/}
+            </View> :
             <Text>Hi, {this.state.username}!</Text>
           }
         </View>

@@ -1,21 +1,12 @@
 import React from 'react';
-import {
-  Button,
-  Text,
-  View,
-  Picker,
-  AsyncStorage,
-  Platform,
-  TouchableOpacity,
-  TextInput,
-  ScrollView
-} from 'react-native';
+import { AsyncStorage, Button, Picker, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Heading from "../Heading";
 import Event from "../Event";
 import { apiHost } from '../../config';
 import moment from "moment";
-import { stylesIos, stylesAndroid } from './style'
+import { stylesAndroid, stylesIos } from './style'
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Separator() {
   return <View style={{
@@ -314,36 +305,57 @@ export default class EventCreationView extends React.Component {
 
         <Separator />
         <Separator />
-        <View style={styles.resultsContainer}>
-          <Text style={styles.textResults}>Your settings:</Text>
-          <Separator />
-          <Text style={styles.textResults}>Date:</Text>
-          {this.state.eventData.event_date &&
-          <View>
-            <Text
-              style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
-          </View>
-          }
-          <Separator />
-          {this.state.eventData.number_of_fields &&
-          <View>
-            <Text style={styles.textResults}>Fields:</Text>
-            <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
-          </View>
-          }
-          <Separator />
-          {this.state.eventData.location &&
-          <View>
-            <Text style={styles.textResults}>Location:</Text>
-            <Text style={styles.textBold}>{this.state.eventData.location}</Text>
-          </View>
-          }
+        <View style={{ backgroundColor: "#ffbf00" }}>
+          <Text style={{...styles.textBold, paddingLeft: 5}}>Your settings:</Text>
+          <View style={styles.resultsContainer}>
+            <Separator />
+            <View style={styles.eventDetailWrapper}>
+              <MaterialCommunityIcons
+                name="calendar-clock"
+                color="grey"
+                size={25}
+                style={styles.eventElement}
+              />
+              {this.state.eventData.event_date &&
+              <View>
+                <Text
+                  style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}</Text>
+              </View>
+              }
+            </View>
+            <Separator />
 
+            {this.state.eventData.number_of_fields &&
+            <View style={styles.eventDetailWrapper}>
+              <MaterialCommunityIcons
+                name="volleyball"
+                color="grey"
+                size={25}
+                style={styles.eventElement}
+              />
+              <Text style={styles.textBold}>{this.state.eventData.number_of_fields}</Text>
+            </View>
+            }
+            <Separator />
+
+            {this.state.eventData.location &&
+            <View style={styles.eventDetailWrapper}>
+              {/*<Text style={styles.textResults}>Location:</Text>*/}
+              <MaterialCommunityIcons
+                name="map-marker"
+                color="grey"
+                size={25}
+                style={styles.eventElement}
+              />
+              <Text style={styles.textBold}>{this.state.eventData.location}</Text>
+            </View>
+            }
+          </View>
         </View>
-        {/*}*/}
         <Separator />
         {Platform.OS !== 'ios' ?
           < Button
+            style={{backgroundColor: 'red'}}
             title={this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
             onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
           /> :

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, ImageBackground } from 'react-native';
 import Heading from "../Heading";
 import { styles } from './style';
 import { apiHost } from "../../config";
 import * as Linking from "expo-linking";
+import { Card, Button, Paragraph, Title } from 'react-native-paper';
 
 function Separator() {
   return <View style={{
@@ -16,7 +17,9 @@ export default class CourtInfo extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      showCardContent: false
+    }
   }
 
   async componentDidMount() {
@@ -48,27 +51,62 @@ export default class CourtInfo extends React.Component {
     }
   }
 
+  selectCard(e, index) {
+    this.setState({
+      selectedItem: index
+    });
+
+  }
+
   render() {
     console.log("STATE IM RENDER VON COURT INFO", this.state)
 
     return (
       <SafeAreaView style={styles.container}>
+        <ImageBackground
+          source={{ uri: 'https://images.unsplash.com/photo-1513233552420-84d7157d6a35?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=952&q=80' }}
+          style={{
+            flex: 1,
+            resizeMode: 'cover',
+            justifyContent: 'center',
+            padding: 0
+          }}>
         <View style={styles.heading}>
-          <Heading navigation={this.props.navigation}/>
+          <Heading navigation={this.props.navigation} />
         </View>
         {this.state.allCourtsInfo &&
         <ScrollView style={styles.scrollView}>
-          {this.state.allCourtsInfo.map((court, index) => <View key={index} style={styles.bla}>
-            <Text>{court.courts_name}</Text>
-            <Text>{court.address}</Text>
-            <Text style={styles.tel}
-              onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}</Text>
-            <Text>{court.time}</Text>
-          </View>)
+          {this.state.allCourtsInfo.map((court, index) =>
+            <Card
+              elevation={10}
+              style={styles.card}
+              onPress={(e) => this.selectCard(e, index)}
+              key={index}>
+              {index === this.state.selectedItem ?
+                <Card.Content>
+                  <Title>{court.courts_name}</Title>
+                  <Paragraph>{court.address}</Paragraph>
+                  <Paragraph>{court.time}</Paragraph>
+                  <Card.Actions>
+                    <Button
+                      onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}
+                    </Button>
+                  </Card.Actions>
+                </Card.Content> :
+                <Card.Content>
+                  <Title>{court.courts_name}</Title>
+                </Card.Content>
+              }
+
+            </Card>
+          )
           }
         </ScrollView>
         }
+        </ImageBackground>
       </SafeAreaView>
     );
   }
 }
+
+

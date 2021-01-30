@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
+import colors from "../../colors";
 
 export const stylesAndroid = StyleSheet.create({
   container: {
     minHeight: '100%',
     padding: 40,
-    backgroundColor: 'orange'
+    backgroundColor: colors.creme,
   },
   title: {
     fontSize: 24,
@@ -12,7 +13,6 @@ export const stylesAndroid = StyleSheet.create({
     color: "white"
   },
   text: {
-    color: "white",
     fontSize: 16,
     marginBottom: 10
   },
@@ -27,7 +27,9 @@ export const stylesAndroid = StyleSheet.create({
   },
   textBold: {
     color: "black",
-    fontWeight: "700"
+    fontWeight: "700",
+    paddingBottom: 5,
+    paddingTop: 5,
   },
   picker: {
     height: 40,
@@ -40,21 +42,21 @@ export const stylesAndroid = StyleSheet.create({
   choiceContainer: {
     width: "100%",
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderRadius: 5
   },
   resultsContainer: {
     position: "relative",
     padding: 5,
     borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white"
+    borderColor: "white",
+    backgroundColor: "white",
+    borderRadius: 5
   },
   table: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 5,
-    borderWidth: 1,
-    borderColor: 'black',
   },
   tableUser: {
     flexDirection: 'row',
@@ -69,7 +71,7 @@ export const stylesAndroid = StyleSheet.create({
     fontSize: 18,
   },
   column1: {
-    color: "white",
+    color: "black",
     fontSize: 16
   },
   column2: {
@@ -108,12 +110,30 @@ export const stylesAndroid = StyleSheet.create({
   buttonCal: {
     width: "100%",
     padding: 10,
+    marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: "purple",
   },
   icon: {
     marginLeft: 5
+  },
+  eventElement: {
+    paddingRight: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    color: "black",
+    fontWeight: "700",
+  },
+  eventDetailWrapper: {
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  participantsWrapper: {
+    backgroundColor: colors.textColorWhite,
+    borderRadius: 5,
+    width: '100%'
   }
 });
 
@@ -121,7 +141,7 @@ export const stylesIos = StyleSheet.create({
   container: {
     minHeight: '100%',
     padding: 40,
-    backgroundColor: 'orange'
+    backgroundColor: colors.creme
   },
   title: {
     fontSize: 24,
@@ -129,7 +149,6 @@ export const stylesIos = StyleSheet.create({
     color: "white"
   },
   text: {
-    color: "white",
     fontSize: 16,
     marginBottom: 10
   },
@@ -144,7 +163,10 @@ export const stylesIos = StyleSheet.create({
   },
   textBold: {
     color: "black",
-    fontWeight: "700"
+    fontWeight: "700",
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'center'
   },
   picker: {
     height: 40,
@@ -157,20 +179,20 @@ export const stylesIos = StyleSheet.create({
   choiceContainer: {
     width: "100%",
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderRadius: 5
   },
   resultsContainer: {
-    padding: 5,
+    padding: 10,
     borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white"
+    borderColor: "white",
+    backgroundColor: "white",
+    borderRadius: 5
   },
   table: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 5,
-    borderWidth: 1,
-    borderColor: 'black',
+    padding: 5
   },
   tableUser: {
     flexDirection: 'row',
@@ -186,7 +208,7 @@ export const stylesIos = StyleSheet.create({
   },
   column1: {
     // width: "50%",
-    color: "white",
+    color: "black",
     fontSize: 16
   },
   column2: {
@@ -218,9 +240,11 @@ export const stylesIos = StyleSheet.create({
   buttonCal: {
     width: "100%",
     padding: 10,
+    marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: "purple",
+    borderRadius: 7,
   },
   textInput: {
     color: "white",
@@ -233,5 +257,23 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     backgroundColor: "#0066FF",
+    right: -50
   },
+  eventElement: {
+    paddingRight: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    color: "black",
+    fontWeight: "700",
+  },
+  eventDetailWrapper: {
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  participantsWrapper: {
+    backgroundColor: colors.textColorWhite,
+    borderRadius: 5,
+    width: '100%'
+  }
 });
