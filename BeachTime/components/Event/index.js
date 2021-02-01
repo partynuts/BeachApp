@@ -125,7 +125,25 @@ export default class Event extends React.Component {
       </View>
 
     </View>
-    // }
+  }
+
+  deleteEvent(e) {
+    e.preventDefault();
+    const eventId = this.state.eventData.id;
+    fetch(
+      `${apiHost}/events/${eventId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(async (res) => {
+        if (res.status === 204) {
+          this.props.navigation.navigate('Home');
+        }
+      })
   }
 
   handleSignup(e) {
@@ -351,12 +369,20 @@ export default class Event extends React.Component {
               </TouchableOpacity>
             )
             }
+            <Separator />
+
+            <TouchableOpacity
+              onPress={(e) => this.deleteEvent(e)}
+              style={styles.button}
+            >
+              <Text style={styles.btnText}>Cancel event</Text>
+            </TouchableOpacity>
 
             <Separator />
             {Date.parse(this.state.eventData.event_date) > new Date() &&
             (Platform.OS !== 'ios' ?
                 < Button
-                  title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
+                  title={this.state.isUserSignedUp ? "Withdraw!" : "Sign up!"}
                   onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
                   disabled={Date.parse(this.state.eventData.event_date) < new Date()}
                 /> :
@@ -365,10 +391,11 @@ export default class Event extends React.Component {
                   style={styles.button}
                   disabled={Date.parse(this.state.eventData.event_date) < new Date()}
                 >
-                  <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}</Text>
+                  <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Withdraw!" : "Sign up!"}</Text>
                 </TouchableOpacity>
             )
             }
+
 
             <Separator />
             {this.state.msg &&
