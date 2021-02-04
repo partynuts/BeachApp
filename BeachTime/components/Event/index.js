@@ -18,6 +18,7 @@ import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
 
 import * as ExpoNotifications from "expo-notifications";
+import colors from "../../colors";
 
 // const validIcon = parseIconFromClassName('fa fa-calendar-alt');
 
@@ -113,7 +114,9 @@ export default class Event extends React.Component {
           size={25}
           style={styles.eventElement}
         />
-        <Text style={styles.eventElement}>{this.state.eventData.location},</Text>
+        <Text style={styles.eventElement}>{this.state.eventData.location}</Text>
+      </View>
+      <View style={styles.eventDetailWrapper}>
         <MaterialCommunityIcons
           name="volleyball"
           color="grey"
@@ -137,19 +140,47 @@ export default class Event extends React.Component {
             <Text style={styles.textBold}>{this.calculateCostsPerPerson()} p.P </Text>
           </View>
         </View>
-        {Date.parse(this.state.eventData.event_date) > new Date() &&
+      </View>
+      {Date.parse(this.state.eventData.event_date) > new Date() &&
+      <View>
         <TouchableOpacity
           title="edit"
           style={styles.editBtn}
           onPress={(e) => this.editEvent(e)}
         >
-          <Text style={styles.btnText}>edit</Text>
+          <Text style={{ ...styles.btnText, color: colors.textColorWhite, fontWeight: '700' }}>edit</Text>
         </TouchableOpacity>
-        }
+        <TouchableOpacity
+          onPress={(e) => this.deleteEvent(e)}
+          style={styles.deleteBtn}
+        >
+          <Text style={{ ...styles.btnText, color: colors.amberBackground, fontWeight: '700' }}>Cancel event</Text>
+        </TouchableOpacity>
       </View>
+      }
     </View>
-    // }
   }
+
+  deleteEvent(e) {
+    e.preventDefault();
+    const eventId = this.state.eventData.id;
+    fetch(
+      `${apiHost}/events/${eventId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(async (res) => {
+        if (res.status === 204) {
+          this.props.navigation.navigate('Home');
+        }
+      })
+      .catch(e => console.log(e))
+  }
+
 
   handleSignup(e) {
     e.preventDefault();
@@ -351,105 +382,136 @@ export default class Event extends React.Component {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
-      <SafeAreaView>
-        <ScrollView
-          style={styles.container}
-          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
-        >
-          <Heading navigation={this.props.navigation} />
-          <ScrollView style={styles.scrollView}>
-            {this.state.eventData &&
-            this.showEventDetails(styles)
-            }
-            {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
-            (<TouchableOpacity
-                onPress={(e) => this.createCalendarEvent(e)}
-                style={styles.buttonCal}
-              >
-                <Text style={styles.btnText}>Save event to calendar</Text>
-                <Ionicons style={styles.icon} name="md-calendar" size={24} color="white" />
-              </TouchableOpacity>
-            )
-            }
+      <View>
+        <SafeAreaView style={{ position: 'relative' }}>
+          <ScrollView
+            style={styles.container}
+            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
+          >
+            <Heading navigation={this.props.navigation} />
+            <ScrollView style={styles.scrollView}>
+              {this.state.eventData &&
+              this.showEventDetails(styles)
+              }
+              <Separator />
+              <Separator />
 
-            <Separator />
-            {Date.parse(this.state.eventData.event_date) > new Date() &&
-            (Platform.OS !== 'ios' ?
-                < Button
-                  title={this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}
-                  onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-                  disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                /> :
+              {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                paddingRight: 15
+              }}>
                 <TouchableOpacity
-                  onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-                  style={styles.button}
-                  disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                  onPress={(e) => this.createCalendarEvent(e)}
+                  style={styles.buttonCal}
                 >
-                  <Text style={styles.btnText}>{this.state.isUserSignedUp ? "Cancel!" : "Sign up!"}</Text>
-                </TouchableOpacity>
-            )
-            }
-
-            <Separator />
-            {this.state.msg &&
-            <Text>{this.state.msg}</Text>
-            }
-            <Separator />
-            <View style={styles.participantsWrapper}>
-              <View style={styles.table}>
-                <Text style={styles.column}>
                   <MaterialCommunityIcons
-                    name="account-multiple-outline"
-                    color="grey"
-                    size={25}
+                    name="calendar-import"
+                    color={colors.darkBlue}
+                    size={30}
                   />
-                </Text>
-                {this.state.eventData.participants &&
-                Date.parse(this.state.eventData.event_date) > new Date() ?
-                  <Text style={styles.column}>
-                    <MaterialCommunityIcons
-                      name="account-plus"
-                      color="grey"
-                      size={25}
-                    />
-                  </Text> :
-                  <Text style={styles.column}>
-                    <MaterialCommunityIcons
-                      name="credit-card-outline"
-                      color="grey"
-                      size={25}
-                    />
-                  </Text>
-                }
+                </TouchableOpacity>
               </View>
-              {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-              this.state.eventData.participants.map((participant, index) =>
-                <View style={styles.table} key={index}>
-                  <Text
-                    style={styles.column1}
-                  >
-                    {index + 1}. {participant.username}
-                  </Text>
-                  {Date.parse(this.state.eventData.event_date) < new Date() ?
-                    this.createPayPalLink(participant.paypal_username, styles)
-                    :
-                    <TextInput
-                      disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                      style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
-                      onChange={(e) => this.setExternalPlayers(e)}
-                      editable={participant.username === this.state.username}
-                      value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
-                      keyboardType="number-pad"
-                      returnKeyType="done"
+              }
+              <Separator />
+              {this.state.msg &&
+              <Text>{this.state.msg}</Text>
+              }
+              <Separator />
+              <View style={styles.participantsWrapper}>
+                <View style={styles.table}>
+                  <Text style={styles.column}>
+                    <MaterialCommunityIcons
+                      name="account-multiple-outline"
+                      color="grey"
+                      size={25}
                     />
+                  </Text>
+                  {this.state.eventData.participants &&
+                  Date.parse(this.state.eventData.event_date) > new Date() ?
+                    <Text style={styles.column}>
+                      <MaterialCommunityIcons
+                        name="account-plus"
+                        color="grey"
+                        size={25}
+                      />
+                    </Text> :
+                    <Text style={styles.column}>
+                      <MaterialCommunityIcons
+                        name="credit-card-outline"
+                        color="grey"
+                        size={25}
+                      />
+                    </Text>
                   }
                 </View>
-              )
-              }
-            </View>
+                {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+                this.state.eventData.participants.map((participant, index) =>
+                  <View style={styles.table} key={index}>
+                    <Text
+                      style={styles.column1}
+                    >
+                      {index + 1}. {participant.username}
+                    </Text>
+                    {Date.parse(this.state.eventData.event_date) < new Date() ?
+                      this.createPayPalLink(participant.paypal_username, styles)
+                      :
+                      <TextInput
+                        disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                        style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
+                        onChange={(e) => this.setExternalPlayers(e)}
+                        editable={participant.username === this.state.username}
+                        value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+                        keyboardType="number-pad"
+                        returnKeyType="done"
+                      />
+                    }
+                  </View>
+                )
+                }
+              </View>
+              <Separator />
+              <Separator />
+              <Separator />
+              <Separator />
+              <Separator />
+              <Separator />
+              <Separator />
+              <Separator />
+
+            </ScrollView>
           </ScrollView>
-        </ScrollView>
-      </SafeAreaView>
+          {Date.parse(this.state.eventData.event_date) > new Date() &&
+          <View style={{
+            width: "100%",
+            height: '10%',
+            position: 'absolute',
+            bottom: 0,
+            backgroundColor: "#d8c3af"
+          }}>
+            <TouchableOpacity
+              onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
+              style={this.state.isUserSignedUp ? {
+                ...styles.buttonSticky,
+                backgroundColor: colors.orangeBrown,
+
+              } : styles.buttonSticky}
+              disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+            >
+              <Text
+                style={this.state.isUserSignedUp ?
+                  styles.btnTxtSecondary :
+                  styles.btnText}>{
+                this.state.isUserSignedUp ? "Withdraw" : "Sign up"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          }
+        </SafeAreaView>
+
+      </View>
     );
   }
 }

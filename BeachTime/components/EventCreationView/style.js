@@ -5,16 +5,16 @@ export const stylesAndroid = StyleSheet.create({
   container: {
     minHeight: '100%',
     padding: 40,
-    backgroundColor: 'orange'
+    backgroundColor: colors.creme
   },
   title: {
     fontSize: 24,
     fontWeight: "700",
-    color: "white"
+    color: colors.textColorBlack
   },
   text: {
-    color: "white",
-    fontSize: 16
+    fontSize: 16,
+    marginBottom: 10
   },
   textResults: {
     color: "black",
@@ -22,10 +22,6 @@ export const stylesAndroid = StyleSheet.create({
   },
   titleResults: {
     marginBottom: 10
-  },
-  textBold: {
-    color: "black",
-    fontWeight: "700"
   },
   picker: {
     height: 40,
@@ -43,9 +39,8 @@ export const stylesAndroid = StyleSheet.create({
   column: {},
   resultsContainer: {
     padding: 5,
-    borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "white"
+    borderRadius: 5,
+    backgroundColor: 'white'
   },
   pickerBtn: {
     height: 30,
@@ -54,7 +49,39 @@ export const stylesAndroid = StyleSheet.create({
     backgroundColor: 'dodgerblue',
     textAlign: 'center',
     lineHeight: 30
-  }
+  },
+  eventElement: {
+    paddingRight: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+    color: "black",
+    fontWeight: "700",
+  },
+  eventDetailWrapper: {
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  textBold: {
+    color: "black",
+    fontWeight: "700",
+    paddingBottom: 10,
+    paddingTop: 5,
+  },
+  buttonSticky: {
+    width: "97%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 7,
+    backgroundColor: colors.darkBlue,
+  },
+  btnText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.textColorWhite,
+  },
 });
 
 export const stylesIos = StyleSheet.create({
@@ -69,9 +96,8 @@ export const stylesIos = StyleSheet.create({
     color: colors.textColorBlack
   },
   text: {
-    marginTop: 30,
-    fontWeight: "700",
-    color: colors.textColorBlack
+    fontSize: 16,
+    marginBottom: 10
   },
   btnText: {
     fontSize: 18,
@@ -113,7 +139,7 @@ export const stylesIos = StyleSheet.create({
   resultsContainer: {
     padding: 5,
     borderRadius: 5,
-    backgroundColor: 'white'
+    backgroundColor: colors.textColorWhite
   },
   titleResults: {
     marginBottom: 10
@@ -146,5 +172,14 @@ export const stylesIos = StyleSheet.create({
     fontWeight: "700",
     paddingBottom: 10,
     paddingTop: 5,
+  },
+  buttonSticky: {
+    width: "97%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 7,
+    backgroundColor: colors.darkBlue,
   },
 });

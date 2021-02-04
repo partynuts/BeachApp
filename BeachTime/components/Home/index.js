@@ -1,16 +1,6 @@
 import React from 'react';
 import * as ExpoNotifications from 'expo-notifications';
-import {
-  Button,
-  Platform,
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  ImageBackground
-} from 'react-native';
+import { ImageBackground, Platform, RefreshControl, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Heading from "../Heading";
 import EventCreationView from "../EventCreationView";
 import WallOfShame from "../WallOfShame";
@@ -19,10 +9,7 @@ import moment from "moment";
 import registerForPushNotificationsAsync, { handlePushNotifications } from './pushNotificationsHelper'
 import { stylesAndroid, stylesIos } from './style';
 import CourtInfo from "../CourtInfo";
-import colors from '../../colors'
-import { Card, Button as Btn, Paragraph, Title } from 'react-native-paper';
-import { styles } from "../CourtInfo/style";
-import * as Linking from "expo-linking";
+import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
 
 function Separator() {
   return <View style={{
