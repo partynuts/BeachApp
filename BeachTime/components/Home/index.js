@@ -10,7 +10,7 @@ import registerForPushNotificationsAsync, { handlePushNotifications } from './pu
 import { stylesAndroid, stylesIos } from './style';
 import CourtInfo from "../CourtInfo";
 import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
-
+import colors from '../../colors'
 function Separator() {
   return <View style={{
     marginVertical: 8,
@@ -21,13 +21,16 @@ function Separator() {
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    const routeParams = props.route.params;
+    console.log("PROPS IN HOME >>>", props.route.params)
+    const routeParams = props.route.params.userData;
     this.state = {
       username: routeParams.username,
       userId: routeParams.userId,
       errorMsg: null
     }
+
   }
+
 
   async componentDidMount() {
     try {
@@ -141,7 +144,7 @@ export default class Home extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://images.unsplash.com/photo-1611588849922-f5b78aeacce3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1506&q=80' }}
+          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
           style={{
             flex: 1,
             resizeMode: 'cover',
@@ -165,7 +168,9 @@ export default class Home extends React.Component {
                 <Paragraph>Set up the time you and your friends play.</Paragraph>
               </Card.Content>
               <Card.Actions>
-                <Btn onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}>
+                <Btn
+                  mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.handleButtonPress(e, 'EventCreationView')}>
                   <Text>Create event</Text>
                 </Btn>
               </Card.Actions>
@@ -183,7 +188,8 @@ export default class Home extends React.Component {
               </Card.Content>
               <Card.Actions>
                 {this.state.nextEventData &&
-                <Btn onPress={(e) => this.getNextEventPage(e)}>
+                <Btn mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.getNextEventPage(e)}>
                   <Text
                   >{moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
                 </Btn>
@@ -191,7 +197,8 @@ export default class Home extends React.Component {
               </Card.Actions>
               <Card.Actions>
                 {this.state.secondNextEventData &&
-                <Btn onPress={(e) => this.getSecondNextEventPage(e)}>
+                <Btn mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.getSecondNextEventPage(e)}>
                   <Text>
                     {moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
                   </Text>
@@ -210,7 +217,8 @@ export default class Home extends React.Component {
               </Card.Content>
               <Card.Actions>
                 {this.state.pastEventData &&
-                <Btn onPress={(e) => this.getPastEventPage(e)}>
+                <Btn mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.getPastEventPage(e)}>
                   <Text>
                     {moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
                   </Text>
@@ -228,12 +236,14 @@ export default class Home extends React.Component {
                 <Paragraph>Want to know who should book the next round?</Paragraph>
               </Card.Content>
               <Card.Actions>
-                <Btn onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}>
+                <Btn mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}>
                   <Text>Wall of shame</Text>
                 </Btn>
               </Card.Actions>
               <Card.Actions>
-                <Btn onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}>
+                <Btn mode='outlined' color={colors.darkBlue}
+                  onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}>
                   <Text>Court Operators</Text>
                 </Btn>
               </Card.Actions>

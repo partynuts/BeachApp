@@ -54,5 +54,8 @@ export const stylesIos = StyleSheet.create({
     borderRadius: 7,
     // backgroundColor: "#0066FF",
     backgroundColor: colors.amberBackground,
+  },
+  card: {
+    opacity: 0.8
   }
 });

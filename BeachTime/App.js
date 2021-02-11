@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native';
 import EntryPage from "./components/EntryPage";
 import { NavigationContainer } from '@react-navigation/native';
 import Home from "./components/Home";
+import HomeNavigator from './navigation/HomeNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
 import EventCreationView from "./components/EventCreationView";
 import Event from "./components/Event";
@@ -42,139 +43,128 @@ const theme = {
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userData: undefined
+    }
+  }
+
+  async componentDidMount() {
+    const userData = JSON.parse(await AsyncStorage.getItem('@User'));
+
+    this.setState({
+      userData
+    })
+  }
+
+  authNavigator() {
+    return (
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen name="Home" component={HomeNavigator} options={{
+          tabBarIcon: () => <MaterialCommunityIcons size={30} name="account-multiple-outline" />,
+        }} />
+        <Tab.Screen name="CourtInfo" component={CourtInfo} />
+      </Tab.Navigator>
+    )
+  }
+
+  guestNavigator() {
+    return (
+      <Tab.Navigator initialRouteName="EntryPage">
+        <Tab.Screen name="EntryPage" component={EntryPage} />
+      </Tab.Navigator>
+    )
   }
 
   render() {
+    if (!this.state.userData) {
+      return <></>
+    }
 
     return (
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              title: "Home",
-              headerTintColor: 'black',
-              headerTitleAlign: 'centre',
-              headerStyle: {
-                backgroundColor: colors.orangeBrown
-              }
-            }}
-          >
-            <Stack.Screen
-              name="EntryPage"
-              component={EntryPage}
-              options={{ title: "Sign up" }}
-            />
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{
-                headerRight: () =>
-                    <ProfileIcon user={userData} />
-              }}
-            />
-            <Stack.Screen
-              name="EventCreationView"
-              component={EventCreationView}
-              options={{
-                title: "Create an event",
-                headerRight: () => <ProfileIcon user={userData} />,
-              }}
-            />
-            <Stack.Screen
-              name="Event"
-              component={Event}
-              options={{
-                title: "Event",
-                headerRight: () => <ProfileIcon user={userData} />,
-              }}
-            />
-            <Stack.Screen
-              name="WallOfShame"
-              component={WallOfShame}
-              options={{
-                title: "Wall of shame",
-                headerRight: () => <ProfileIcon user={userData} />,
-              }}
-            />
-            <Stack.Screen
-              name="Heading"
-              component={Heading}
-            />
-            <Stack.Screen
-              name="CourtInfo"
-              component={CourtInfo}
-              options={{
-                title: "Court operators info",
-                headerRight: () => <ProfileIcon user={userData} />,
-              }}
-            />
-            <Stack.Screen
-              name="Profile"
-              component={Profile}
-              options={{ title: "Edit your profile" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-    );
+      <NavigationContainer>
+        {this.state.userData ?
+          this.authNavigator()
+          :
+          this.guestNavigator()
+        }
+      </NavigationContainer>
+    )
+
+    // return (
+    //     <NavigationContainer>
+    //       <Stack.Navigator
+    //         screenOptions={{
+    //           title: "Home",
+    //           headerTintColor: 'black',
+    //           headerTitleAlign: 'centre',
+    //           headerStyle: {
+    //             backgroundColor: colors.orangeBrown
+    //           }
+    //         }}
+    //       >
+    //         <Stack.Screen
+    //           name="EntryPage"
+    //           component={EntryPage}
+    //           options={{ title: "Sign up" }}
+    //         />
+    //         <Stack.Screen
+    //           name="Home"
+    //           component={Home}
+    //           options={{
+    //             headerRight: () =>
+    //                 <ProfileIcon user={userData} />
+    //           }}
+    //         />
+    //         <Stack.Screen
+    //           name="EventCreationView"
+    //           component={EventCreationView}
+    //           options={{
+    //             title: "Create an event",
+    //             headerRight: () => <ProfileIcon user={userData} />,
+    //           }}
+    //         />
+    //         <Stack.Screen
+    //           name="Event"
+    //           component={Event}
+    //           options={{
+    //             title: "Event",
+    //             headerRight: () => <ProfileIcon user={userData} />,
+    //           }}
+    //         />
+    //         <Stack.Screen
+    //           name="WallOfShame"
+    //           component={WallOfShame}
+    //           options={{
+    //             title: "Wall of shame",
+    //             headerRight: () => <ProfileIcon user={userData} />,
+    //           }}
+    //         />
+    //         <Stack.Screen
+    //           name="Heading"
+    //           component={Heading}
+    //         />
+    //         <Stack.Screen
+    //           name="CourtInfo"
+    //           component={CourtInfo}
+    //           options={{
+    //             title: "Court operators info",
+    //             headerRight: () => <ProfileIcon user={userData} />,
+    //           }}
+    //         />
+    //         <Stack.Screen
+    //           name="Profile"
+    //           component={Profile}
+    //           options={{ title: "Edit your profile" }}
+    //         />
+    //       </Stack.Navigator>
+    //     </NavigationContainer>
+    // );
   }
 }
+//
+// const userData = App.getInitialProps = async () => {
+//   const userData = JSON.parse(await AsyncStorage.getItem('@User'));
+//   console.log("-------------UD----------", JSON.stringify(userData.username))
+//   return userData;
+// };
 
-const userData = App.getInitialProps = async () => {
-  const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-  console.log("-------------UD----------", JSON.stringify(userData.username))
-  return userData;
-};
-
-
-//  <Tab.Navigator
-//           initialRouteName="Home">
-//           <Tab.Screen
-//             name="EntryPage"
-//             component={EntryPage}
-//             options={{ title: "Sign up for the app" }}
-//           />
-//           <Tab.Screen
-//             name="Home"
-//             component={Home}
-//             onPress={() => {navigation.navigate('Home', {userData})}}
-//             options={{
-//               title: "Create or sign up for an event",
-//               headerRight: () => <ProfileIcon user={userData} />,
-//             }}
-//           />
-//           <Tab.Screen
-//             name="EventCreationView"
-//             component={EventCreationView}
-//             options={{
-//               title: "Create an event",
-//               headerRight: () => <ProfileIcon user={userData} />,
-//             }}
-//           />
-//           <Tab.Screen
-//             name="Event"
-//             component={Event}
-//             options={{ title: "Event",
-//               headerRight: () => <ProfileIcon user={userData} />,
-//             }}
-//           />
-//           <Tab.Screen
-//             name="WallOfShame"
-//             component={WallOfShame}
-//             options={{ title: "Wall of shame",
-//               headerRight: () => <ProfileIcon user={userData} />,
-//             }}
-//           />
-//           <Tab.Screen
-//             name="Heading"
-//             component={Heading}
-//           />
-//           <Tab.Screen name="CourtInfo" component={CourtInfo} options={{
-//             tabBarIcon: () => (
-//               <MaterialCommunityIcons size={30} style={{ marginBottom: -3 }} />
-//             ),
-//           }} />
-//           <Tab.Screen
-//             name="Profile"
-//             component={Profile}
-//             options={{ title: "Edit your profile" }}
-//           />
-//         </Tab.Navigator>

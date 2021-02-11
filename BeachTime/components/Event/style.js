@@ -269,7 +269,7 @@ export const stylesIos = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,
-    backgroundColor: "#0066FF",
+    backgroundColor: colors.darkBlue,
   },
   textInput: {
     color: "white",
@@ -287,8 +287,8 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: colors.darkBlue,
-    backgroundColor: colors.darkBlue,
+    borderColor: colors.lightBlue,
+    backgroundColor: colors.lightBlue,
   },
   deleteBtn: {
     paddingTop: 10,
@@ -302,7 +302,7 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: colors.amberBackground,
+    borderColor: colors.brown,
     backgroundColor: colors.textColorWhite,
   },
   buttonSticky: {

@@ -1,2 +1,2 @@
-export const apiHost = 'http://ebf7e1d3c271.ngrok.io';
+export const apiHost = 'http://localhost:3000';
 // export const apiHost = 'https://beachtime-api.herokuapp.com';

@@ -10,7 +10,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View, ImageBackground
 } from 'react-native';
 import Heading from "../Heading";
 import { apiHost } from '../../config';
@@ -154,7 +154,7 @@ export default class Event extends React.Component {
           onPress={(e) => this.deleteEvent(e)}
           style={styles.deleteBtn}
         >
-          <Text style={{ ...styles.btnText, color: colors.amberBackground, fontWeight: '700' }}>Cancel event</Text>
+          <Text style={{ ...styles.btnText, color: colors.brown, fontWeight: '700' }}>Cancel event</Text>
         </TouchableOpacity>
       </View>
       }
@@ -510,7 +510,6 @@ export default class Event extends React.Component {
           </View>
           }
         </SafeAreaView>
-
       </View>
     );
   }

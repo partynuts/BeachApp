@@ -8,9 +8,11 @@
   "lightYellow":"#fff14e",
   "amberBackground": "#ffbf00",
   "lightgrayBackground": "#F5F5F5",
-  "darkBlue": "#153ae6",
+  "darkBlue": "#0035c7",
   "darkerBlue": "#0012b2",
+  "lightBlue": "#56818c",
   "purpleBlue":"#6b66ff",
   "textColorBlack": "#000000",
-  "textColorWhite": "#ffffff"
+  "textColorWhite": "#ffffff",
+  "brown": "#7a5800"
 }
