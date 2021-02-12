@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Home from "../Home";
+import Home from "../Info";
 import WallOfShame from "../WallOfShame";
 import CourtInfo from "../CourtInfo";
 import ProfileIcon from "../ProfileIcon";

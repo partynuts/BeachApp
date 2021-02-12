@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   AsyncStorage,
-  Button,
   Picker,
   Platform,
   RefreshControl,
@@ -12,20 +11,13 @@ import {
   View
 } from 'react-native';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import Heading from "../Heading";
 import Event from "../Event";
 import { apiHost } from '../../config';
 import moment from "moment";
 import { stylesAndroid, stylesIos } from './style'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Card, Button as Btn, Paragraph, Title } from 'react-native-paper';
-
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+import { Button as Btn, Card, Title } from 'react-native-paper';
+import { Separator } from "../../helper";
 
 export default class EventCreationView extends React.Component {
 
@@ -236,8 +228,6 @@ export default class EventCreationView extends React.Component {
             style={styles.container}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            <Heading navigation={this.props.navigation} />
-            {/*<View style={styles.resultsContainer}>*/}
             <Card
               elevation={10}
               style={styles.card}

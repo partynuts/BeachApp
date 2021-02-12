@@ -1,20 +1,14 @@
 import React from 'react';
-import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { AsyncStorage, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from './style';
-
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+import { Separator } from "../../helper";
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
-    const routeParams = props.route.params;
+    // const routeParams = props.route.params.userData;
+    console.log("PROPS IN PROFILE", props)
     this.state = {}
   }
 
@@ -88,7 +82,7 @@ export default class Profile extends React.Component {
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
           this.props.route.params.refresh();
-          this.props.navigation.navigate('Home', {username: this.state.username});
+          this.props.navigation.navigate('Home', { username: this.state.username });
 
         } catch (e) {
           console.log(e);
@@ -100,7 +94,6 @@ export default class Profile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Heading nonEditable={true}/>
         <View>
           <TextInput
             style={styles.textInput}
@@ -123,8 +116,6 @@ export default class Profile extends React.Component {
             keyboardType='email-address'
           />
         </View>
-
-
         <Separator />
         <Separator />
         {this.state.errorMsg &&
@@ -135,6 +126,7 @@ export default class Profile extends React.Component {
           style={styles.button}>
           <Text style={styles.btnText}>Update profile</Text>
         </TouchableOpacity>
+
       </View>
     )
   }

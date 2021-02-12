@@ -2,9 +2,10 @@ import React from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
 import { AsyncStorage, Button, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Heading from "../Heading";
-import Home from "../Home";
+import Home from "../Info";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style';
+import GlobalState from "../../contexts/GlobalState";
 
 function Separator() {
   return <View style={{
@@ -23,17 +24,16 @@ export default class EntryPage extends React.Component {
       errorMsg: undefined
     }
   }
-
-  async componentDidMount() {
-    const { id, username } = await this.getUserIdFromStorage()
-    if (username) {
-      this.setState({
-        username,
-        userId: id
-      });
-      this.props.navigation.navigate('Home', { username, userId: id })
-    }
-  }
+  //
+  // async componentDidMount() {
+  //   const { id, username } = await this.getUserIdFromStorage()
+  //   if (username) {
+  //     this.setState({
+  //       username,
+  //       userId: id
+  //     });
+  //   }
+  // }
 
   async getUserIdFromStorage() {
     const userData = JSON.parse(await AsyncStorage.getItem('@User'));
@@ -61,6 +61,7 @@ export default class EntryPage extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    const [_, setState] = React.useContext(GlobalState);
     console.log("ENTERED DATA", this.state)
     fetch(
       `${apiHost}/users`,
@@ -89,7 +90,8 @@ export default class EntryPage extends React.Component {
         console.log("ENTRY PAGE DATENZEUGS", data)
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
-          this.props.navigation.navigate('Home', { username: data.username, userId: data.id })
+          setState((state) => ({ ...state, user: data }));
+          // this.props.navigation.navigate('Home', { username: data.username, userId: data.id })
         } catch (e) {
           console.log(e);
         }

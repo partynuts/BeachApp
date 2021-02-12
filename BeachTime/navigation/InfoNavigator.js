@@ -1,16 +1,16 @@
 import React from 'react';
 import { createStackNavigator } from "@react-navigation/stack";
-
-const Stack = createStackNavigator();
 import colors from '../colors'
-import Home from '../components/Home'
-import EventCreationView from '../components/EventCreationView'
-import Event from '../components/Event'
+import Info from '../components/Info'
 import ProfileIcon from "../components/ProfileIcon";
 import { AsyncStorage } from "react-native";
-import App from "../App";
+import WallOfShame from "../components/WallOfShame";
+import CourtInfo from "../components/CourtInfo";
+import Header from "../components/Header";
 
-export default function HomeNavigator() {
+const Stack = createStackNavigator();
+
+export default function InfoNavigator() {
   const [userData, setUserdata] = React.useState(undefined);
   React.useEffect(() => {
     AsyncStorage.getItem('@User')
@@ -23,7 +23,7 @@ export default function HomeNavigator() {
     return () => {
     }
   }, []);
-console.log("userData in Nav", userData)
+  console.log("userData in Nav", userData)
   if (!userData) {
     return <></>
   }
@@ -32,37 +32,37 @@ console.log("userData in Nav", userData)
   return (
     <Stack.Navigator
       screenOptions={{
-        title: "Home",
+        title: "Info",
         headerTintColor: 'black',
         headerTitleAlign: 'centre',
         headerStyle: {
-          backgroundColor: colors.orangeBrown
+          backgroundColor: colors.creme
         }
       }}
     >
       <Stack.Screen
-        name="Events"
-        component={Home}
-        initialParams={{userData}}
+        name="Info"
+        component={Info}
+        initialParams={{ userData }}
         options={{
           headerRight: () =>
-            <ProfileIcon user={userData} />
+            <Header userData={userData} />
         }}
       />
       <Stack.Screen
-        name="EventCreationView"
-        component={EventCreationView}
+        name="CourtInfo"
+        component={CourtInfo}
         options={{
-          title: "Create an event",
-          headerRight: () => <ProfileIcon user={userData} />,
+          title: "Courts info",
+          headerRight: () => <Header userData={userData} />
         }}
       />
       <Stack.Screen
-        name="Event"
-        component={Event}
+        name="WallOfShame"
+        component={WallOfShame}
         options={{
-          title: "Event",
-          headerRight: () => <ProfileIcon user={userData} />,
+          title: "Wall of shame",
+          headerRight: () => <Header userData={userData} />
         }}
       />
     </Stack.Navigator>

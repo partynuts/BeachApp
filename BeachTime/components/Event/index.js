@@ -1,33 +1,23 @@
 import React from 'react';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
-  Button,
-  SafeAreaView,
   Linking,
   Platform,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View, ImageBackground
+  View
 } from 'react-native';
-import Heading from "../Heading";
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style'
 import moment from "moment";
-
+import { Separator } from "../../helper";
 import * as ExpoNotifications from "expo-notifications";
 import colors from "../../colors";
 
-// const validIcon = parseIconFromClassName('fa fa-calendar-alt');
-
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
 
 export default class Event extends React.Component {
 
@@ -388,7 +378,6 @@ export default class Event extends React.Component {
             style={styles.container}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            <Heading navigation={this.props.navigation} />
             <ScrollView style={styles.scrollView}>
               {this.state.eventData &&
               this.showEventDetails(styles)

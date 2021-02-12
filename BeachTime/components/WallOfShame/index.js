@@ -1,16 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, SafeAreaView } from 'react-native';
-import Heading from "../Heading";
+import { SafeAreaView, ScrollView } from 'react-native';
 import { styles } from './style';
 import { apiHost } from "../../config";
 import { DataTable } from 'react-native-paper';
-
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+import { Separator } from "../../helper";
 
 export default class WallOfShame extends React.Component {
 
@@ -53,12 +46,11 @@ export default class WallOfShame extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.heading}>
-          <Heading navigation={this.props.navigation} />
-        </View>
-
+        <Separator />
+        <Separator />
+        <Separator />
+        <Separator />
         <ScrollView style={styles.scrollView}>
-
           <DataTable style={styles.dataTable}>
             <DataTable.Header>
               <DataTable.Title>Name</DataTable.Title>
@@ -75,7 +67,6 @@ export default class WallOfShame extends React.Component {
             }
           </DataTable>
         </ScrollView>
-
       </SafeAreaView>
     );
   }

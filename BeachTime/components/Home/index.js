@@ -11,12 +11,7 @@ import { stylesAndroid, stylesIos } from './style';
 import CourtInfo from "../CourtInfo";
 import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../colors'
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+import { Separator } from "../../helper";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -155,7 +150,6 @@ export default class Home extends React.Component {
             style={{ padding: 40 }}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            <Heading navigation={this.props.navigation} />
             {this.state.errorMsg &&
             <Text>{this.state.errorMsg}</Text>
             }
