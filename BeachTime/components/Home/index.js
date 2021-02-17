@@ -12,6 +12,7 @@ import CourtInfo from "../CourtInfo";
 import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../colors'
 import { Separator } from "../../helper";
+import { AsyncStorage } from "react-native";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -43,8 +44,13 @@ export default class Home extends React.Component {
     }
 
     this.fetchDataFromDb();
-    this.intervalId = setInterval(() => {
+    this.intervalId = setInterval(async () => {
+      const user = await AsyncStorage.getItem('@User');
+      if (user) {
       this.fetchDataFromDb();
+      } else {
+        clearInterval(this.intervalId)
+      }
     }, 10000);
     console.log("EVENT DATA", this.state.eventData)
   }

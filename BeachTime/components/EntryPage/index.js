@@ -1,8 +1,16 @@
 import React from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
-import { AsyncStorage, Button, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Heading from "../Heading";
-import Home from "../Info";
+import {
+  AsyncStorage,
+  Button,
+  ImageBackground,
+  Platform,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { apiHost } from '../../config';
 import { stylesAndroid, stylesIos } from './style';
 import GlobalState from "../../contexts/GlobalState";
@@ -14,55 +22,25 @@ function Separator() {
   }} />;
 }
 
-export default class EntryPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      email: '',
-      paypalUsername: '',
-      errorMsg: undefined
-    }
-  }
-  //
-  // async componentDidMount() {
-  //   const { id, username } = await this.getUserIdFromStorage()
-  //   if (username) {
-  //     this.setState({
-  //       username,
-  //       userId: id
-  //     });
-  //   }
-  // }
+export default function EntryPage() {
 
-  async getUserIdFromStorage() {
-    const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-    console.log("-------------UD----------", JSON.stringify(userData.username))
-    return userData;
-  }
 
-  setUsername(input) {
-    this.setState({
-      username: input
-    });
-  }
+  const [_, setState] = React.useContext(GlobalState);
+  const [username, setUsername] = React.useState({});
+  const [email, setEmail] = React.useState({});
+  const [paypal_username, setPaypalUsername] = React.useState({});
+  const [errorMsg, setErrorMsg] = React.useState({});
 
-  setEmail(input) {
-    this.setState({
-      email: input
-    });
-  }
+  React.useEffect(() => {
+    AsyncStorage.getItem('@User')
+      .then(storageItem => {
+        const userData = JSON.parse(storageItem);
+        setState((state) => ({ ...state, user: userData }));
+      })
+  }, []);
 
-  setPaypalUsername(input) {
-    this.setState({
-      paypalUsername: input
-    })
-  }
-
-  handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    const [_, setState] = React.useContext(GlobalState);
-    console.log("ENTERED DATA", this.state)
     fetch(
       `${apiHost}/users`,
       {
@@ -70,7 +48,11 @@ export default class EntryPage extends React.Component {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ username: this.state.username, email: this.state.email, paypal_username: this.state.paypalUsername })
+        body: JSON.stringify({
+          username,
+          email,
+          paypal_username
+        })
       }
     )
       .then(async (res) => {
@@ -78,20 +60,16 @@ export default class EntryPage extends React.Component {
           let errorMsg = 'Something went terribly wrong!';
           try {
             errorMsg = (await res.json()).errorMsg;
-          }
-          catch (e) {
+          } catch (e) {
 
           }
-          return this.setState({
-            errorMsg: errorMsg
-          })
+          return setErrorMsg(errorMsg)
         }
         const data = await res.json();
         console.log("ENTRY PAGE DATENZEUGS", data)
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
           setState((state) => ({ ...state, user: data }));
-          // this.props.navigation.navigate('Home', { username: data.username, userId: data.id })
         } catch (e) {
           console.log(e);
         }
@@ -99,52 +77,57 @@ export default class EntryPage extends React.Component {
       })
   }
 
-  render() {
-    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
+  const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
-    return (
-      <View style={styles.container}>
-        <Heading />
-        <Text style={styles.title}>Sign in!</Text>
-        <Separator />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Username*"
-          onChangeText={(input) => this.setUsername(input)}
-          value={this.state.username}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="PayPal username"
-          onChangeText={(input) => this.setPaypalUsername(input)}
-          value={this.state.paypalUsername}
-        />
-        <TextInput
-          style={styles.textInput}
-          type="email"
-          placeholder="Email*"
-          onChangeText={(input) => this.setEmail(input)}
-          value={this.state.email}
-          keyboardType='email-address'
-        />
-        <Separator />
-        {this.state.errorMsg &&
-        <Text>{this.state.errorMsg}</Text>
-        }
-        {Platform.OS !== 'ios' ?
-          <Button
-            title="Go!"
-            onPress={(e) => this.handleSubmit(e)}
-          /> :
-          <TouchableOpacity
-            onPress={(e) => this.handleSubmit(e)}
-            style={styles.button}>
-            <Text style={styles.btnText}>Go!</Text>
-          </TouchableOpacity>
-        }
-      </View>
-    )
-  }
+  return (
+    <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
+        style={{
+          flex: 1,
+          resizeMode: 'cover',
+          justifyContent: 'center',
+          padding: 0
+        }}>
+      <Text style={styles.title}>Sign in!</Text>
+      <Separator />
+      <TextInput
+        style={styles.textInput}
+        placeholder="Username*"
+        onChangeText={(input) => setUsername(input)}
+        value={username}
+      />
+      <TextInput
+        style={styles.textInput}
+        placeholder="PayPal username"
+        onChangeText={(input) => setPaypalUsername(input)}
+        value={paypal_username}
+      />
+      <TextInput
+        style={styles.textInput}
+        type="email"
+        placeholder="Email*"
+        onChangeText={(input) => setEmail(input)}
+        value={email}
+        keyboardType='email-address'
+      />
+      <Separator />
+
+      {Platform.OS !== 'ios' ?
+        <Button
+          title="Go"
+          onPress={(e) => handleSubmit(e)}
+        /> :
+        <TouchableOpacity
+          onPress={(e) => handleSubmit(e)}
+          style={styles.button}>
+          <Text style={styles.btnText}>Go</Text>
+        </TouchableOpacity>
+      }
+      </ImageBackground>
+    </View>
+  )
 }
+
 
 

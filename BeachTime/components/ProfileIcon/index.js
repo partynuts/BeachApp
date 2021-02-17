@@ -14,7 +14,7 @@ export default function ProfileIcon({ user }) {
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate("Profile")}>
-      <FontAwesome5 style={styles.icon} name="user-circle" size={25} color={'585858'} />
+      <FontAwesome5 style={styles.icon} name="user-circle" size={25} color={'#585858'} />
 
     </TouchableOpacity>
   );

@@ -11,7 +11,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import GlobalState from "./contexts/GlobalState";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Profile from "./components/Profile";
 // Sentry.init({
 //   dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
 //   enableInExpoDevelopment: true,
@@ -34,14 +33,12 @@ const theme = {
 
 export default function App() {
   const [state, setState] = React.useState({});
-  const [userDataLoaded, setUserDataLoaded] = React.useState(false)
-  // const [globalState, setGlobalState] = React.useContext(GlobalState);
-  console.log("GLOBAL STATE IN APP", state)
+  const [userDataLoaded, setUserDataLoaded] = React.useState(false);
+
   React.useEffect(() => {
     AsyncStorage.getItem('@User')
       .then(storageItem => {
         const userData = JSON.parse(storageItem);
-        console.log("USERDATA IN APP", userData)
         setState((state) => ({ ...state, user: userData }));
         setUserDataLoaded(true);
       })
