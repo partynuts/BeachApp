@@ -17,11 +17,11 @@ import { AsyncStorage } from "react-native";
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    console.log("PROPS IN HOME >>>", props.route.params)
+    console.log("PROPS IN HOME >>>", props)
     const routeParams = props.route.params.userData;
     this.state = {
       username: routeParams.username,
-      userId: routeParams.userId,
+      userId: routeParams.id,
       errorMsg: null
     }
 
@@ -224,28 +224,6 @@ export default class Home extends React.Component {
                   </Text>
                 </Btn>
                 }
-              </Card.Actions>
-            </Card>
-            <Separator />
-            <Card
-              elevation={10}
-              style={styles.card}
-            >
-              <Card.Content>
-                <Title>Info</Title>
-                <Paragraph>Want to know who should book the next round?</Paragraph>
-              </Card.Content>
-              <Card.Actions>
-                <Btn mode='outlined' color={colors.darkBlue}
-                  onPress={(e) => this.handleButtonPress(e, 'WallOfShame')}>
-                  <Text>Wall of shame</Text>
-                </Btn>
-              </Card.Actions>
-              <Card.Actions>
-                <Btn mode='outlined' color={colors.darkBlue}
-                  onPress={(e) => this.handleButtonPress(e, 'CourtInfo')}>
-                  <Text>Court Operators</Text>
-                </Btn>
               </Card.Actions>
             </Card>
             <Separator />

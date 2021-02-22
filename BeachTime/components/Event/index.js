@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
+  AsyncStorage, ImageBackground,
   Linking,
   Platform,
   RefreshControl,
@@ -45,12 +46,17 @@ export default class Event extends React.Component {
   componentDidMount() {
     this.fetchDataFromDb();
     ExpoNotifications.addNotificationReceivedListener(notification => {
-      console.log("NOTIFICATIONS", notification)
+      // console.log("NOTIFICATIONS", notification)
       this.fetchDataFromDb()
     });
 
-    this.intervalId = setInterval(() => {
-      this.fetchDataFromDb();
+    this.intervalId = setInterval(async () => {
+      const user = await AsyncStorage.getItem('@User');
+      if (user) {
+        this.fetchDataFromDb();
+      } else {
+        clearInterval(this.intervalId)
+      }
     }, 10000);
 
     this.props.navigation.addListener("blur", () => {
@@ -144,7 +150,7 @@ export default class Event extends React.Component {
           onPress={(e) => this.deleteEvent(e)}
           style={styles.deleteBtn}
         >
-          <Text style={{ ...styles.btnText, color: colors.brown, fontWeight: '700' }}>Cancel event</Text>
+          <Text style={{ ...styles.btnText, color: colors.orangeBrown, fontWeight: '700' }}>Cancel event</Text>
         </TouchableOpacity>
       </View>
       }
@@ -175,7 +181,7 @@ export default class Event extends React.Component {
   handleSignup(e) {
     e.preventDefault();
     this.setState({ msg: null })
-    console.log("EVENT ID", this.state);
+    // console.log("EVENT ID", this.state);
     const eventId = this.state.eventData.id;
     fetch(
       `${apiHost}/events/${eventId}/signup`,
@@ -190,12 +196,13 @@ export default class Event extends React.Component {
       }
     )
       .then(async (res) => {
+        // console.log("RES NACH SIGNUP", res)
         if (res.status === 200) {
           const data = await res.json();
-          console.log("DATA NACH SIGN UP mit 200", data, res.status);
+          // console.log("DATA NACH SIGN UP mit 200", data, res.status);
           const myParticipant = data.participants.find(participant => participant.username === this.state.username);
           const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
-          console.log('onsignup', data)
+          // console.log('onsignup', data)
           this.setState({
             msg: data.msg,
             eventData: data,
@@ -209,7 +216,7 @@ export default class Event extends React.Component {
 
         } else if (res.status === 201) {
           const data = await res.json();
-          console.log("DATA NACH SIGN UP mit 201", data, res.status);
+          // console.log("DATA NACH SIGN UP mit 201", data, res.status);
           const myParticipant = data.participants.find(participant => participant.username === this.state.username);
           const noParticipants = data.participants === null || data.participants.length < 1;
           const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
@@ -226,13 +233,13 @@ export default class Event extends React.Component {
           });
         } else if (res.status === 403) {
           const data = await res.json();
-          console.log("DATA NACH SIGN UP mit 403", data, res.status);
+          // console.log("DATA NACH SIGN UP mit 403", data, res.status);
 
           this.setState({
             msg: (data || null).msg,
             signUpStatus: res.status,
           });
-          console.log("NEUES STATE", this.state)
+          // console.log("NEUES STATE", this.state)
         }
       })
       .catch(e => console.log(e))
@@ -256,7 +263,7 @@ export default class Event extends React.Component {
     )
       .then(async (res) => {
         const response = await res.json();
-        console.log("RESPONSE GUESTS", response)
+        // console.log("RESPONSE GUESTS", response)
 
         const extraData = response.enrollment ? {
           signupData: {
@@ -277,7 +284,7 @@ export default class Event extends React.Component {
     e.preventDefault();
     this.setState({ msg: null })
 
-    console.log("EVENT ID Cancellation", this.state, "CANCELLING!!!!!!!");
+    // console.log("EVENT ID Cancellation", this.state, "CANCELLING!!!!!!!");
     const eventId = this.state.eventData.id;
     fetch(
       `${apiHost}/events/${eventId}/cancel`,
@@ -293,7 +300,7 @@ export default class Event extends React.Component {
     )
       .then(async (res) => {
         const data = await res.json();
-        console.log("DATA NACH CANCELLATION", data)
+        // console.log("DATA NACH CANCELLATION", data)
         const noParticipants = data.participants === null || data.participants.length < 1;
         const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
 
@@ -302,7 +309,7 @@ export default class Event extends React.Component {
           eventData: { ...this.state.eventData, participants: data.participants },
           isUserSignedUp: !this.state.isUserSignedUp,
         });
-        console.log("NEUES STATE", this.state)
+        // console.log("NEUES STATE", this.state)
       })
       .catch(e => console.log(e))
   }
@@ -369,116 +376,129 @@ export default class Event extends React.Component {
   }
 
   render() {
+    console.log("RENDER");
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
-      <View>
-        <SafeAreaView style={{ position: 'relative' }}>
+      <SafeAreaView style={styles.container}>
+        <ImageBackground
+          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
+          style={{
+            flex: 1,
+            resizeMode: 'cover',
+            justifyContent: 'center',
+            padding: 0
+          }}>
+          {/*<SafeAreaView style={{ position: 'relative' }}>*/}
           <ScrollView
-            style={styles.container}
+            // style={styles.container}
+            style={{ padding: 40 }}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            <ScrollView style={styles.scrollView}>
-              {this.state.eventData &&
-              this.showEventDetails(styles)
-              }
-              <Separator />
-              <Separator />
-
+            {/*<ScrollView style={styles.scrollView}>*/}
+            {this.state.eventData &&
+            this.showEventDetails(styles)
+            }
+            <Separator />
+            <Separator />
+            <View style={{
+              width: '100%',
+              height: 45,
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              paddingRight: 15
+            }}>
               {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
-              <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                paddingRight: 15
-              }}>
-                <TouchableOpacity
-                  onPress={(e) => this.createCalendarEvent(e)}
-                  style={styles.buttonCal}
-                >
+
+              <TouchableOpacity
+                onPress={(e) => this.createCalendarEvent(e)}
+                style={styles.buttonCal}
+              >
+                <MaterialCommunityIcons
+                  name="calendar-import"
+                  color={colors.darkBlue}
+                  size={30}
+                />
+              </TouchableOpacity>
+              }
+            </View>
+            <Separator />
+            {this.state.msg &&
+            <Text>{this.state.msg}</Text>
+            }
+            <Separator />
+            {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+            <View style={styles.participantsWrapper}>
+              <View style={styles.table}>
+                <Text style={styles.column}>
                   <MaterialCommunityIcons
-                    name="calendar-import"
-                    color={colors.darkBlue}
-                    size={30}
+                    name="account-multiple-outline"
+                    color="grey"
+                    size={25}
                   />
-                </TouchableOpacity>
-              </View>
-              }
-              <Separator />
-              {this.state.msg &&
-              <Text>{this.state.msg}</Text>
-              }
-              <Separator />
-              <View style={styles.participantsWrapper}>
-                <View style={styles.table}>
+                </Text>
+                {Date.parse(this.state.eventData.event_date) > new Date() ?
                   <Text style={styles.column}>
                     <MaterialCommunityIcons
-                      name="account-multiple-outline"
+                      name="account-plus"
+                      color="grey"
+                      size={25}
+                    />
+                  </Text> :
+                  <Text style={styles.column}>
+                    <MaterialCommunityIcons
+                      name="credit-card-outline"
                       color="grey"
                       size={25}
                     />
                   </Text>
-                  {this.state.eventData.participants &&
-                  Date.parse(this.state.eventData.event_date) > new Date() ?
-                    <Text style={styles.column}>
-                      <MaterialCommunityIcons
-                        name="account-plus"
-                        color="grey"
-                        size={25}
-                      />
-                    </Text> :
-                    <Text style={styles.column}>
-                      <MaterialCommunityIcons
-                        name="credit-card-outline"
-                        color="grey"
-                        size={25}
-                      />
-                    </Text>
-                  }
-                </View>
-                {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-                this.state.eventData.participants.map((participant, index) =>
-                  <View style={styles.table} key={index}>
-                    <Text
-                      style={styles.column1}
-                    >
-                      {index + 1}. {participant.username}
-                    </Text>
-                    {Date.parse(this.state.eventData.event_date) < new Date() ?
-                      this.createPayPalLink(participant.paypal_username, styles)
-                      :
-                      <TextInput
-                        disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                        style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
-                        onChange={(e) => this.setExternalPlayers(e)}
-                        editable={participant.username === this.state.username}
-                        value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
-                        keyboardType="number-pad"
-                        returnKeyType="done"
-                      />
-                    }
-                  </View>
-                )
                 }
               </View>
-              <Separator />
-              <Separator />
-              <Separator />
-              <Separator />
-              <Separator />
-              <Separator />
-              <Separator />
-              <Separator />
+              {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+              this.state.eventData.participants.map((participant, index) =>
+                <View style={styles.table} key={index}>
+                  <Text
+                    style={styles.column1}
+                  >
+                    {index + 1}. {participant.username}
+                  </Text>
+                  {Date.parse(this.state.eventData.event_date) < new Date() ?
+                    this.createPayPalLink(participant.paypal_username, styles)
+                    :
+                    <TextInput
+                      disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                      style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
+                      onChange={(e) => this.setExternalPlayers(e)}
+                      editable={participant.username === this.state.username}
+                      value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+                      keyboardType="number-pad"
+                      returnKeyType="done"
+                    />
+                  }
+                </View>
+              )
+              }
+            </View>
+            }
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
 
-            </ScrollView>
+            {/*</ScrollView>*/}
+
           </ScrollView>
           {Date.parse(this.state.eventData.event_date) > new Date() &&
           <View style={{
             width: "100%",
-            height: '10%',
+            // height: '10%',
             position: 'absolute',
-            bottom: 0,
-            backgroundColor: "#d8c3af"
+            bottom: 100,
+            // backgroundColor: "#d8c3af"
           }}>
             <TouchableOpacity
               onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
@@ -486,7 +506,10 @@ export default class Event extends React.Component {
                 ...styles.buttonSticky,
                 backgroundColor: colors.orangeBrown,
 
-              } : styles.buttonSticky}
+              } : {
+                ...styles.buttonSticky,
+                backgroundColor: colors.darkBlue,
+              }}
               disabled={Date.parse(this.state.eventData.event_date) < new Date()}
             >
               <Text
@@ -498,8 +521,9 @@ export default class Event extends React.Component {
             </TouchableOpacity>
           </View>
           }
-        </SafeAreaView>
-      </View>
+          {/*</SafeAreaView>*/}
+        </ImageBackground>
+      </SafeAreaView>
     );
   }
 }

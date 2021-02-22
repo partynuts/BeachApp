@@ -4,8 +4,9 @@ import colors from "../../colors";
 export const stylesAndroid = StyleSheet.create({
   container: {
     minHeight: '100%',
-    padding: 40,
+    // padding: 40,
     backgroundColor: colors.creme,
+    position: 'relative'
   },
   title: {
     fontSize: 24,
@@ -119,7 +120,7 @@ export const stylesAndroid = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: colors.amberBackground,
+    borderColor: colors.orangeBrown,
     backgroundColor: colors.textColorWhite,
   },
   buttonSticky: {
@@ -129,7 +130,6 @@ export const stylesAndroid = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderRadius: 7,
-    backgroundColor: colors.darkBlue,
   },
   btnText: {
     fontSize: 16,
@@ -287,8 +287,8 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: colors.lightBlue,
-    backgroundColor: colors.lightBlue,
+    borderColor: colors.darkBlue,
+    backgroundColor: colors.darkBlue,
   },
   deleteBtn: {
     paddingTop: 10,
@@ -302,7 +302,7 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: colors.brown,
+    borderColor: colors.orangeBrown,
     backgroundColor: colors.textColorWhite,
   },
   buttonSticky: {

@@ -9,7 +9,7 @@ import EntryPage from "../EntryPage";
 import EventCreationView from "../EventCreationView";
 import Event from "../Event";
 import Heading from "../Heading";
-import Profile from "../Profile";
+import Profile from "../Profile/index";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { styles } from "../ProfileIcon/style";
 import { TouchableOpacity } from "react-native-gesture-handler";

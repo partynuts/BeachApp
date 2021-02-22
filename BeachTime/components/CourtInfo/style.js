@@ -5,13 +5,9 @@ import colors from "../../colors";
 
 const commonStyles = {
   container: {
-    // minHeight: '100%',
-    padding: 40,
     color: "white",
-    // backgroundColor: 'orange',
     backgroundColor: colors.creme,
     flex: 1
-    // marginTop: Constants.statusBarHeight,
   },
   text: {
     marginTop: 30,
@@ -55,21 +51,18 @@ const commonStyles = {
     marginBottom: 10
   },
   scrollView: {
-    padding: 0
+    padding: 40
   },
-  heading: {
-
-  },
+  heading: {},
   card: {
-    borderWidth: 1,
     margin: 5,
-    // backgroundColor: colors.amberBackground
+    opacity: 0.8
   }
 };
 
 if (Platform.OS === 'ios') {
-  commonStyles.scrollView = {...commonStyles.scrollView, padding: 40, paddingTop: 0};
-  commonStyles.heading = {...commonStyles.heading, paddingLeft: 40, paddingTop: 40, paddingRight: 40}
+  commonStyles.scrollView = { ...commonStyles.scrollView, padding: 40, paddingTop: 0 };
+  commonStyles.heading = { ...commonStyles.heading, paddingLeft: 40, paddingTop: 40, paddingRight: 40 }
 }
 
 export const styles = StyleSheet.create(commonStyles);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  AsyncStorage,
+  AsyncStorage, ImageBackground,
   Picker,
   Platform,
   RefreshControl,
@@ -222,11 +222,18 @@ export default class EventCreationView extends React.Component {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
-      <View>
-        <SafeAreaView style={{ position: 'relative' }}>
+      <SafeAreaView style={styles.container}>
+        <ImageBackground
+          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
+          style={{
+            flex: 1,
+            resizeMode: 'cover',
+            justifyContent: 'center',
+            padding: 0
+          }}>
+        {/*<SafeAreaView style={{ position: 'relative' }}>*/}
           <ScrollView
-            style={styles.container}
-            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
+            style={{ padding: 40 }}
           >
             <Card
               elevation={10}
@@ -388,26 +395,31 @@ export default class EventCreationView extends React.Component {
                 }
               </View>
             </View>
-          </ScrollView>
-          <View style={{
-            width: "100%",
-            height: '10%',
-            position: 'absolute',
-            bottom: 0,
-            backgroundColor: "#d8c3af"
-          }}>
-            <TouchableOpacity
-              onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
-              style={styles.buttonSticky}
-            >
-              <Text style={styles.btnText}>
-                {this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
+            {/*<View style={{*/}
+            {/*  width: "100%",*/}
+            {/*  height: '10%',*/}
+            {/*  position: 'absolute',*/}
+            {/*  bottom: 0,*/}
+            {/*  backgroundColor: "#d8c3af"*/}
+            {/*}}>*/}
+            <Separator />
+            <Separator />
 
-      </View>
+            <TouchableOpacity
+                onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
+                style={styles.buttonSticky}
+              >
+                <Text style={styles.btnText}>
+                  {this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
+                </Text>
+              </TouchableOpacity>
+            {/*</View>*/}
+            <Separator />
+          </ScrollView>
+        {/*</SafeAreaView>*/}
+      </ImageBackground>
+
+  </SafeAreaView>
   );
   }
   }

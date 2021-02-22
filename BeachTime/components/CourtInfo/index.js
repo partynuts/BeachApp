@@ -5,6 +5,7 @@ import { styles } from './style';
 import { apiHost } from "../../config";
 import * as Linking from "expo-linking";
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
+import { Separator } from "../../helper";
 
 export default class CourtInfo extends React.Component {
 
@@ -64,9 +65,6 @@ export default class CourtInfo extends React.Component {
             justifyContent: 'center',
             padding: 0
           }}>
-          <View style={styles.heading}>
-            <Heading navigation={this.props.navigation} />
-          </View>
           {this.state.allCourtsInfo &&
           <ScrollView style={styles.scrollView}>
             {this.state.allCourtsInfo.map((court, index) =>
@@ -90,10 +88,13 @@ export default class CourtInfo extends React.Component {
                     <Title>{court.courts_name}</Title>
                   </Card.Content>
                 }
-
               </Card>
             )
             }
+            <Separator />
+            <Separator />
+            <Separator />
+            <Separator />
           </ScrollView>
           }
         </ImageBackground>

@@ -4,7 +4,6 @@ import colors from "../../colors";
 export const commonStyles = StyleSheet.create({
   container: {
     minHeight: '100%',
-    padding: 40,
     color: "white",
     backgroundColor: colors.creme
   },
@@ -43,7 +42,7 @@ export const commonStyles = StyleSheet.create({
     fontSize: 16
   },
   scrollView: {
-    padding: 0
+    padding: 40
   },
   dataTable: {
     backgroundColor: colors.textColorWhite,

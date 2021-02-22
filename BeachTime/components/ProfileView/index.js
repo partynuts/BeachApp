@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageBackground, Platform, RefreshControl, SafeAreaView, ScrollView, Text } from 'react-native';
 import { stylesAndroid, stylesIos } from './style';
-import Profile from "../Profile";
+import Profile from "../Profile/index";
 
 
 export default class ProfileView extends React.Component {
@@ -32,7 +32,7 @@ export default class ProfileView extends React.Component {
   }
 
   async refreshData() {
-    const newUserData = await this.getUserIdFromStorage();
+    // const newUserData = await this.getUserIdFromStorage();
     console.log("____NEW USER DATA ______", newUserData)
     this.setState({
       username: newUserData.username,

@@ -4,7 +4,7 @@ import colors from "../../colors";
 export const stylesAndroid = StyleSheet.create({
   container: {
     minHeight: '100%',
-    padding: 40,
+    // padding: 40,
     backgroundColor: colors.creme
   },
   title: {
