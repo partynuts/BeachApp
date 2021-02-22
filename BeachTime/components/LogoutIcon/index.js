@@ -6,7 +6,7 @@ import GlobalState from "../../contexts/GlobalState";
 import { styles } from './style';
 
 export default function LogoutIcon() {
-  const [_, setState] = React.useContext(GlobalState);
+  const [state, setState] = React.useContext(GlobalState);
 
   async function logoutUser(e) {
     // console.log("EVENT IM LOGOUT", e)

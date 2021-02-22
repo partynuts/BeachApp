@@ -58,7 +58,6 @@ export default class Info extends React.Component {
             style={{ padding: 40 }}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            <Heading navigation={this.props.navigation} />
             {this.state.errorMsg &&
             <Text>{this.state.errorMsg}</Text>
             }
@@ -67,7 +66,7 @@ export default class Info extends React.Component {
               style={styles.card}
             >
               <Card.Content>
-                <Title>Info</Title>
+                <Title>Court operators</Title>
                 <Paragraph>Here is all the info you need for the Beachvolleyball places we play at.</Paragraph>
               </Card.Content>
               <Card.Actions>
@@ -84,7 +83,7 @@ export default class Info extends React.Component {
               style={styles.card}
             >
               <Card.Content>
-                <Title>Info</Title>
+                <Title>Wall of shame</Title>
                 <Paragraph>Want to know who should book the next round?</Paragraph>
               </Card.Content>
               <Card.Actions>

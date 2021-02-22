@@ -2,14 +2,15 @@ import React from 'react';
 import { AsyncStorage, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
 import ProfileIcon from "../ProfileIcon";
+import GlobalState from "../../contexts/GlobalState";
 
 export default function Header(userData) {
-console.log("USERDATA IN HEADER", userData.userData)
+  const [state, setState] = React.useContext(GlobalState);
 
   return (
       <View style={styles.container}>
-        <Text style={styles.greeting}>Hi {userData.userData.username}</Text>
-        <ProfileIcon user={userData} />
+        <Text style={styles.greeting}>Hi {state.user.username}</Text>
+        <ProfileIcon user={state.user} />
       </View>
   )
 }

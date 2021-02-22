@@ -3,65 +3,41 @@ import { apiHost } from '../../config';
 import { AsyncStorage, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from './style';
 import { Separator } from "../../helper";
+import GlobalState from "../../contexts/GlobalState";
+import { useNavigation } from '@react-navigation/native';
 
-export default class Profile extends React.Component {
-  constructor(props) {
-    super(props);
-    // const routeParams = props.route.params.userData;
-    console.log("PROPS IN PROFILE", props)
-    this.state = {}
-  }
+export default function Profile() {
+  const [state, setState] = React.useContext(GlobalState);
+  const [username, setUsername] = React.useState(state.user.username);
+  const [email, setEmail] = React.useState(state.user.email);
+  const [paypal_username, setPaypalUsername] = React.useState(state.user.paypal_username);
+  const [errorMsg, setErrorMsg] = React.useState({});
+  const [success, setSuccess] = React.useState(false)
+  const navigation = useNavigation();
 
-  async getUserDataFromStorage() {
-    const userData = JSON.parse(await AsyncStorage.getItem('@User'));
-    console.log("-------------UD in Profile--------", JSON.stringify(userData));
-    return userData;
-  }
+  // React.useEffect(() => {
+  //   AsyncStorage.getItem('@User')
+  //     .then(storageItem => {
+  //       const userData = JSON.parse(storageItem);
+  //       console.log("USERDATA in PROFILE", userData)
+  //       setState((state) => ({ ...state, user: userData }));
+  //     })
+  // }, []);
 
-  async componentDidMount() {
-    const { id, username, paypal_username, email } = await this.getUserDataFromStorage();
-    if (username) {
-      this.setState({
-        username,
-        userId: id,
-        paypal_username,
-        email
-      });
-    }
-  }
-
-  setUsername(input) {
-    this.setState({
-      username: input
-    });
-  }
-
-  setEmail(input) {
-    this.setState({
-      email: input
-    });
-  }
-
-  setPaypalUsername(input) {
-    this.setState({
-      paypal_username: input
-    })
-  }
-
-  handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    console.log("ENTERED DATA", this.state)
+    console.log("ENTERED DATA", state)
     fetch(
-      `${apiHost}/users/${this.state.userId}`,
+      `${apiHost}/users/${state.user.id}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          username: this.state.username,
-          email: this.state.email,
-          paypal_username: this.state.paypal_username
+          username,
+          email,
+          paypal_username
         })
       }
     )
@@ -71,63 +47,59 @@ export default class Profile extends React.Component {
           try {
             errorMsg = (await res.json()).errorMsg;
           } catch (e) {
-
+            console.log("error in updating profile", e)
           }
-          return this.setState({
-            errorMsg: errorMsg
-          })
+          return setErrorMsg(errorMsg)
         }
         const data = await res.json();
         console.log("DATA FROM EDITING PROFILE", data)
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
-          this.props.route.params.refresh();
-          this.props.navigation.navigate('Home', { username: this.state.username });
-
+          setSuccess(true);
+          setState((state) => ({ ...state, user: data }));
+          navigation.navigate('Events')
         } catch (e) {
           console.log(e);
         }
-
       })
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <View>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(input) => this.setUsername(input)}
-            value={this.state.username ? this.state.username : ''}
-            placeholder={this.state.username ? '' : 'Fritz'}
-          />
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(input) => this.setPaypalUsername(input)}
-            value={this.state.paypal_username ? this.state.paypal_username : ''}
-            placeholder={this.state.paypal_username ? '' : 'Bratzo'}
-          />
-          <TextInput
-            style={styles.textInput}
-            type="email"
-            onChangeText={(input) => this.setEmail(input)}
-            value={this.state.email ? this.state.email : ''}
-            placeholder={this.state.email ? '' : 'example@mail.com'}
-            keyboardType='email-address'
-          />
-        </View>
-        <Separator />
-        <Separator />
-        {this.state.errorMsg &&
-        <Text>{this.state.errorMsg}</Text>
-        }
-        <TouchableOpacity
-          onPress={(e) => this.handleSubmit(e)}
-          style={styles.button}>
-          <Text style={styles.btnText}>Update profile</Text>
-        </TouchableOpacity>
-
+  return (
+    <View style={styles.container}>
+      <View>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(input) => setUsername(input)}
+          value={username}
+          placeholder='Username, i.e. Fritz'
+        />
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(input) => setPaypalUsername(input)}
+          value={paypal_username}
+          placeholder='Bratzo'
+        />
+        <TextInput
+          style={styles.textInput}
+          type="email"
+          onChangeText={(input) => setEmail(input)}
+          value={email}
+          placeholder= 'example@mail.com'
+          keyboardType='email-address'
+        />
       </View>
-    )
-  }
+      <Separator />
+      <Separator />
+      {errorMsg &&
+      <Text>{errorMsg}</Text>
+      }
+      <TouchableOpacity
+        onPress={(e) => handleSubmit(e)}
+        style={styles.button}>
+        <Text style={styles.btnText}>Update profile</Text>
+      </TouchableOpacity>
+
+    </View>
+  )
 }
+

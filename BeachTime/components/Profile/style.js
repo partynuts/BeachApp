@@ -14,8 +14,8 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderWidth: 1,
-    borderColor: 'black',
+    borderWidth: 0.2,
+    borderColor: colors.textColorBlack,
     backgroundColor: colors.textColorWhite,
     padding: 5,
     marginBottom: 30

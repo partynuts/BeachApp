@@ -11,6 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import GlobalState from "./contexts/GlobalState";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import LoginNavigator from "./navigation/LoginNavigator";
 // Sentry.init({
 //   dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
 //   enableInExpoDevelopment: true,
@@ -92,7 +93,7 @@ function authNavigator() {
 function guestNavigator() {
   return (
     <Tab.Navigator initialRouteName="Login">
-      <Tab.Screen name="Login" component={EntryPage} />
+      <Tab.Screen name="Login" component={LoginNavigator} />
     </Tab.Navigator>
   )
 }

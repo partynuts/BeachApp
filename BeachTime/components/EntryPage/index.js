@@ -4,8 +4,8 @@ import {
   AsyncStorage,
   Button,
   ImageBackground,
-  Platform,
-  SafeAreaView,
+  Platform, RefreshControl,
+  SafeAreaView, ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -23,13 +23,11 @@ function Separator() {
 }
 
 export default function EntryPage() {
-
-
   const [_, setState] = React.useContext(GlobalState);
-  const [username, setUsername] = React.useState({});
-  const [email, setEmail] = React.useState({});
-  const [paypal_username, setPaypalUsername] = React.useState({});
-  const [errorMsg, setErrorMsg] = React.useState({});
+  const [username, setUsername] = React.useState();
+  const [email, setEmail] = React.useState();
+  const [paypal_username, setPaypalUsername] = React.useState();
+  const [errorMsg, setErrorMsg] = React.useState();
 
   React.useEffect(() => {
     AsyncStorage.getItem('@User')
@@ -61,7 +59,7 @@ export default function EntryPage() {
           try {
             errorMsg = (await res.json()).errorMsg;
           } catch (e) {
-
+            console.log("error in login page", e)
           }
           return setErrorMsg(errorMsg)
         }
@@ -80,7 +78,7 @@ export default function EntryPage() {
   const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ImageBackground
         source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
         style={{
@@ -89,43 +87,42 @@ export default function EntryPage() {
           justifyContent: 'center',
           padding: 0
         }}>
-      <Text style={styles.title}>Sign in!</Text>
-      <Separator />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Username*"
-        onChangeText={(input) => setUsername(input)}
-        value={username}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="PayPal username"
-        onChangeText={(input) => setPaypalUsername(input)}
-        value={paypal_username}
-      />
-      <TextInput
-        style={styles.textInput}
-        type="email"
-        placeholder="Email*"
-        onChangeText={(input) => setEmail(input)}
-        value={email}
-        keyboardType='email-address'
-      />
-      <Separator />
-
-      {Platform.OS !== 'ios' ?
-        <Button
-          title="Go"
-          onPress={(e) => handleSubmit(e)}
-        /> :
-        <TouchableOpacity
-          onPress={(e) => handleSubmit(e)}
-          style={styles.button}>
-          <Text style={styles.btnText}>Go</Text>
-        </TouchableOpacity>
-      }
+        <ScrollView style={{ padding: 40 }}>
+          <Text style={styles.title}>Sign up or log in!</Text>
+          <Separator />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Username*"
+            onChangeText={(input) => setUsername(input)}
+            value={username}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="PayPal username"
+            onChangeText={(input) => setPaypalUsername(input)}
+            value={paypal_username}
+          />
+          <TextInput
+            style={styles.textInput}
+            type="email"
+            placeholder="Email*"
+            onChangeText={(input) => setEmail(input)}
+            value={email}
+            keyboardType='email-address'
+          />
+          <Separator />
+          <TouchableOpacity
+            onPress={(e) => handleSubmit(e)}
+            style={styles.button}>
+            <Text style={styles.btnText}>Go</Text>
+          </TouchableOpacity>
+          <Separator />
+          {errorMsg &&
+          <Text>{errorMsg}</Text>
+          }
+        </ScrollView>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   )
 }
 
