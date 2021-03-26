@@ -18,6 +18,7 @@ import moment from "moment";
 import { Separator } from "../../helper";
 import * as ExpoNotifications from "expo-notifications";
 import colors from "../../colors";
+import { Portal } from "react-native-paper";
 
 
 export default class Event extends React.Component {
@@ -380,150 +381,140 @@ export default class Event extends React.Component {
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
 
     return (
-      <SafeAreaView style={styles.container}>
-        <ImageBackground
-          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
-          {/*<SafeAreaView style={{ position: 'relative' }}>*/}
-          <ScrollView
-            // style={styles.container}
-            style={{ padding: 40 }}
-            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
-          >
-            {/*<ScrollView style={styles.scrollView}>*/}
-            {this.state.eventData &&
-            this.showEventDetails(styles)
-            }
-            <Separator />
-            <Separator />
-            <View style={{
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              paddingRight: 15
-            }}>
-              {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
+      <View>
 
-              <TouchableOpacity
-                onPress={(e) => this.createCalendarEvent(e)}
-                style={styles.buttonCal}
-              >
-                <MaterialCommunityIcons
-                  name="calendar-import"
-                  color={colors.darkBlue}
-                  size={30}
-                />
-              </TouchableOpacity>
+        <SafeAreaView style={styles.container}>
+          <ImageBackground
+            source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
+            style={{
+              resizeMode: 'cover',
+              justifyContent: 'center',
+              padding: 0
+            }}>
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 100 }}
+              style={{ padding: 40 }}
+              refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
+            >
+              {this.state.eventData &&
+              this.showEventDetails(styles)
               }
-            </View>
-            <Separator />
-            {this.state.msg &&
-            <Text>{this.state.msg}</Text>
-            }
-            <Separator />
-            {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-            <View style={styles.participantsWrapper}>
-              <View style={styles.table}>
-                <Text style={styles.column}>
+              <Separator />
+              <Separator />
+              <View style={{
+                width: '100%',
+                height: 45,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                paddingRight: 15
+              }}>
+                {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
+
+                <TouchableOpacity
+                  onPress={(e) => this.createCalendarEvent(e)}
+                  style={styles.buttonCal}
+                >
                   <MaterialCommunityIcons
-                    name="account-multiple-outline"
-                    color="grey"
-                    size={25}
+                    name="calendar-import"
+                    color={colors.darkBlue}
+                    size={30}
                   />
-                </Text>
-                {Date.parse(this.state.eventData.event_date) > new Date() ?
-                  <Text style={styles.column}>
-                    <MaterialCommunityIcons
-                      name="account-plus"
-                      color="grey"
-                      size={25}
-                    />
-                  </Text> :
-                  <Text style={styles.column}>
-                    <MaterialCommunityIcons
-                      name="credit-card-outline"
-                      color="grey"
-                      size={25}
-                    />
-                  </Text>
+                </TouchableOpacity>
                 }
               </View>
+              <Separator />
+              {this.state.msg &&
+              <Text>{this.state.msg}</Text>
+              }
+              <Separator />
               {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-              this.state.eventData.participants.map((participant, index) =>
-                <View style={styles.table} key={index}>
-                  <Text
-                    style={styles.column1}
-                  >
-                    {index + 1}. {participant.username}
-                  </Text>
-                  {Date.parse(this.state.eventData.event_date) < new Date() ?
-                    this.createPayPalLink(participant.paypal_username, styles)
-                    :
-                    <TextInput
-                      disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-                      style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
-                      onChange={(e) => this.setExternalPlayers(e)}
-                      editable={participant.username === this.state.username}
-                      value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
-                      keyboardType="number-pad"
-                      returnKeyType="done"
+              <View style={styles.participantsWrapper}>
+                <View style={styles.table}>
+                  <Text style={styles.column}>
+                    <MaterialCommunityIcons
+                      name="account-multiple-outline"
+                      color="grey"
+                      size={25}
                     />
+                  </Text>
+                  {Date.parse(this.state.eventData.event_date) > new Date() ?
+                    <Text style={styles.column}>
+                      <MaterialCommunityIcons
+                        name="account-plus"
+                        color="grey"
+                        size={25}
+                      />
+                    </Text> :
+                    <Text style={styles.column}>
+                      <MaterialCommunityIcons
+                        name="credit-card-outline"
+                        color="grey"
+                        size={25}
+                      />
+                    </Text>
                   }
                 </View>
-              )
+                {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
+                this.state.eventData.participants.map((participant, index) =>
+                  <View style={styles.table} key={index}>
+                    <Text
+                      style={styles.column1}
+                    >
+                      {index + 1}. {participant.username}
+                    </Text>
+                    {Date.parse(this.state.eventData.event_date) < new Date() ?
+                      this.createPayPalLink(participant.paypal_username, styles)
+                      :
+                      <TextInput
+                        disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+                        style={participant.username === this.state.username ? styles.externalPlayer : styles.column1}
+                        onChange={(e) => this.setExternalPlayers(e)}
+                        editable={participant.username === this.state.username}
+                        value={(participant.username === this.state.username ? this.state.signupData.numberExternalPlayers : participant.guests).toString()}
+                        keyboardType="number-pad"
+                        returnKeyType="done"
+                      />
+                    }
+                  </View>
+                )
+                }
+              </View>
               }
-            </View>
-            }
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
+              <Separator />
+            </ScrollView>
 
-            {/*</ScrollView>*/}
+          </ImageBackground>
 
-          </ScrollView>
-          {Date.parse(this.state.eventData.event_date) > new Date() &&
-          <View style={{
-            width: "100%",
-            // height: '10%',
-            position: 'absolute',
-            bottom: 100,
-            // backgroundColor: "#d8c3af"
-          }}>
-            <TouchableOpacity
-              onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-              style={this.state.isUserSignedUp ? {
-                ...styles.buttonSticky,
-                backgroundColor: colors.orangeBrown,
+        </SafeAreaView>
+        {Date.parse(this.state.eventData.event_date) > new Date() &&
+        <View style={{
+          width: "100%",
+          position: 'absolute',
+          bottom: 10,
+        }}>
+          <TouchableOpacity
+            onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
+            style={this.state.isUserSignedUp ? {
+              ...styles.buttonSticky,
+              backgroundColor: colors.orangeBrown,
 
-              } : {
-                ...styles.buttonSticky,
-                backgroundColor: colors.darkBlue,
-              }}
-              disabled={Date.parse(this.state.eventData.event_date) < new Date()}
-            >
-              <Text
-                style={this.state.isUserSignedUp ?
-                  styles.btnTxtSecondary :
-                  styles.btnText}>{
-                this.state.isUserSignedUp ? "Withdraw" : "Sign up"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          }
-          {/*</SafeAreaView>*/}
-        </ImageBackground>
-      </SafeAreaView>
+            } : {
+              ...styles.buttonSticky,
+              backgroundColor: colors.darkBlue,
+            }}
+            disabled={Date.parse(this.state.eventData.event_date) < new Date()}
+          >
+            <Text
+              style={this.state.isUserSignedUp ?
+                styles.btnTxtSecondary :
+                styles.btnText}>{
+              this.state.isUserSignedUp ? "Withdraw" : "Sign up"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        }
+
+      </View>
     );
   }
 }

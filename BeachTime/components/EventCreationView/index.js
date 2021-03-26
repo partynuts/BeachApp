@@ -237,7 +237,7 @@ export default class EventCreationView extends React.Component {
           >
             <Card
               elevation={10}
-              style={styles.card}
+              style={{paddingBottom: 15}}
             >
               <Card.Content>
                 {/*<Text style={styles.text}>Set up an event!</Text>*/}
@@ -254,11 +254,6 @@ export default class EventCreationView extends React.Component {
 
               {Platform.OS !== 'ios' ?
                   <View>
-                    {/*<Button*/}
-                    {/*  title="Select date and time"*/}
-                    {/*  onPress={(e) => this.showCalendar(e)}*/}
-                    {/*/>*/}
-                    {/*<Separator />*/}
                     {this.state.calendarShown &&
                     <RNDateTimePicker
                       value={this.state.eventData.event_date}
@@ -275,12 +270,6 @@ export default class EventCreationView extends React.Component {
                     }
                   </View> :
                   <View>
-                    {/*<TouchableOpacity*/}
-                    {/*  onPress={(e) => this.showCalendar(e)}*/}
-                    {/*  style={styles.button}>*/}
-                    {/*  <Text*/}
-                    {/*    style={styles.btnText}>Select date and time</Text>*/}
-                    {/*</TouchableOpacity>*/}
                     <Separator />
                     {this.state.calendarShown &&
                     <View style={styles.iosDatePicker}>

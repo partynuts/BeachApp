@@ -89,7 +89,7 @@ export const stylesAndroid = StyleSheet.create({
   externalPlayer: {
     color: "white",
     fontSize: 16,
-    backgroundColor: "dodgerblue",
+    backgroundColor: colors.darkBlue,
     paddingLeft: 10
   },
   calBtn: {
@@ -176,9 +176,10 @@ export const stylesAndroid = StyleSheet.create({
 
 export const stylesIos = StyleSheet.create({
   container: {
-    minHeight: '100%',
-    padding: 40,
-    backgroundColor: colors.creme
+    // minHeight: '100%',
+    // padding: 40,
+    // marginBottom: 10,
+    // backgroundColor: colors.creme
   },
   title: {
     fontSize: 24,
@@ -257,7 +258,7 @@ export const stylesIos = StyleSheet.create({
   externalPlayer: {
     color: "white",
     fontSize: 16,
-    backgroundColor: "#0066FF",
+    backgroundColor: colors.darkBlue,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 5,

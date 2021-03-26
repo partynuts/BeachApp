@@ -213,7 +213,7 @@ export default class Home extends React.Component {
             >
               <Card.Content>
                 <Title>Last event</Title>
-                <Paragraph>Check out whow joined the last event and make a payment.</Paragraph>
+                <Paragraph>Check out who joined the last event and make a payment.</Paragraph>
               </Card.Content>
               <Card.Actions>
                 {this.state.pastEventData &&

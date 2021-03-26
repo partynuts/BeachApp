@@ -11,7 +11,7 @@ export default function Profile() {
   const [username, setUsername] = React.useState(state.user.username);
   const [email, setEmail] = React.useState(state.user.email);
   const [paypal_username, setPaypalUsername] = React.useState(state.user.paypal_username);
-  const [errorMsg, setErrorMsg] = React.useState({});
+  const [errorMsg, setErrorMsg] = React.useState(undefined);
   const [success, setSuccess] = React.useState(false)
   const navigation = useNavigation();
 
@@ -84,14 +84,14 @@ export default function Profile() {
           type="email"
           onChangeText={(input) => setEmail(input)}
           value={email}
-          placeholder= 'example@mail.com'
+          placeholder='example@mail.com'
           keyboardType='email-address'
         />
       </View>
       <Separator />
       <Separator />
       {errorMsg &&
-      <Text>{errorMsg}</Text>
+      <Text>{errorMsg.toString()}</Text>
       }
       <TouchableOpacity
         onPress={(e) => handleSubmit(e)}
