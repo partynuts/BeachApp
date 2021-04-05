@@ -2,12 +2,6 @@ import { StyleSheet } from 'react-native';
 import colors from "../../colors";
 
 export const stylesAndroid = StyleSheet.create({
-  container: {
-    minHeight: '100%',
-    // padding: 40,
-    backgroundColor: colors.creme,
-    position: 'relative'
-  },
   title: {
     fontSize: 24,
     fontWeight: "700",
@@ -121,7 +115,7 @@ export const stylesAndroid = StyleSheet.create({
     borderRadius: 7,
     borderWidth: 1,
     borderColor: colors.orangeBrown,
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
   },
   buttonSticky: {
     width: "97%",
@@ -134,23 +128,22 @@ export const stylesAndroid = StyleSheet.create({
   btnText: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textColorWhite,
+    color: colors.textWhite,
   },
   btnTxtSecondary: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textColorWhite,
+    color: colors.textWhite,
   },
   buttonCal: {
     width: "25%",
     height: "100%",
     padding: 5,
     borderRadius: 7,
-    // flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.darkBlue,
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
   },
   icon: {
     marginLeft: 5
@@ -168,19 +161,17 @@ export const stylesAndroid = StyleSheet.create({
     flexDirection: 'row',
   },
   participantsWrapper: {
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
     borderRadius: 5,
     width: '100%'
+  },
+  eventBtns: {
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
   }
 });
 
 export const stylesIos = StyleSheet.create({
-  container: {
-    // minHeight: '100%',
-    // padding: 40,
-    // marginBottom: 10,
-    // backgroundColor: colors.creme
-  },
   title: {
     fontSize: 24,
     fontWeight: "700",
@@ -222,7 +213,6 @@ export const stylesIos = StyleSheet.create({
   },
   resultsContainer: {
     padding: 10,
-    paddingBottom: 20,
     borderWidth: 1,
     borderColor: "white",
     backgroundColor: "white",
@@ -246,7 +236,6 @@ export const stylesIos = StyleSheet.create({
     fontSize: 18
   },
   column1: {
-    // width: "50%",
     color: "black",
     fontSize: 16
   },
@@ -304,7 +293,7 @@ export const stylesIos = StyleSheet.create({
     borderRadius: 7,
     borderWidth: 1,
     borderColor: colors.orangeBrown,
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
   },
   buttonSticky: {
     width: "97%",
@@ -318,23 +307,22 @@ export const stylesIos = StyleSheet.create({
   btnText: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textColorWhite,
+    color: colors.textWhite,
   },
   btnTxtSecondary: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textColorWhite,
+    color: colors.textWhite,
   },
   buttonCal: {
     width: "25%",
     height: "100%",
     padding: 5,
     borderRadius: 7,
-    // flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.darkBlue,
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
   },
   eventElement: {
     paddingRight: 5,
@@ -349,8 +337,12 @@ export const stylesIos = StyleSheet.create({
     flexDirection: 'row',
   },
   participantsWrapper: {
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
     borderRadius: 5,
     width: '100%'
+  },
+  eventBtns: {
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
   }
 });

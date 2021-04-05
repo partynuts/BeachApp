@@ -1,8 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { DefaultTheme } from 'react-native-paper';
 import { AsyncStorage } from 'react-native';
-import EntryPage from "./components/EntryPage";
 import { NavigationContainer } from '@react-navigation/native';
 import EventsNavigator from './navigation/EventsNavigator';
 import InfoNavigator from './navigation/InfoNavigator';
@@ -12,6 +10,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import GlobalState from "./contexts/GlobalState";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LoginNavigator from "./navigation/LoginNavigator";
+import colors from './colors'
+
 // Sentry.init({
 //   dsn: "https://706e63e3c743494587fd7ea82fffe000@o447756.ingest.sentry.io/5428017",
 //   enableInExpoDevelopment: true,
@@ -20,17 +20,6 @@ import LoginNavigator from "./navigation/LoginNavigator";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const theme = {
-  ...DefaultTheme,
-  roundness: 2,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: 'blue',
-    accent: 'yellow',
-    background: 'deeppink'
-  },
-};
 
 export default function App() {
   const [state, setState] = React.useState({});
@@ -69,21 +58,21 @@ function authNavigator() {
         name="Events"
         component={EventsNavigator}
         options={{
-          tabBarIcon: () => <MaterialCommunityIcons size={30} name="calendar-heart" />,
+          tabBarIcon: () => <MaterialCommunityIcons size={30} color={colors.grey} name="calendar-heart" />,
         }}
       />
       <Tab.Screen
         name="Info"
         component={InfoNavigator}
         options={{
-          tabBarIcon: () => <MaterialCommunityIcons size={30} name="information-outline" />,
+          tabBarIcon: () => <MaterialCommunityIcons size={30} color={colors.grey} name="information-outline" />,
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileNavigator}
         options={{
-          tabBarIcon: () => <MaterialCommunityIcons size={30} name="account-circle-outline" />,
+          tabBarIcon: () => <MaterialCommunityIcons size={30} color={colors.grey} name="account-circle-outline" />,
         }}
       />
     </Tab.Navigator>

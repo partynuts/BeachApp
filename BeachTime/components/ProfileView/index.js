@@ -1,8 +1,10 @@
 import React from 'react';
 import { ImageBackground, Platform, RefreshControl, SafeAreaView, ScrollView, Text } from 'react-native';
-import { stylesAndroid, stylesIos } from './style';
+import { styles } from './style';
 import Profile from "../Profile/index";
+import { globalStyles } from "../../global-styles";
 
+const sand = require('../../assets/sand.jpg');
 
 export default class ProfileView extends React.Component {
   constructor(props) {
@@ -32,7 +34,6 @@ export default class ProfileView extends React.Component {
   }
 
   async refreshData() {
-    // const newUserData = await this.getUserIdFromStorage();
     console.log("____NEW USER DATA ______", newUserData)
     this.setState({
       username: newUserData.username,
@@ -44,19 +45,14 @@ export default class ProfileView extends React.Component {
 
   render() {
     console.log("STATE IN Profile View", this.state.username)
-    const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
+    // const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
+          source={sand}
+          style={globalStyles.imageBackground}>
           <ScrollView
-            style={{ padding: 40 }}
+            style={globalStyles.scrollView}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
             {this.state.errorMsg &&
@@ -68,7 +64,6 @@ export default class ProfileView extends React.Component {
               paypalUsername={this.state.paypalUsername}
               refresh={() => this.refreshData()}
             />
-
           </ScrollView>
         </ImageBackground>
       </SafeAreaView>

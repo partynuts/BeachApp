@@ -1,11 +1,13 @@
 import React from 'react';
-import { ImageBackground, SafeAreaView, ScrollView, View } from 'react-native';
-import Heading from "../Heading";
+import { ImageBackground, SafeAreaView, ScrollView } from 'react-native';
 import { styles } from './style';
 import { apiHost } from "../../config";
 import * as Linking from "expo-linking";
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Separator } from "../../helper";
+import colors from "../../colors";
+
+const court = require('../../assets/court.jpg');
 
 export default class CourtInfo extends React.Component {
 
@@ -17,7 +19,6 @@ export default class CourtInfo extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("SGTRING", `${apiHost}/users`)
     await fetch(
       `${apiHost}/courtsinfo`,
       {
@@ -26,7 +27,6 @@ export default class CourtInfo extends React.Component {
     )
       .then(res => res.json())
       .then(resp => {
-        console.log("======RESPONSE from GET In COURT INFO======", resp)
         this.setState({
           allCourtsInfo: resp
         });
@@ -49,16 +49,13 @@ export default class CourtInfo extends React.Component {
     this.setState({
       selectedItem: index
     });
-
   }
 
   render() {
-    console.log("STATE IM RENDER VON COURT INFO", this.state)
-
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://images.unsplash.com/photo-1513233552420-84d7157d6a35?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=952&q=80' }}
+          source={court}
           style={{
             flex: 1,
             resizeMode: 'cover',
@@ -66,7 +63,10 @@ export default class CourtInfo extends React.Component {
             padding: 0
           }}>
           {this.state.allCourtsInfo &&
-          <ScrollView style={styles.scrollView}>
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 100 }}
+            style={styles.scrollView}
+          >
             {this.state.allCourtsInfo.map((court, index) =>
               <Card
                 elevation={10}
@@ -80,6 +80,8 @@ export default class CourtInfo extends React.Component {
                     <Paragraph>{court.time}</Paragraph>
                     <Card.Actions>
                       <Button
+                        mode='outlined'
+                        color={colors.darkBlue}
                         onPress={() => Linking.openURL(this.createBookingLink(court))}>{court.telephone}
                       </Button>
                     </Card.Actions>
@@ -91,10 +93,6 @@ export default class CourtInfo extends React.Component {
               </Card>
             )
             }
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
           </ScrollView>
           }
         </ImageBackground>

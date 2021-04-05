@@ -80,7 +80,7 @@ export const stylesAndroid = StyleSheet.create({
   btnText: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textColorWhite,
+    color: colors.textWhite,
   },
 });
 
@@ -139,7 +139,7 @@ export const stylesIos = StyleSheet.create({
   resultsContainer: {
     padding: 5,
     borderRadius: 5,
-    backgroundColor: colors.textColorWhite
+    backgroundColor: colors.textWhite
   },
   titleResults: {
     marginBottom: 10

@@ -1,18 +1,7 @@
 {
-  "lightBrownBackground": "#987c62",
-  "lighterBrownBackground": "#ab8b6e",
-  "creme": "#d8c3af",
-  "lightCreme": "#e5d7ca",
-  "darkerCreme": "#d1b9a2",
   "orangeBrown": "#c78f00",
-  "lightYellow":"#fff14e",
-  "amberBackground": "#ffbf00",
-  "lightgrayBackground": "#F5F5F5",
   "darkBlue": "#0035c7",
-  "darkerBlue": "#0012b2",
-  "lightBlue": "#56818c",
-  "purpleBlue":"#6b66ff",
-  "textColorBlack": "#000000",
-  "textColorWhite": "#ffffff",
-  "brown": "#7a5800"
+  "textWhite": "#ffffff",
+  "creme": "#d8c3af",
+  "grey": "#808080"
 }

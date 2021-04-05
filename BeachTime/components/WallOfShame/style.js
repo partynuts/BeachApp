@@ -45,7 +45,7 @@ export const commonStyles = StyleSheet.create({
     padding: 40
   },
   dataTable: {
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
     margin: 5
   }
 });

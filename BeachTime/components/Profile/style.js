@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     height: 40,
     borderWidth: 0.2,
     borderColor: colors.textColorBlack,
-    backgroundColor: colors.textColorWhite,
+    backgroundColor: colors.textWhite,
     padding: 5,
     marginBottom: 30
   },

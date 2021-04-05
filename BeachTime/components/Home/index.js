@@ -1,18 +1,17 @@
 import React from 'react';
 import * as ExpoNotifications from 'expo-notifications';
-import { ImageBackground, Platform, RefreshControl, SafeAreaView, ScrollView, Text, View } from 'react-native';
-import Heading from "../Heading";
+import { AsyncStorage, ImageBackground, Platform, RefreshControl, SafeAreaView, ScrollView, Text } from 'react-native';
 import EventCreationView from "../EventCreationView";
-import WallOfShame from "../WallOfShame";
 import { apiHost } from "../../config";
 import moment from "moment";
 import registerForPushNotificationsAsync, { handlePushNotifications } from './pushNotificationsHelper'
 import { stylesAndroid, stylesIos } from './style';
-import CourtInfo from "../CourtInfo";
+import { globalStyles } from '../../global-styles';
 import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../colors'
 import { Separator } from "../../helper";
-import { AsyncStorage } from "react-native";
+
+const sand = require('../../assets/sand.jpg');
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -24,16 +23,14 @@ export default class Home extends React.Component {
       userId: routeParams.id,
       errorMsg: null
     }
-
   }
-
 
   async componentDidMount() {
     try {
       await registerForPushNotificationsAsync(this.state.userId, this.state.username);
       handlePushNotifications();
       ExpoNotifications.addNotificationReceivedListener(notification => {
-        console.log("NOTIFICATIONS", notification)
+        console.log("NOTIFICATIONS", notification);
         this.fetchDataFromDb()
       });
 
@@ -47,7 +44,7 @@ export default class Home extends React.Component {
     this.intervalId = setInterval(async () => {
       const user = await AsyncStorage.getItem('@User');
       if (user) {
-      this.fetchDataFromDb();
+        this.fetchDataFromDb();
       } else {
         clearInterval(this.intervalId)
       }
@@ -140,20 +137,16 @@ export default class Home extends React.Component {
   }
 
   render() {
-    console.log("STATE IN HOME", this.state.username)
+    console.log("STATE IN HOME", this.state.username);
     const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
+          source={sand}
+          style={globalStyles.imageBackground}>
           <ScrollView
-            style={{ padding: 40 }}
+            contentContainerStyle={{ paddingBottom: 100 }}
+            style={globalStyles.scrollView}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
             {this.state.errorMsg &&
@@ -161,7 +154,7 @@ export default class Home extends React.Component {
             }
             <Card
               elevation={10}
-              style={styles.card}
+              style={globalStyles.card}
             >
               <Card.Content>
                 <Title>Create a beachvolley event</Title>
@@ -178,7 +171,7 @@ export default class Home extends React.Component {
             <Separator />
             <Card
               elevation={10}
-              style={styles.card}
+              style={globalStyles.card}
             >
               <Card.Content>
                 <Title>Upcoming events</Title>
@@ -188,7 +181,9 @@ export default class Home extends React.Component {
               </Card.Content>
               <Card.Actions>
                 {this.state.nextEventData &&
-                <Btn mode='outlined' color={colors.darkBlue}
+                <Btn
+                  mode='outlined'
+                  color={colors.darkBlue}
                   onPress={(e) => this.getNextEventPage(e)}>
                   <Text
                   >{moment(this.state.nextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}</Text>
@@ -197,7 +192,9 @@ export default class Home extends React.Component {
               </Card.Actions>
               <Card.Actions>
                 {this.state.secondNextEventData &&
-                <Btn mode='outlined' color={colors.darkBlue}
+                <Btn
+                  mode='outlined'
+                  color={colors.darkBlue}
                   onPress={(e) => this.getSecondNextEventPage(e)}>
                   <Text>
                     {moment(this.state.secondNextEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
@@ -209,7 +206,7 @@ export default class Home extends React.Component {
             <Separator />
             <Card
               elevation={10}
-              style={styles.card}
+              style={globalStyles.card}
             >
               <Card.Content>
                 <Title>Last event</Title>
@@ -217,7 +214,9 @@ export default class Home extends React.Component {
               </Card.Content>
               <Card.Actions>
                 {this.state.pastEventData &&
-                <Btn mode='outlined' color={colors.darkBlue}
+                <Btn
+                  mode='outlined'
+                  color={colors.darkBlue}
                   onPress={(e) => this.getPastEventPage(e)}>
                   <Text>
                     {moment(this.state.pastEventData.event_date).format("ddd, MMMM Do YYYY, HH:mm")}
@@ -226,14 +225,6 @@ export default class Home extends React.Component {
                 }
               </Card.Actions>
             </Card>
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
-            <Separator />
           </ScrollView>
         </ImageBackground>
       </SafeAreaView>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
-  AsyncStorage, ImageBackground,
+  AsyncStorage,
+  ImageBackground,
   Linking,
   Platform,
   RefreshControl,
@@ -18,8 +19,8 @@ import moment from "moment";
 import { Separator } from "../../helper";
 import * as ExpoNotifications from "expo-notifications";
 import colors from "../../colors";
-import { Portal } from "react-native-paper";
-
+import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
+const sand = require('../../assets/sand.jpg')
 
 export default class Event extends React.Component {
 
@@ -139,21 +140,30 @@ export default class Event extends React.Component {
         </View>
       </View>
       {Date.parse(this.state.eventData.event_date) > new Date() &&
-      <View>
-        <TouchableOpacity
-          title="edit"
-          style={styles.editBtn}
-          onPress={(e) => this.editEvent(e)}
+      <Card.Actions style={styles.eventBtns}>
+        <Btn mode='outlined'
+          color={colors.orangeBrown}
+          onPress={(e) => this.deleteEvent(e)}>
+          Cancel event
+        </Btn>
+        <Btn mode='contained'
+          color={colors.darkBlue}
+          onPress={(e) => this.editEvent(e)}>
+          edit
+        </Btn>
+        {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
+        <Btn
+          // mode='outlined'
+          onPress={(e) => this.createCalendarEvent(e)}
         >
-          <Text style={{ ...styles.btnText, color: colors.textColorWhite, fontWeight: '700' }}>edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={(e) => this.deleteEvent(e)}
-          style={styles.deleteBtn}
-        >
-          <Text style={{ ...styles.btnText, color: colors.orangeBrown, fontWeight: '700' }}>Cancel event</Text>
-        </TouchableOpacity>
-      </View>
+          <MaterialCommunityIcons
+            name="calendar-import"
+            color={colors.darkBlue}
+            size={35}
+          />
+        </Btn>
+        }
+      </Card.Actions>
       }
     </View>
   }
@@ -382,14 +392,14 @@ export default class Event extends React.Component {
 
     return (
       <View>
-
         <SafeAreaView style={styles.container}>
           <ImageBackground
-            source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
+            source={sand}
             style={{
               resizeMode: 'cover',
               justifyContent: 'center',
-              padding: 0
+              padding: 0,
+              minHeight: '100%',
             }}>
             <ScrollView
               contentContainerStyle={{ paddingBottom: 100 }}
@@ -399,8 +409,6 @@ export default class Event extends React.Component {
               {this.state.eventData &&
               this.showEventDetails(styles)
               }
-              <Separator />
-              <Separator />
               <View style={{
                 width: '100%',
                 height: 45,
@@ -408,25 +416,11 @@ export default class Event extends React.Component {
                 justifyContent: 'flex-end',
                 paddingRight: 15
               }}>
-                {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
-
-                <TouchableOpacity
-                  onPress={(e) => this.createCalendarEvent(e)}
-                  style={styles.buttonCal}
-                >
-                  <MaterialCommunityIcons
-                    name="calendar-import"
-                    color={colors.darkBlue}
-                    size={30}
-                  />
-                </TouchableOpacity>
-                }
               </View>
               <Separator />
               {this.state.msg &&
               <Text>{this.state.msg}</Text>
               }
-              <Separator />
               {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
               <View style={styles.participantsWrapper}>
                 <View style={styles.table}>
@@ -481,10 +475,9 @@ export default class Event extends React.Component {
               </View>
               }
               <Separator />
+              <Separator />
             </ScrollView>
-
           </ImageBackground>
-
         </SafeAreaView>
         {Date.parse(this.state.eventData.event_date) > new Date() &&
         <View style={{
