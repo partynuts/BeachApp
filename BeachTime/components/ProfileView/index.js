@@ -18,11 +18,6 @@ export default class ProfileView extends React.Component {
     }
   }
 
-  handleButtonPress(e, component) {
-    e.preventDefault();
-    this.props.navigation.navigate(component)
-  }
-
   async onRefresh() {
     this.setState({
       refreshing: true
