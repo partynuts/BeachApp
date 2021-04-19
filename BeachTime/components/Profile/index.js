@@ -15,18 +15,9 @@ export default function Profile() {
   const [success, setSuccess] = React.useState(false)
   const navigation = useNavigation();
 
-  // React.useEffect(() => {
-  //   AsyncStorage.getItem('@User')
-  //     .then(storageItem => {
-  //       const userData = JSON.parse(storageItem);
-  //       console.log("USERDATA in PROFILE", userData)
-  //       setState((state) => ({ ...state, user: userData }));
-  //     })
-  // }, []);
-
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("ENTERED DATA", state)
+    console.log("ENTERED DATA", state);
     fetch(
       `${apiHost}/users/${state.user.id}`,
       {
@@ -52,7 +43,7 @@ export default function Profile() {
           return setErrorMsg(errorMsg)
         }
         const data = await res.json();
-        console.log("DATA FROM EDITING PROFILE", data)
+        console.log("DATA FROM EDITING PROFILE", data);
         try {
           await AsyncStorage.setItem('@User', JSON.stringify(data));
           setSuccess(true);

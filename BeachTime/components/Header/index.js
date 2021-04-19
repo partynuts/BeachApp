@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from './style';
 import ProfileIcon from "../ProfileIcon";
 import GlobalState from "../../contexts/GlobalState";

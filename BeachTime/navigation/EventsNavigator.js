@@ -4,9 +4,7 @@ import colors from '../colors'
 import Home from '../components/Home'
 import EventCreationView from '../components/EventCreationView'
 import Event from '../components/Event'
-import ProfileIcon from "../components/ProfileIcon";
 import { AsyncStorage } from "react-native";
-import { Text } from 'react-native';
 import Header from "../components/Header";
 
 const Stack = createStackNavigator();

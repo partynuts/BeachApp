@@ -14,12 +14,14 @@ import {
   View
 } from 'react-native';
 import { apiHost } from '../../config';
-import { stylesAndroid, stylesIos } from './style'
+import { stylesAndroid, stylesIos } from './style';
+import { globalStyles } from '../../global-styles';
 import moment from "moment";
 import { Separator } from "../../helper";
 import * as ExpoNotifications from "expo-notifications";
 import colors from "../../colors";
-import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
+import { Button as Btn, Card } from 'react-native-paper';
+
 const sand = require('../../assets/sand.jpg')
 
 export default class Event extends React.Component {
@@ -92,50 +94,50 @@ export default class Event extends React.Component {
   }
 
   showEventDetails(styles) {
-    return <View style={styles.resultsContainer}>
+    return <View style={globalStyles.resultsContainer}>
       <Text style={styles.text}>Event details:</Text>
-      <View style={styles.eventDetailWrapper}>
+      <View style={globalStyles.eventDetailWrapper}>
         <MaterialCommunityIcons
           name="calendar-clock"
-          color="grey"
+          color={colors.grey}
           size={25}
-          style={styles.eventElement}
+          style={globalStyles.eventElement}
         />
         <Text
-          style={styles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
+          style={globalStyles.textBold}>{moment(this.state.eventData.event_date).format("dddd, MMMM Do YYYY, HH:mm")}
         </Text>
       </View>
-      <View style={styles.eventDetailWrapper}>
+      <View style={globalStyles.eventDetailWrapper}>
         <MaterialCommunityIcons
           name="map-marker"
-          color="grey"
+          color={colors.grey}
           size={25}
-          style={styles.eventElement}
+          style={globalStyles.eventElement}
         />
-        <Text style={styles.eventElement}>{this.state.eventData.location}</Text>
+        <Text style={globalStyles.textBold}>{this.state.eventData.location}</Text>
       </View>
-      <View style={styles.eventDetailWrapper}>
+      <View style={globalStyles.eventDetailWrapper}>
         <MaterialCommunityIcons
           name="volleyball"
-          color="grey"
+          color={colors.grey}
           size={25}
-          style={styles.eventElement}
+          style={globalStyles.eventElement}
         />
-        <Text style={styles.textBold}>{this.state.eventData.number_of_fields} </Text>
+        <Text style={globalStyles.textBold}>{this.state.eventData.number_of_fields} </Text>
       </View>
-      <View style={styles.eventDetailWrapper}>
+      <View style={globalStyles.eventDetailWrapper}>
         <MaterialCommunityIcons
           name="currency-eur"
-          color="grey"
+          color={colors.grey}
           size={25}
-          style={styles.eventElement}
+          style={globalStyles.eventElement}
         />
         <View style={styles.costsContainer}>
           <View>
-            <Text style={styles.eventElement}>{this.state.totalCosts} total,</Text>
+            <Text style={globalStyles.eventElement}>{this.state.totalCosts} total,</Text>
           </View>
           <View>
-            <Text style={styles.textBold}>{this.calculateCostsPerPerson()} p.P </Text>
+            <Text style={globalStyles.textBold}>{this.calculateCostsPerPerson()} p.P </Text>
           </View>
         </View>
       </View>
@@ -153,7 +155,6 @@ export default class Event extends React.Component {
         </Btn>
         {this.state.isUserSignedUp && Date.parse(this.state.eventData.event_date) > new Date() &&
         <Btn
-          // mode='outlined'
           onPress={(e) => this.createCalendarEvent(e)}
         >
           <MaterialCommunityIcons
@@ -244,13 +245,11 @@ export default class Event extends React.Component {
           });
         } else if (res.status === 403) {
           const data = await res.json();
-          // console.log("DATA NACH SIGN UP mit 403", data, res.status);
 
           this.setState({
             msg: (data || null).msg,
             signUpStatus: res.status,
           });
-          // console.log("NEUES STATE", this.state)
         }
       })
       .catch(e => console.log(e))
@@ -274,8 +273,6 @@ export default class Event extends React.Component {
     )
       .then(async (res) => {
         const response = await res.json();
-        // console.log("RESPONSE GUESTS", response)
-
         const extraData = response.enrollment ? {
           signupData: {
             numberExternalPlayers: response.enrollment.guests
@@ -293,9 +290,7 @@ export default class Event extends React.Component {
 
   handleCancellation(e) {
     e.preventDefault();
-    this.setState({ msg: null })
-
-    // console.log("EVENT ID Cancellation", this.state, "CANCELLING!!!!!!!");
+    this.setState({ msg: null });
     const eventId = this.state.eventData.id;
     fetch(
       `${apiHost}/events/${eventId}/cancel`,
@@ -311,7 +306,6 @@ export default class Event extends React.Component {
     )
       .then(async (res) => {
         const data = await res.json();
-        // console.log("DATA NACH CANCELLATION", data)
         const noParticipants = data.participants === null || data.participants.length < 1;
         const totalExternalPlayers = data.participants.reduce((acc, currVal) => acc + currVal.guests, 0);
 
@@ -320,7 +314,6 @@ export default class Event extends React.Component {
           eventData: { ...this.state.eventData, participants: data.participants },
           isUserSignedUp: !this.state.isUserSignedUp,
         });
-        // console.log("NEUES STATE", this.state)
       })
       .catch(e => console.log(e))
   }
@@ -395,15 +388,10 @@ export default class Event extends React.Component {
         <SafeAreaView style={styles.container}>
           <ImageBackground
             source={sand}
-            style={{
-              resizeMode: 'cover',
-              justifyContent: 'center',
-              padding: 0,
-              minHeight: '100%',
-            }}>
+            style={globalStyles.imageBackground}>
             <ScrollView
               contentContainerStyle={{ paddingBottom: 100 }}
-              style={{ padding: 40 }}
+              style={globalStyles.scrollView}
               refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
             >
               {this.state.eventData &&
@@ -416,18 +404,18 @@ export default class Event extends React.Component {
                 justifyContent: 'flex-end',
                 paddingRight: 15
               }}>
+                {this.state.msg &&
+                <Text>{this.state.msg}</Text>
+                }
               </View>
-              <Separator />
-              {this.state.msg &&
-              <Text>{this.state.msg}</Text>
-              }
+
               {this.state.eventData.participants && this.state.eventData.participants.length > 0 &&
-              <View style={styles.participantsWrapper}>
+              <View style={globalStyles.participantsWrapper}>
                 <View style={styles.table}>
                   <Text style={styles.column}>
                     <MaterialCommunityIcons
                       name="account-multiple-outline"
-                      color="grey"
+                      color={colors.grey}
                       size={25}
                     />
                   </Text>
@@ -435,14 +423,14 @@ export default class Event extends React.Component {
                     <Text style={styles.column}>
                       <MaterialCommunityIcons
                         name="account-plus"
-                        color="grey"
+                        color={colors.grey}
                         size={25}
                       />
                     </Text> :
                     <Text style={styles.column}>
                       <MaterialCommunityIcons
                         name="credit-card-outline"
-                        color="grey"
+                        color={colors.grey}
                         size={25}
                       />
                     </Text>
