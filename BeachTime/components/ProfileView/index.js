@@ -40,25 +40,23 @@ export default class ProfileView extends React.Component {
 
   render() {
     console.log("STATE IN Profile View", this.state.username)
-    // const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={globalStyles.pageContainer}>
         <ImageBackground
           source={sand}
           style={globalStyles.imageBackground}>
           <ScrollView
+            contentContainerStyle={globalStyles.contentContainer}
             style={globalStyles.scrollView}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >
-            {this.state.errorMsg &&
-            <Text>{this.state.errorMsg}</Text>
-            }
             <Profile
               username={this.state.username}
               user_id={this.state.user_id}
               paypalUsername={this.state.paypalUsername}
               refresh={() => this.refreshData()}
             />
+
           </ScrollView>
         </ImageBackground>
       </SafeAreaView>

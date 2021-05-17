@@ -3,5 +3,7 @@
   "darkBlue": "#0035c7",
   "textWhite": "#ffffff",
   "creme": "#d8c3af",
-  "grey": "#808080"
+  "grey": "#808080",
+  "black": "#000000",
+  "red": "#ff0000"
 }

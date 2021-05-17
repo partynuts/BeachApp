@@ -2,25 +2,20 @@ import React from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
 import {
   AsyncStorage,
-  Button,
   ImageBackground,
-  Platform, RefreshControl,
-  SafeAreaView, ScrollView,
+  SafeAreaView,
+  ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
-  View
+  TouchableOpacity
 } from 'react-native';
 import { apiHost } from '../../config';
-import { stylesAndroid, stylesIos } from './style';
+import { styles } from './style';
 import GlobalState from "../../contexts/GlobalState";
+import { globalStyles } from "../../global-styles";
+import { Separator } from "../../helper";
 
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+const sand = require('../../assets/sand.jpg');
 
 export default function EntryPage() {
   const [_, setState] = React.useContext(GlobalState);
@@ -75,35 +70,29 @@ export default function EntryPage() {
       })
   }
 
-  const styles = Platform.OS === 'ios' ? stylesIos : stylesAndroid;
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.pageContainer}>
       <ImageBackground
-        source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-        style={{
-          flex: 1,
-          resizeMode: 'cover',
-          justifyContent: 'center',
-          padding: 0
-        }}>
-        <ScrollView style={{ padding: 40 }}>
+        source={sand}
+        style={globalStyles.imageBackground}
+      >
+        <ScrollView style={globalStyles.scrollView}>
           <Text style={styles.title}>Sign up or log in!</Text>
           <Separator />
           <TextInput
-            style={styles.textInput}
+            style={globalStyles.textInput}
             placeholder="Username*"
             onChangeText={(input) => setUsername(input)}
             value={username}
           />
           <TextInput
-            style={styles.textInput}
+            style={globalStyles.textInput}
             placeholder="PayPal username"
             onChangeText={(input) => setPaypalUsername(input)}
             value={paypal_username}
           />
           <TextInput
-            style={styles.textInput}
+            style={globalStyles.textInput}
             type="email"
             placeholder="Email*"
             onChangeText={(input) => setEmail(input)}
@@ -113,12 +102,12 @@ export default function EntryPage() {
           <Separator />
           <TouchableOpacity
             onPress={(e) => handleSubmit(e)}
-            style={styles.button}>
-            <Text style={styles.btnText}>Go</Text>
+            style={globalStyles.primaryBtn}>
+            <Text style={globalStyles.primaryBtnText}>Go</Text>
           </TouchableOpacity>
           <Separator />
           {errorMsg &&
-          <Text>{errorMsg}</Text>
+          <Text style={globalStyles.errorMsgShort}>{errorMsg}</Text>
           }
         </ScrollView>
       </ImageBackground>

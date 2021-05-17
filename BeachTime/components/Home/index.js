@@ -145,7 +145,7 @@ export default class Home extends React.Component {
           source={sand}
           style={globalStyles.imageBackground}>
           <ScrollView
-            contentContainerStyle={{ paddingBottom: 100 }}
+            contentContainerStyle={globalStyles.contentContainer}
             style={globalStyles.scrollView}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
           >

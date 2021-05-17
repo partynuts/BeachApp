@@ -6,13 +6,10 @@ import { stylesAndroid, stylesIos } from './style';
 import CourtInfo from "../CourtInfo";
 import { Button as Btn, Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../colors'
+import { globalStyles } from "../../global-styles";
+import { Separator } from "../../helper";
 
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+const sand = require('../../assets/sand.jpg');
 
 export default class Info extends React.Component {
   constructor(props) {
@@ -47,13 +44,8 @@ export default class Info extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
+          source={sand}
+          style={globalStyles.imageBackground}>
           <ScrollView
             style={{ padding: 40 }}
             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}

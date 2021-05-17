@@ -4,8 +4,8 @@ import { styles } from './style';
 import { apiHost } from "../../config";
 import * as Linking from "expo-linking";
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
-import { Separator } from "../../helper";
 import colors from "../../colors";
+import { globalStyles } from "../../global-styles";
 
 const court = require('../../assets/court.jpg');
 
@@ -56,15 +56,10 @@ export default class CourtInfo extends React.Component {
       <SafeAreaView style={styles.container}>
         <ImageBackground
           source={court}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
+          style={globalStyles.imageBackground}>
           {this.state.allCourtsInfo &&
           <ScrollView
-            contentContainerStyle={{ paddingBottom: 100 }}
+            contentContainerStyle={globalStyles.contentContainer}
             style={styles.scrollView}
           >
             {this.state.allCourtsInfo.map((court, index) =>

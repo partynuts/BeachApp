@@ -7,18 +7,9 @@ export const stylesAndroid = StyleSheet.create({
     // padding: 40,
     backgroundColor: colors.creme
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: colors.textColorBlack
-  },
   text: {
     fontSize: 16,
     marginBottom: 10
-  },
-  textResults: {
-    color: "black",
-    fontSize: 16
   },
   titleResults: {
     marginBottom: 10
@@ -26,9 +17,9 @@ export const stylesAndroid = StyleSheet.create({
   picker: {
     height: 40,
     width: 100,
-    borderColor: 'black',
+    borderColor: colors.black,
     borderWidth: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.textWhite,
     marginTop: 10
   },
   choiceContainer: {
@@ -36,17 +27,15 @@ export const stylesAndroid = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  column: {},
   resultsContainer: {
     padding: 5,
-    borderRadius: 5,
-    backgroundColor: 'white'
+    borderRadius: 5
   },
   pickerBtn: {
     height: 30,
     width: 100,
-    color: 'white',
-    backgroundColor: 'dodgerblue',
+    color: colors.textWhite,
+    backgroundColor: colors.darkBlue,
     textAlign: 'center',
     lineHeight: 30
   },
@@ -54,7 +43,7 @@ export const stylesAndroid = StyleSheet.create({
     paddingRight: 5,
     paddingBottom: 5,
     paddingTop: 5,
-    color: "black",
+    color: colors.black,
     fontWeight: "700",
   },
   eventDetailWrapper: {
@@ -63,25 +52,11 @@ export const stylesAndroid = StyleSheet.create({
     flexDirection: 'row',
   },
   textBold: {
-    color: "black",
+    color: colors.black,
     fontWeight: "700",
     paddingBottom: 10,
     paddingTop: 5,
-  },
-  buttonSticky: {
-    width: "97%",
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderRadius: 7,
-    backgroundColor: colors.darkBlue,
-  },
-  btnText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.textWhite,
-  },
+  }
 });
 
 export const stylesIos = StyleSheet.create({
@@ -90,18 +65,9 @@ export const stylesIos = StyleSheet.create({
     padding: 40,
     backgroundColor: colors.creme
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: colors.textColorBlack
-  },
   text: {
     fontSize: 16,
     marginBottom: 10
-  },
-  btnText: {
-    fontSize: 18,
-    color: "white",
   },
   button: {
     width: "100%",
@@ -109,7 +75,7 @@ export const stylesIos = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 7,
-    backgroundColor: "#0066FF",
+    backgroundColor: colors.darkBlue,
   },
   btnDisabled: {
     width: "100%",
@@ -125,7 +91,7 @@ export const stylesIos = StyleSheet.create({
   },
   column1: {
     width: "50%",
-    color: "white",
+    color: colors.textWhite,
     fontSize: 16
   },
   column2: {
@@ -133,13 +99,12 @@ export const stylesIos = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: "50%",
-    color: "white",
+    color: colors.textWhite,
     fontSize: 16
   },
   resultsContainer: {
     padding: 5,
     borderRadius: 5,
-    backgroundColor: colors.textWhite
   },
   titleResults: {
     marginBottom: 10
@@ -147,8 +112,8 @@ export const stylesIos = StyleSheet.create({
   pickerBtn: {
     height: 30,
     width: 100,
-    color: 'white',
-    backgroundColor: "#0066FF",
+    color: colors.textWhite,
+    backgroundColor: colors.darkBlue,
     textAlign: 'center',
     lineHeight: 30
   },
@@ -159,7 +124,7 @@ export const stylesIos = StyleSheet.create({
     paddingRight: 5,
     paddingBottom: 5,
     paddingTop: 5,
-    color: "black",
+    color: colors.black,
     fontWeight: "700",
   },
   eventDetailWrapper: {
@@ -168,18 +133,9 @@ export const stylesIos = StyleSheet.create({
     flexDirection: 'row',
   },
   textBold: {
-    color: "black",
+    color: colors.black,
     fontWeight: "700",
     paddingBottom: 10,
     paddingTop: 5,
-  },
-  buttonSticky: {
-    width: "97%",
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderRadius: 7,
-    backgroundColor: colors.darkBlue,
   },
 });

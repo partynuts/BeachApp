@@ -5,6 +5,7 @@ import { styles } from './style';
 import { Separator } from "../../helper";
 import GlobalState from "../../contexts/GlobalState";
 import { useNavigation } from '@react-navigation/native';
+import { globalStyles } from "../../global-styles";
 
 export default function Profile() {
   const [state, setState] = React.useContext(GlobalState);
@@ -56,22 +57,22 @@ export default function Profile() {
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       <View>
         <TextInput
-          style={styles.textInput}
+          style={globalStyles.textInput}
           onChangeText={(input) => setUsername(input)}
           value={username}
           placeholder='Username, i.e. Fritz'
         />
         <TextInput
-          style={styles.textInput}
+          style={globalStyles.textInput}
           onChangeText={(input) => setPaypalUsername(input)}
           value={paypal_username}
           placeholder='Bratzo'
         />
         <TextInput
-          style={styles.textInput}
+          style={globalStyles.textInput}
           type="email"
           onChangeText={(input) => setEmail(input)}
           value={email}
@@ -81,15 +82,16 @@ export default function Profile() {
       </View>
       <Separator />
       <Separator />
-      {errorMsg &&
-      <Text>{errorMsg.toString()}</Text>
-      }
       <TouchableOpacity
         onPress={(e) => handleSubmit(e)}
-        style={styles.button}>
-        <Text style={styles.btnText}>Update profile</Text>
+        style={globalStyles.primaryBtn}>
+        <Text style={globalStyles.primaryBtnText}>Update profile</Text>
       </TouchableOpacity>
+      <Separator />
 
+      {errorMsg &&
+      <Text style={globalStyles.errorMsgShort}>{errorMsg.toString()}</Text>
+      }
     </View>
   )
 }

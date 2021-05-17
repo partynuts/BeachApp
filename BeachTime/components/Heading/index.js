@@ -1,13 +1,7 @@
 import React from 'react';
 import { AsyncStorage, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
-
-function Separator() {
-  return <View style={{
-    marginVertical: 8,
-    borderBottomColor: '#737373'
-  }} />;
-}
+import { Separator } from "../../helper";
 
 export default class Heading extends React.Component {
   constructor(props) {

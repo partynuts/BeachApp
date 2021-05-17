@@ -28,14 +28,6 @@ export const stylesAndroid = StyleSheet.create({
     backgroundColor: colors.darkBlue,
     paddingLeft: 10
   },
-  buttonSticky: {
-    width: "97%",
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderRadius: 7,
-  },
   btnText: {
     fontSize: 16,
     fontWeight: '700',
@@ -88,15 +80,6 @@ export const stylesIos = StyleSheet.create({
   textInput: {
     color: colors.textWhite,
     fontSize: 18
-  },
-  buttonSticky: {
-    width: "97%",
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderRadius: 7,
-    backgroundColor: colors.darkBlue,
   },
   btnText: {
     fontSize: 16,

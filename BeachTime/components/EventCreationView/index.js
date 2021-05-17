@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  AsyncStorage, ImageBackground,
+  AsyncStorage,
+  ImageBackground,
   Picker,
   Platform,
-  RefreshControl,
   SafeAreaView,
   ScrollView,
   Text,
@@ -18,6 +18,10 @@ import { stylesAndroid, stylesIos } from './style'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Button as Btn, Card, Title } from 'react-native-paper';
 import { Separator } from "../../helper";
+import colors from '../../colors';
+import { globalStyles } from "../../global-styles";
+
+const sand = require('../../assets/sand.jpg');
 
 export default class EventCreationView extends React.Component {
 
@@ -224,122 +228,115 @@ export default class EventCreationView extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <ImageBackground
-          source={{ uri: 'https://i.pinimg.com/originals/88/5a/fd/885afd3f8182489c0b729b161157d1e8.jpg' }}
-          style={{
-            flex: 1,
-            resizeMode: 'cover',
-            justifyContent: 'center',
-            padding: 0
-          }}>
-        {/*<SafeAreaView style={{ position: 'relative' }}>*/}
+          source={sand}
+          style={globalStyles.imageBackground}>
           <ScrollView
             style={{ padding: 40 }}
           >
             <Card
               elevation={10}
-              style={{paddingBottom: 15}}
+              style={{...globalStyles.card, paddingBottom: 15 }}
             >
               <Card.Content>
-                {/*<Text style={styles.text}>Set up an event!</Text>*/}
                 <Title>Set up an event!</Title>
               </Card.Content>
               <Card.Actions>
                 <Btn
                   onPress={(e) => this.showCalendar(e)}
-                  mode='outlined'
+                  mode='contained'
+                  style={{ backgroundColor: colors.darkBlue }}
                 >
                   <Text>Select date and time</Text>
                 </Btn>
               </Card.Actions>
 
               {Platform.OS !== 'ios' ?
-                  <View>
-                    {this.state.calendarShown &&
+                <View>
+                  {this.state.calendarShown &&
+                  <RNDateTimePicker
+                    value={this.state.eventData.event_date}
+                    mode='date'
+                    onChange={(e, date) => this.setDate(e, date)}
+                  />
+                  }
+                  {this.state.timepickerShown &&
+                  <RNDateTimePicker
+                    value={this.state.eventData.event_date}
+                    mode='time'
+                    onChange={(e, date) => this.setDate(e, date)}
+                  />
+                  }
+                </View> :
+                <View>
+                  <Separator />
+                  {this.state.calendarShown &&
+                  <View style={styles.iosDatePicker}>
                     <RNDateTimePicker
                       value={this.state.eventData.event_date}
-                      mode='date'
-                      onChange={(e, date) => this.setDate(e, date)}
+                      mode='datetime'
+                      onChange={(e, date) => this.setDateIos(e, date)}
                     />
-                    }
-                    {this.state.timepickerShown &&
-                    <RNDateTimePicker
-                      value={this.state.eventData.event_date}
-                      mode='time'
-                      onChange={(e, date) => this.setDate(e, date)}
-                    />
-                    }
-                  </View> :
-                  <View>
-                    <Separator />
-                    {this.state.calendarShown &&
-                    <View style={styles.iosDatePicker}>
-                      <RNDateTimePicker
-                        value={this.state.eventData.event_date}
-                        mode='datetime'
-                        onChange={(e, date) => this.setDateIos(e, date)}
-                      />
-                      <TouchableOpacity
-                        onPress={(e) => this.showCalendar(e)}
-                        style={styles.button}>
-                        <Text
-                          style={styles.btnText}>Confirm</Text>
-                      </TouchableOpacity>
-                    </View>
-                    }
+                    <TouchableOpacity
+                      onPress={(e) => this.showCalendar(e)}
+                      style={styles.button}>
+                      <Text
+                        style={globalStyles.primaryBtnText}>Confirm</Text>
+                    </TouchableOpacity>
                   </View>
-                }
-                {Platform.OS !== 'ios' &&
-                <Separator />
-                }
-                <View style={styles.choiceContainer}>
-                  <View style={styles.column}>
-                    <Text
-                      style={styles.text}
-                      onPress={(e) => {
-                        e.preventDefault();
-                        this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
-                      }}
-                    >
-                      Select fields:
-                    </Text>
-                    <Text
-                      style={styles.pickerBtn}
-                      onPress={(e) => {
-                        e.preventDefault();
-                        this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
-                      }}
-                    >
-                      {this.state.eventData.number_of_fields}
-                    </Text>
-                    {this.state.showNumberOfFieldsPicker &&
-                    <Picker
-                      selectedValue={this.state.eventData.number_of_fields}
-                      style={styles.picker}
-                      onValueChange={(fieldValue, fieldIndex) => this.setState({
-                        eventData: {
-                          ...this.state.eventData,
-                          number_of_fields: fieldValue,
-                        }
-                      })
-                      }>
-                      <Picker.Item label="1" value={1} />
-                      <Picker.Item label="2" value={2} />
-                      <Picker.Item label="3" value={3} />
-                      <Picker.Item label="4" value={4} />
-                    </Picker>
-                    }
-                  </View>
-                  {this.state.allCourts &&
-                  this.getLocationOptions(styles)
                   }
                 </View>
-                {/*</View>*/}
+              }
+              {Platform.OS !== 'ios' &&
+              <Separator />
+              }
+              <View style={styles.choiceContainer}>
+                <View style={styles.column}>
+                  <Text
+                    style={styles.text}
+                    onPress={(e) => {
+                      e.preventDefault();
+                      this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
+                    }}
+                  >
+                    Select fields:
+                  </Text>
+                  <Text
+                    style={styles.pickerBtn}
+                    onPress={(e) => {
+                      e.preventDefault();
+                      this.setState({ showNumberOfFieldsPicker: !this.state.showNumberOfFieldsPicker });
+                    }}
+                  >
+                    {this.state.eventData.number_of_fields}
+                  </Text>
+                  {this.state.showNumberOfFieldsPicker &&
+                  <Picker
+                    selectedValue={this.state.eventData.number_of_fields}
+                    style={styles.picker}
+                    onValueChange={(fieldValue, fieldIndex) => this.setState({
+                      eventData: {
+                        ...this.state.eventData,
+                        number_of_fields: fieldValue,
+                      }
+                    })
+                    }>
+                    <Picker.Item label="1" value={1} />
+                    <Picker.Item label="2" value={2} />
+                    <Picker.Item label="3" value={3} />
+                    <Picker.Item label="4" value={4} />
+                  </Picker>
+                  }
+                </View>
+                {this.state.allCourts &&
+                this.getLocationOptions(styles)
+                }
+              </View>
             </Card>
 
+            <Separator />
+            <Separator />
 
-            <Separator />
-            <Separator />
-            <View style={{ backgroundColor: "#ffbf00" }}>
+            <Card style={globalStyles.card}>
               <View style={styles.resultsContainer}>
                 <Text style={styles.text}>Your settings:</Text>
                 <View style={styles.eventDetailWrapper}>
@@ -383,33 +380,25 @@ export default class EventCreationView extends React.Component {
                 </View>
                 }
               </View>
-            </View>
-            {/*<View style={{*/}
-            {/*  width: "100%",*/}
-            {/*  height: '10%',*/}
-            {/*  position: 'absolute',*/}
-            {/*  bottom: 0,*/}
-            {/*  backgroundColor: "#d8c3af"*/}
-            {/*}}>*/}
+            </Card>
+
             <Separator />
             <Separator />
 
             <TouchableOpacity
-                onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
-                style={styles.buttonSticky}
-              >
-                <Text style={styles.btnText}>
-                  {this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
-                </Text>
-              </TouchableOpacity>
-            {/*</View>*/}
+              onPress={this.props.route.params && this.props.route.params.eventData ? (e) => this.handleUpdate(e) : (e) => this.handleSubmit(e)}
+              style={globalStyles.primaryBtn}
+            >
+              <Text style={globalStyles.primaryBtnText}>
+                {this.props.route.params && this.props.route.params.eventData ? 'Update event' : 'Create event'}
+              </Text>
+            </TouchableOpacity>
             <Separator />
           </ScrollView>
-        {/*</SafeAreaView>*/}
-      </ImageBackground>
+        </ImageBackground>
 
-  </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
   }
-  }
+}
 

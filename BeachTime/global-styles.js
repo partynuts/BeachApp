@@ -9,6 +9,23 @@ export const globalStyles = StyleSheet.create({
     paddingTop: 5,
     textAlign: 'center'
   },
+  textInput: {
+    height: 40,
+    borderWidth: 0.2,
+    backgroundColor: colors.textWhite,
+    padding: 5,
+    marginBottom: 30
+  },
+  errorMsg: {
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingRight: 15
+  },
+  errorMsgShort: {
+    color: colors.red
+  },
   imageBackground: {
     resizeMode: 'cover',
     justifyContent: 'center',
@@ -21,6 +38,10 @@ export const globalStyles = StyleSheet.create({
   card: {
     opacity: 0.75
   },
+  pageContainer: {
+    minHeight: '100%',
+    backgroundColor: colors.creme,
+  },
   resultsContainer: {
     position: "relative",
     padding: 5,
@@ -29,6 +50,9 @@ export const globalStyles = StyleSheet.create({
     borderColor: colors.textWhite,
     backgroundColor: colors.textWhite,
     borderRadius: 5
+  },
+  contentContainer: {
+    paddingBottom: 100
   },
   eventElement: {
     paddingRight: 5,
@@ -56,4 +80,41 @@ export const globalStyles = StyleSheet.create({
     borderColor: colors.darkBlue,
     backgroundColor: colors.textWhite,
   },
+  primaryBtnText: {
+    fontSize: 17,
+    color: colors.textWhite,
+    fontWeight: "700"
+  },
+  primaryBtn: {
+    width: "97%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 7,
+    backgroundColor: colors.darkBlue,
+  },
+  primaryButtonSticky: {
+    width: "97%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 7,
+    backgroundColor: colors.darkBlue,
+  },
+  secondaryButtonSticky: {
+    width: "97%",
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 7,
+    backgroundColor: colors.orangeBrown,
+  },
+  stickyBtnWrapper: {
+    width: "100%",
+    position: 'absolute',
+    bottom: 10,
+  }
 });

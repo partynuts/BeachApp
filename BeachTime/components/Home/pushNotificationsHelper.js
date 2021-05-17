@@ -44,7 +44,7 @@ export function handlePushNotifications() {
   ExpoNotifications.setNotificationHandler({
     handleNotification: async (event) => {
       console.log("EVENT", event);
-      return Promise.reject("BLA")
+      return Promise.reject("No notification")
       // return {
       //   shouldShowAlert: false,
       //   shouldPlaySound: false,

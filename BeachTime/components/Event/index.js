@@ -183,7 +183,7 @@ export default class Event extends React.Component {
     )
       .then(async (res) => {
         if (res.status === 204) {
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Events');
         }
       })
       .catch(e => console.log(e))
@@ -390,20 +390,14 @@ export default class Event extends React.Component {
             source={sand}
             style={globalStyles.imageBackground}>
             <ScrollView
-              contentContainerStyle={{ paddingBottom: 100 }}
+              contentContainerStyle={globalStyles.contentContainer}
               style={globalStyles.scrollView}
               refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()} />}
             >
               {this.state.eventData &&
               this.showEventDetails(styles)
               }
-              <View style={{
-                width: '100%',
-                height: 45,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                paddingRight: 15
-              }}>
+              <View style={globalStyles.errorMsg}>
                 {this.state.msg &&
                 <Text>{this.state.msg}</Text>
                 }
@@ -468,27 +462,14 @@ export default class Event extends React.Component {
           </ImageBackground>
         </SafeAreaView>
         {Date.parse(this.state.eventData.event_date) > new Date() &&
-        <View style={{
-          width: "100%",
-          position: 'absolute',
-          bottom: 10,
-        }}>
+        <View style={globalStyles.stickyBtnWrapper}>
           <TouchableOpacity
             onPress={!this.state.isUserSignedUp ? (e) => this.handleSignup(e) : (e) => this.handleCancellation(e)}
-            style={this.state.isUserSignedUp ? {
-              ...styles.buttonSticky,
-              backgroundColor: colors.orangeBrown,
-
-            } : {
-              ...styles.buttonSticky,
-              backgroundColor: colors.darkBlue,
-            }}
+            style={this.state.isUserSignedUp ? globalStyles.secondaryButtonSticky : globalStyles.primaryButtonSticky}
             disabled={Date.parse(this.state.eventData.event_date) < new Date()}
           >
             <Text
-              style={this.state.isUserSignedUp ?
-                styles.btnTxtSecondary :
-                styles.btnText}>{
+              style={globalStyles.primaryBtnText}>{
               this.state.isUserSignedUp ? "Withdraw" : "Sign up"}
             </Text>
           </TouchableOpacity>
