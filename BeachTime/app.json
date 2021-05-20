@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "2",
+    "version": "3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -30,11 +30,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.parinazroghany.beachtime",
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "package": "com.parinazroghany.beachtime",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [],
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
